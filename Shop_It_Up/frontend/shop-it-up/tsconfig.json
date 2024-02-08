@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "esnext",
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "baseUrl": ".", // Add this line
+    "paths": { // Add this section if you're using path aliases, adjust as needed
+      "*": ["src/*"],
+      "features/*": ["src/features/*"]
+    },
+    "resolveJsonModule": true, // Add if you need to import .json files
+    "allowSyntheticDefaultImports": true // Allows default imports from modules with no default export
+  },
+  "include": ["src/**/*"], // Adjust this to include all your project sources
+  "exclude": ["node_modules", "**/*.spec.ts"] // Adjust as needed to exclude files you don't want to compile
+}
