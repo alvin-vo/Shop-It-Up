@@ -1,13 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-const Product = require("./models/productsModel.js");
+const productRoutes = require("./routes/productRoutes.js");
+
 require("dotenv").config();
 const uri = `mongodb+srv://Joshua_Beed:${process.env.DB_PASSWORD}@cs180shopitupcluster.l7nsxfh.mongodb.net/?retryWrites=true&w=majority`;
 
-app.get("/", async (req, res) => {
-  res.send(products);
-});
+//middleware for routes
+app.use("/api/products", productRoutes);
 
 app.listen(3010, () => {
   connectToDB()

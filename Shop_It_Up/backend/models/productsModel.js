@@ -1,7 +1,6 @@
 const { Schema, mongoose } = require("mongoose");
 
 const productSchema = new Schema({
-  version: Number,
   productId: String,
   sellerId: String,
   title: String,
