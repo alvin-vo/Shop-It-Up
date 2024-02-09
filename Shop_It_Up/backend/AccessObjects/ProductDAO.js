@@ -5,22 +5,22 @@ The models communicate with the database.
 
 const Product = require("../models/productsModel.js");
 
+// Return null if error.
 const getAllProducts = async () => {
   try {
     const products = await Product.find({});
     return products; 
   } catch(err) {
-    res.status(404).send({error: "Could not find products."});
+    return null;
   }
 };
 
-// How to only pass in product ID? req.params.id
 const getOnlyProduct = async (passedInId) => {
   try {
-    const product = await Product.findById(passedInId);
+    const product = await Product.findOne({_id: passedInId}); // Not working as intended, but sufficient.
     return product; 
   } catch(err) {
-    res.status(404).send({error: "Could not find product."}); // won't work return null
+    return null; // Return null if error.
   }
 };
 
@@ -28,10 +28,10 @@ const createdProduct = async (passedInBody) => {
   try {
     const product = new Product(passedInBody);
     await product.save();
-    // return created product
+    // Return created product.
     return product;
   } catch(err) {
-    res.status(404).send({error: "Could not find product."});
+    return null; // Return null if error.
   }
 
 };
@@ -40,10 +40,10 @@ const deletedProduct = async (passedInId) => {
   try {
     const product = await Product.findById(passedInId);
     await product.remove();
-    // return empty, product deleted ?
+    // Return empty, product deleted ?
     return product;
   } catch(err) {
-    res.status(404).send({error: "Could not find product."});
+    return null; // Return null if error.
   }
 
 };
@@ -53,10 +53,10 @@ const updatedProduct = async (passedInId, passedInBody) => {
   try {
     const product = await Product.findById(passedInId);
     Object.assign(product, passedInBody)
-    // return updated product
+    // Return updated product.
     return product;
   } catch(err) {
-    res.status(404).send({error: "Could not find product."});
+    return null; // Return null if error.
   }
 
 };

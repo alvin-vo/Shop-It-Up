@@ -10,12 +10,12 @@ const getProducts = async () => {
 };
 
 const getOneProduct = async (req) => {
-  getOnlyProduct(req.params.id);
+  return ProductDAO.getOnlyProduct(req.params.productId);
 
 };
 
 const createProduct = async (req) => {
-  createdProduct(req.body);
+  return ProductDAO.createdProduct(req.body);
 };
 
 const deleteProduct = async (req) => {

@@ -21,12 +21,21 @@ router.get("/", async (req, res) => {
 // Find by product ID.
 router.get("/:productId", async (req, res) => {
   const product = await productManager.getOneProduct(req);
-  res.send("Got product.");
+  if (product == null) { // null or empty ?
+    res.send("Error: null.");
+  } else {
+    res.send(product);
+  }
 });
 
 // Create new product.
 router.post("/create", async (req, res) => {
-  res.send("Created product.");
+  const product = await productManager.createProduct(req);
+  if (product == null) { // null or empty ?
+    res.send("Error: null.");
+  } else {
+    res.send(product);
+  }
 });
 
 // Delete product.
