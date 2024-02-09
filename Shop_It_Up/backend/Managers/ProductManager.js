@@ -3,16 +3,34 @@
    It should be the only thing that commuicates with the DAOs.
 */
 
-const ProductDAO = require("../AccessObjects/ProductDAO");
+const ProductDAO = require("../AccessObjects/ProductDAO.js");
 
-const getProducts = async () => {};
+const getProducts = async () => {
+  return ProductDAO.getAllProducts();
+};
 
-const createProduct = async () => {};
+const getOneProduct = async (req) => {
+  getOnlyProduct(req.params.id);
 
-const deleteProduct = async () => {};
+};
 
-const updateProduct = async () => {};
+const createProduct = async (req) => {
+  createdProduct(req.body);
+};
+
+const deleteProduct = async (req) => {
+  deletedProduct(req.params.id);
+};
+
+// Might need to change later based on req setup.
+const updateProduct = async (req) => {
+  updatedProduct(req.params.id, req.body);
+};
 
 module.exports = {
   getProducts,
+  getOneProduct,
+  createProduct,
+  deleteProduct,
+  updateProduct,
 };

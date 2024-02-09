@@ -4,26 +4,39 @@ const express = require("express");
     They will only communicate with the the req and res object, and managers interfaces.
 */
 const router = express.Router();
-const productManager = require("../Managers/ProductManager");
+const productManager = require("../Managers/ProductManager.js");
+const { createProduct, deleteProduct } = require("../AccessObjects/ProductDAO.js");
 
-//gets all products
+// Get all products.
 router.get("/", async (req, res) => {
-  res.send("get all products");
+  const products = await productManager.getProducts();
+  if (products == null) {
+    res.send("Error: null.");
+  } else {
+    res.send(products);
+  }
+
 });
 
-//create new products
+// Find by product ID.
+router.get("/:productId", async (req, res) => {
+  const product = await productManager.getOneProduct(req);
+  res.send("Got product.");
+});
+
+// Create new product.
 router.post("/create", async (req, res) => {
-  res.send("create new product");
+  res.send("Created product.");
 });
 
-//delete product
+// Delete product.
 router.delete("/delete", async (req, res) => {
-  res.send("deleted product");
+  res.send("Deleted product.");
 });
 
-//update product
+// Update product.
 router.patch("/update", async (req, res) => {
-  res.send("update product");
+  res.send("Updated product.");
 });
 
 module.exports = router;
