@@ -19,12 +19,12 @@ const createProduct = async (req) => {
 };
 
 const deleteProduct = async (req) => {
-  deletedProduct(req.params.id);
+  return ProductDAO.deletedProduct(req.params.productId);
 };
 
 // Might need to change later based on req setup.
 const updateProduct = async (req) => {
-  updatedProduct(req.params.id, req.body);
+  return ProductDAO.updatedProduct(req.params.productId, req.body);
 };
 
 module.exports = {

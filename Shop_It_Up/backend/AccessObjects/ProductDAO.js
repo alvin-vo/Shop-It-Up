@@ -38,8 +38,7 @@ const createdProduct = async (passedInBody) => {
 
 const deletedProduct = async (passedInId) => {
   try {
-    const product = await Product.findById(passedInId);
-    await product.remove();
+    const product = await Product.findOneAndDelete({productId: passedInId});
     // Return empty, product deleted ?
     return product;
   } catch(err) {
@@ -51,8 +50,7 @@ const deletedProduct = async (passedInId) => {
 // Might need to change later based on req setup.
 const updatedProduct = async (passedInId, passedInBody) => {
   try {
-    const product = await Product.findById(passedInId);
-    Object.assign(product, passedInBody)
+    const product = await Product.findOneAndUpdate({productId: passedInId}, passedInBody);
     // Return updated product.
     return product;
   } catch(err) {

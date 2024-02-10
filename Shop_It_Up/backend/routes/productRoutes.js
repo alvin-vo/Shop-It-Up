@@ -39,13 +39,24 @@ router.post("/create", async (req, res) => {
 });
 
 // Delete product.
-router.delete("/delete", async (req, res) => {
-  res.send("Deleted product.");
+router.delete("/delete/:productId", async (req, res) => {
+  const product = await productManager.deleteProduct(req); // not working?
+  if (product == null) { // null or empty ?
+    res.send("Error: null.");
+  } else {
+    res.send(product);
+  }
+  
 });
 
 // Update product.
-router.patch("/update", async (req, res) => {
-  res.send("Updated product.");
+router.patch("/update/:productId", async (req, res) => {
+  const product = await productManager.updateProduct(req);
+  if (product == null) { // null or empty ?
+    res.send("Error: null.");
+  } else {
+    res.send(product);
+  }
 });
 
 module.exports = router;
