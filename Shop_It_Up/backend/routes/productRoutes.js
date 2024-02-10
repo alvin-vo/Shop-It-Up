@@ -8,6 +8,7 @@ const productManager = require("../Managers/ProductManager.js");
 const { createProduct, deleteProduct } = require("../AccessObjects/ProductDAO.js");
 
 // Get all products.
+// RETURNS ALL PRODUCTS
 router.get("/", async (req, res) => {
   const products = await productManager.getProducts();
   if (products == null) {
@@ -19,6 +20,7 @@ router.get("/", async (req, res) => {
 });
 
 // Find by product ID.
+// RETURNS FOUND PRODUCT
 router.get("/:productId", async (req, res) => {
   const product = await productManager.getOneProduct(req);
   if (product == null) { // null or empty ?
@@ -29,6 +31,7 @@ router.get("/:productId", async (req, res) => {
 });
 
 // Create new product.
+// RETURNS CREATED PRODUCT
 router.post("/create", async (req, res) => {
   const product = await productManager.createProduct(req);
   if (product == null) { // null or empty ?
@@ -39,6 +42,7 @@ router.post("/create", async (req, res) => {
 });
 
 // Delete product.
+// RETURNS DELETED PRODUCT
 router.delete("/delete/:productId", async (req, res) => {
   const product = await productManager.deleteProduct(req); // not working?
   if (product == null) { // null or empty ?
@@ -49,7 +53,8 @@ router.delete("/delete/:productId", async (req, res) => {
   
 });
 
-// Update product.
+// Update product. 
+// RETURNS PRODUCT BEFORE UPDATE
 router.patch("/update/:productId", async (req, res) => {
   const product = await productManager.updateProduct(req);
   if (product == null) { // null or empty ?
