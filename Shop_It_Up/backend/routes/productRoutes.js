@@ -54,7 +54,7 @@ router.delete("/delete/:productId", async (req, res) => {
 });
 
 // Update product. 
-// RETURNS PRODUCT BEFORE UPDATE
+// RETURNS NEW PRODUCT
 router.patch("/update/:productId", async (req, res) => {
   const product = await productManager.updateProduct(req);
   if (product == null) { // null or empty ?
