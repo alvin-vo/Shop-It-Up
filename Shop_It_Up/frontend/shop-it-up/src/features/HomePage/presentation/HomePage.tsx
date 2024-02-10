@@ -1,11 +1,9 @@
 import "./HomePage.css";
+import ProductsGrid from '../../Products/Presentation/ProductsGrid';
 
-import { Text } from '@chakra-ui/react'
 const HomePage = () => {
-
-
     return (
-        <Text fontSize='6xl'>(6xl) In love with React & Next</Text>
+        <ProductsGrid/>
 
     );
 }
