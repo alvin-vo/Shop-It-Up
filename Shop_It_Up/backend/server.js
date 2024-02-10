@@ -1,13 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+const bodyParser = require('body-parser')
 const productRoutes = require("./routes/productRoutes.js");
 
 require("dotenv").config();
 const uri = `mongodb+srv://Joshua_Beed:${process.env.DB_PASSWORD}@cs180shopitupcluster.l7nsxfh.mongodb.net/?retryWrites=true&w=majority`;
 
 //middleware for routes
-app.use("/api/products", productRoutes);
+app.use(bodyParser.json()) // Get req.body
+app.use("/api/products", productRoutes); // Break up routes for seperate files.
 
 app.listen(3010, () => {
   connectToDB()
