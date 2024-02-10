@@ -3,6 +3,7 @@
    It should be the only thing that commuicates with the DAOs.
 */
 
+
 const Joi = require('joi');
 // MIRROR CHANGES HERE!
 const schemaChecker = Joi.object({
