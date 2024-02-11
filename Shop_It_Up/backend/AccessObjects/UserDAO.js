@@ -3,7 +3,7 @@ These are the interfaces that communicate with the models.
 The models communicate with the database.
 */
 
-const Product = require("../models/UserModel.js");
+const User = require("../models/UserModel.js");
 
 const createNewUser = async () => {};
 

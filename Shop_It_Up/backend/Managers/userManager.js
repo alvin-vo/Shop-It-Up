@@ -3,6 +3,8 @@
    It should be the only thing that commuicates with the DAOs.
 */
 
+const UserDAO = require("../AccessObjects/UserDAO.js");
+
 const createUser = async () => {};
 
 const udpateUser = async () => {};
@@ -19,7 +21,7 @@ const sendInvite = async () => {};
 
 const acceptInvite = async () => {};
 
-const recieveInvite = async () => {};
+const receiveInvite = async () => {};
 
 // Function to check that req.body matches our schema!
 // RETURNS true IF req.body IS VALID, false OTHERWISE.
@@ -42,9 +44,13 @@ async function checkId(productIdToCheck) {
 }
 
 module.exports = {
-  getProducts,
-  getOneProduct,
-  createProduct,
-  deleteProduct,
-  updateProduct,
+  createUser,
+  udpateUser,
+  deleteUser,
+  getUser,
+  addProductToSell,
+  removeProductToSell,
+  receiveInvite,
+  acceptInvite,
+  sendInvite,
 };

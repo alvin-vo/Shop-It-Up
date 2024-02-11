@@ -13,8 +13,8 @@ const userSchema = new Schema({
   },
 });
 
-productSchema.set("collection", "users");
+userSchema.set("collection", "users");
 
-const Product = mongoose.model("product", userSchema);
+const User = mongoose.model("user", userSchema);
 
-module.exports = Product;
+module.exports = User;
