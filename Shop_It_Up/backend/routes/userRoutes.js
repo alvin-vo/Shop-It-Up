@@ -13,7 +13,10 @@ router.post("/create", async (req, res) => {});
 router.patch("/update", async (req, res) => {});
 
 //Delete user account
-router.delete("/remove", async (req, res) => {});
+router.delete("/delete", async (req, res) => {});
+
+//Get user Info
+router.get("/getInfo", async (req, res) => {});
 
 //Add product to sell
 router.post("/addProduct", async (req, res) => {});
@@ -27,7 +30,7 @@ router.post("/invite", async (req, res) => {});
 //Accept Invite
 router.post("/invite/accept", async (req, res) => {});
 
-//Recieve Invite
+//Receive Invite
 router.get("/invite", async (req, res) => {});
 
 module.exports = router;
