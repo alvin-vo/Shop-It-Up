@@ -1,9 +1,19 @@
 const express = require("express");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const app = express();
 const bodyParser = require("body-parser");
+const authRoutes = require("./routes/authRoutes.js");
 const productRoutes = require("./routes/productRoutes.js");
 const userRoutes = require("./routes/userRoutes.js");
+const passport = require("passport");
+
+const PORT = 3010;
+
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const GOOGLE_CLIENT_ID =
+  "1005337001636-7bpm9ohobj26vvvm3bg57tlftqf7nmln.apps.googleusercontent.com";
+const GOOGLE_CLIENT_SECRET = "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";
 
 require("dotenv").config();
 const uri = `mongodb+srv://Joshua_Beed:${process.env.DB_PASSWORD}@cs180shopitupcluster.l7nsxfh.mongodb.net/?retryWrites=true&w=majority`;
@@ -11,10 +21,68 @@ const uri = `mongodb+srv://Joshua_Beed:${process.env.DB_PASSWORD}@cs180shopitupc
 //middleware for routes
 app.use(bodyParser.json()); // Get req.body
 
+//Routes
+app.use("/api/authorize", authRoutes);
 app.use("/api/products", productRoutes); // Break up routes for seperate files.
 app.use("/api/user", userRoutes); // Break up routes for seperate files.
 
-app.listen(3010, () => {
+//middleware for passport
+app.use(session({ secret: "cats", resave: false, saveUninitialized: true })); // TODO
+app.use(passport.initialize());
+app.use(passport.session());
+
+//middleware for passport
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: `http://localhost:${PORT}/auth/google/callback`, // TODO
+      passReqToCallback: true,
+    },
+    function (request, accessToken, refreshToken, profile, done) {
+      return done(null, profile);
+      // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      //   return done(err, user);
+      // });
+    }
+  )
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/protected",
+    failureRedirect: "/auth/google/failure",
+  })
+);
+
+app.get("/protected", (req, res) => {
+  res.send("user authenticated...");
+});
+
+app.get("/auth/google/failure", (req, res) => {
+  res.send("Failed to authenticate..");
+});
+
+app.get("/logout", (req, res) => {
+  req.logout((err) => {
+    if (err) console.error("Error occured when logging out...");
+    res.clearCookie("connect.sid");
+    req.session.destroy();
+    res.send("Goodbye!");
+  });
+});
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
+
+app.listen(PORT, () => {
   connectToDB()
     .then(() => console.log("connected to Database..."))
     .catch((e) => console.log("error occured:", e));
@@ -28,4 +96,18 @@ async function connectToDB() {
     })
     .catch((err) => console.error(err));
 }
+
+async function authorize(userId) {
+  const authenticated = user.find(userId);
+  if (authenticated === null) {
+    console.error("user not authenticated");
+  } else {
+    return userId;
+  }
+}
+
+function isLoggedIn(req, res, next) {
+  req.user ? next() : res.sendStatus(401);
+}
+
 // run().catch(console.dir);
