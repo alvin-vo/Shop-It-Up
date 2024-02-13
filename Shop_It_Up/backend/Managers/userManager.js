@@ -5,9 +5,11 @@
 
 const UserDAO = require("../AccessObjects/UserDAO.js");
 
-const createUser = async () => {};
+const createUser = async (userId) => {
+  await UserDAO.createNewUser(userId);
+};
 
-const udpateUser = async () => {};
+const updateUser = async () => {};
 
 const deleteUser = async () => {};
 
@@ -45,7 +47,7 @@ async function checkId(productIdToCheck) {
 
 module.exports = {
   createUser,
-  udpateUser,
+  updateUser,
   deleteUser,
   getUser,
   addProductToSell,
