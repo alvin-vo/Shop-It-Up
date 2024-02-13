@@ -9,7 +9,7 @@ const userSchema = new Schema({
     cartId: String,
     ownerId: String,
     contributors: [String],
-    products: String,
+    products: [String],
   },
 });
 

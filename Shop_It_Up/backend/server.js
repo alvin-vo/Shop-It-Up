@@ -3,8 +3,10 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const app = express();
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authRoutes.js");
 const productRoutes = require("./routes/productRoutes.js");
+const UserManager = require("./Managers/userManager.js");
 const userRoutes = require("./routes/userRoutes.js");
 const passport = require("passport");
 
@@ -20,6 +22,9 @@ const uri = `mongodb+srv://Joshua_Beed:${process.env.DB_PASSWORD}@cs180shopitupc
 
 //middleware for routes
 app.use(bodyParser.json()); // Get req.body
+
+// adding cookieParser middleware
+app.use(cookieParser()); //makes parsing cookies easier
 
 //Routes
 app.use("/api/authorize", authRoutes);
@@ -42,9 +47,6 @@ passport.use(
     },
     function (request, accessToken, refreshToken, profile, done) {
       return done(null, profile);
-      // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      //   return done(err, user);
-      // });
     }
   )
 );
@@ -57,8 +59,14 @@ app.get(
   })
 );
 
-app.get("/protected", (req, res) => {
-  res.send("user authenticated...");
+app.get("/protected", async (req, res) => {
+  const userId = await UserManager.createUser(req.user.id);
+  res.cookie("auth", req.user.id, { httpOnly: false });
+  if (userId !== null) {
+    res.json({ redirect: true, message: "login succesfull" });
+  } else {
+    res.json({ redirect: true, message: "new user created." });
+  }
 });
 
 app.get("/auth/google/failure", (req, res) => {
@@ -69,6 +77,7 @@ app.get("/logout", (req, res) => {
   req.logout((err) => {
     if (err) console.error("Error occured when logging out...");
     res.clearCookie("connect.sid");
+    res.clearCookie("auth");
     req.session.destroy();
     res.send("Goodbye!");
   });
