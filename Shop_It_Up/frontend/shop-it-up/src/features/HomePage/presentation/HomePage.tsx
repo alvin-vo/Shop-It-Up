@@ -1,13 +1,9 @@
 import "./HomePage.css";
-
+import ProductsGrid from '../../Products/Presentation/ProductsGrid';
 
 const HomePage = () => {
-
-
     return (
-        <div className = "home-page">
-            Home Page
-        </div>
+        <ProductsGrid/>
 
     );
 }
