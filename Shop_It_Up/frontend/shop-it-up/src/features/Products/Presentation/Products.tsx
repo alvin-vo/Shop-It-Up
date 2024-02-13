@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
-import { Card, CardBody, CardFooter, Image, Stack, Heading, Text, Button, Flex, Spacer, Accordion, AccordionItem, AccordionIcon, AccordionButton, AccordionPanel, Box } from '@chakra-ui/react'
+import { Card, CardBody, Image, Stack, Heading, Text, Button, Flex, Spacer} from '@chakra-ui/react'
 
 
-function Product(){
+function Product(props:any){
     const product = {
         title: 'Living room Sofa',
         imageSrc: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80',
@@ -39,25 +38,6 @@ function Product(){
 
                     </Stack>
                 </CardBody>
-
-
-                <CardFooter>
-                    <Accordion allowToggle w='100%'>
-                        <AccordionItem>
-                            <h2>
-                                <AccordionButton>
-                                    <Box as="span" flex='1' textAlign='left'>
-                                        Categories
-                                    </Box>
-                                    <AccordionIcon />
-                                </AccordionButton>
-                            </h2>
-                            <AccordionPanel pb={4}>
-                                {product.categories.join(", ")}
-                            </AccordionPanel>
-                        </AccordionItem>
-                    </Accordion>
-                </CardFooter>
 
             </Card>
     );
