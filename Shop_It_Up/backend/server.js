@@ -20,6 +20,9 @@ const GOOGLE_CLIENT_SECRET = "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";
 require("dotenv").config();
 const uri = `mongodb+srv://Joshua_Beed:${process.env.DB_PASSWORD}@cs180shopitupcluster.l7nsxfh.mongodb.net/?retryWrites=true&w=majority`;
 
+//cors to allow server access on localhost
+const cors = require("cors");
+app.use(cors());
 //middleware for routes
 app.use(bodyParser.json()); // Get req.body
 

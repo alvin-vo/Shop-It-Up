@@ -1,9 +1,14 @@
 import "./HomePage.css";
 import ProductsGrid from '../../Products/Presentation/ProductsGrid';
+import Navbar from '../../NavBar/Presentation/Navbar'
 
 const HomePage = () => {
     return (
-        <ProductsGrid/>
+        <div>
+            <Navbar/>
+                <ProductsGrid/>
+        </div>
+
 
     );
 }
