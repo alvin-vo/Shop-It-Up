@@ -42,9 +42,9 @@ const checkUserExistence = async (userId) => {
 };
 const updateExistingUser = async () => {};
 
-const deleteExisitingUser = async () => {};
+const deleteExistingUser = async () => {};
 
-const getExisitngUserInfo = async () => {};
+const getExistingUserInfo = async () => {};
 
 const addProduct = async () => {};
 
@@ -59,8 +59,8 @@ const receiveInvitation = async () => {};
 module.exports = {
   createNewUser,
   updateExistingUser,
-  deleteExisitingUser,
-  getExisitngUserInfo,
+  deleteExistingUser,
+  getExistingUserInfo,
   addProduct,
   removeProduct,
   sendInvitation,
