@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authRoutes.js");
 const productRoutes = require("./routes/productRoutes.js");
-const UserManager = require("./Managers/userManager.js");
+const UserManager = require("./Managers/UserManager.js");
 const userRoutes = require("./routes/userRoutes.js");
 const passport = require("passport");
 
@@ -107,7 +107,7 @@ async function connectToDB() {
 }
 
 async function authorize(userId) {
-  const authenticated = user.find(userId);
+  const authenticated = user.find(userId); // Hmm
   if (authenticated === null) {
     console.error("user not authenticated");
   } else {

@@ -5,8 +5,12 @@
 
 const UserDAO = require("../AccessObjects/UserDAO.js");
 
-const createUser = async (userId) => {
-  await UserDAO.createNewUser(userId);
+const Guard = require("../Security/checkStatus.js")
+
+// USER:
+
+const createUser = async (userInfo) => {
+  await UserDAO.createNewUser(userInfo.userId, userInfo.email);
 };
 
 const updateUser = async () => {};
@@ -15,41 +19,69 @@ const deleteUser = async () => {};
 
 const getUser = async () => {};
 
+// SHOULD BE PASSWORD PROTECTED
+const getAll = async (passedInVariablePassword, passedInVariablePassphrase) => {
+  // Encrypt Server
+  const encryptedServerMessage = await Guard.encryptServer();
+  const decryptedServerMessage = await Guard.decryptNow(encryptedServerMessage, passedInVariablePassphrase);
+  
+  // Encrypt User
+  const encryptedUserMessage = await Guard.encryptNow(passedInVariablePassword, passedInVariablePassphrase);
+  const decryptedUserMessage = await Guard.decryptNow(encryptedUserMessage, passedInVariablePassphrase);
+
+  // Check: Should be TRUE
+  const checkNow = await Guard.checkCorrect(decryptedServerMessage, decryptedUserMessage);
+
+  // TRUE: Get all users
+  if(checkNow) {
+    return await UserDAO.getAllUsers(); 
+  }
+  return null; // Return null if FALSE
+ };
+
+// PRODUCTS:
+
 const addProductToSell = async () => {};
 
 const removeProductToSell = async () => {};
 
-const sendInvite = async () => {};
+// INVITES:
 
-const acceptInvite = async () => {};
-
-const receiveInvite = async () => {};
-
-// Function to check that req.body matches our schema!
-// RETURNS true IF req.body IS VALID, false OTHERWISE.
-async function checkBody(bodyToCheck) {
-  const bodyResult = schemaChecker.validate(bodyToCheck);
-  if (bodyResult.error) {
-    return false;
+const sendInvite = async (passedInId) => {
+  const valUser = await checkValidUser(passedInId);
+  if(valUser == null) {
+    return null;
   }
-  return true;
-}
+  return await UserDAO.sendHandler(valUser);
+};
 
-// Function to check that req.body.productId is not duplicated!
-// RETURNS true IF THERE IS NOT AN EXISTING PRODUCT, false OTHERWISE.
-async function checkId(productIdToCheck) {
-  const idResult = await ProductDAO.getOnlyProduct(productIdToCheck);
-  if (idResult == null) {
-    return true;
+const acceptInvite = async () => {
+
+  return null;
+};
+
+const receiveInvite = async () => {
+
+
+};
+
+// HELPERS:
+
+// Validate User, returns TRUE
+async function checkValidUser(userToValidate) {
+  const userResult = await UserDAO.getOnlyUser(userToValidate);
+  if(userResult == null) {
+    return null;
   }
-  return false;
-}
+  return userResult;
+};
 
 module.exports = {
   createUser,
   updateUser,
   deleteUser,
   getUser,
+  getAll,
   addProductToSell,
   removeProductToSell,
   receiveInvite,

@@ -5,11 +5,17 @@ const express = require("express");
 */
 
 const router = express.Router();
-const userManager = require("../Managers/UserManager.js");
+const UserManager = require("../Managers/UserManager.js");
+
+// USER:
 
 //Create user account
 router.post("/create", async (req, res) => {
-  res.send("create new user");
+  const user = await UserManager.createUser(req.body);
+  if (user == null) {
+    res.send("Error: null.");
+  }
+  res.send(user);
 });
 
 ///Update user account
@@ -27,6 +33,17 @@ router.get("/getInfo", async (req, res) => {
   res.send("getting use Informaton.");
 });
 
+//Get all user
+router.get("/getAll/", async (req, res) => {
+  const users = await UserManager.getAll(req.body.password, req.body.passphrase);
+  if (users == null) {
+    res.send("Error: null.");
+  }
+  res.send(users);
+});
+
+// PRODUCTS:
+
 //Add product to sell
 router.post("/addProduct", async (req, res) => {
   res.send("add product.");
@@ -37,17 +54,28 @@ router.delete("/removeProduct", async (req, res) => {
   res.send("remove product");
 });
 
+// INVITES:
+
 //Send Invite
-router.post("/invite", async (req, res) => {
-  res.send("sent invite.");
+router.post("/invite/:userId", async (req, res) => {
+  const user = await UserManager.sendInvite(req.params.userId);
+  if (user == null) {
+    res.send("Error: null.");
+  }
+  res.send(user);
 });
 
 //Accept Invite
-router.post("/invite/accept", async (req, res) => {
-  res.send("accept invite");
+router.post("/invite/accept/:cartId", async (req, res) => {
+  const user = await UserManager.acceptInvite(req.params.cartId);
+  if (user == null) {
+    res.send("Error: null.");
+  }
+  res.send(user);
 });
 
-//Receive Invite
+// Do we need this?
+//Receive Invite 
 router.get("/invite", async (req, res) => {
   res.send("recieved invite");
 });
