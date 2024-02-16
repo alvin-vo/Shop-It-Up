@@ -4,12 +4,17 @@
 
 const User = require("../models/UserModel.js");
 const UserDAO = require("../AccessObjects/UserDAO.js");
+const jwt = require("jsonwebtoken");
 
 const authorize = async (req, res, next) => {
   try {
     const id = req.cookies.auth;
 
-    const doesUserExists = await UserDAO.checkUserExistence(id);
+    let data = await jwt.verify(id, process.env.HASH);
+
+    console.log(data);
+
+    const doesUserExists = await UserDAO.checkUserExistence(data.id);
     console.log(doesUserExists);
 
     if (doesUserExists) {

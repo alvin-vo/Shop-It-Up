@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const mongoose = require("mongoose");
@@ -9,15 +10,17 @@ const productRoutes = require("./routes/productRoutes.js");
 const UserManager = require("./Managers/userManager.js");
 const userRoutes = require("./routes/userRoutes.js");
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
 
 const PORT = 3010;
+const privateKey = process.env.HASH;
+console.log(privateKey);
 
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GOOGLE_CLIENT_ID =
   "1005337001636-7bpm9ohobj26vvvm3bg57tlftqf7nmln.apps.googleusercontent.com";
 const GOOGLE_CLIENT_SECRET = "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";
 
-require("dotenv").config();
 const uri = `mongodb+srv://Joshua_Beed:${process.env.DB_PASSWORD}@cs180shopitupcluster.l7nsxfh.mongodb.net/?retryWrites=true&w=majority`;
 
 //middleware for routes
@@ -61,9 +64,15 @@ app.get(
 
 app.get("/protected", async (req, res) => {
   const userId = await UserManager.createUser(req.user.id);
-  res.cookie("auth", req.user.id, { httpOnly: false });
+
+  console.log(req.user.id);
+
+  const token = jwt.sign({ id: req.user.id }, process.env.HASH);
+
+  res.cookie("auth", token, { httpOnly: true });
+
   if (userId !== null) {
-    res.json({ redirect: true, message: "login succesfull" });
+    res.json({ redirect: true, message: "login succesful" });
   } else {
     res.json({ redirect: true, message: "new user created." });
   }
