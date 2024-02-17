@@ -22,6 +22,7 @@ const createNewUser = async (userId, passedInEmail) => {
       userId: userID,
       email: encryptEmail,
       productsToSell: [],
+      cartId: "123434",
     }).save();
 
     return userID;
@@ -50,7 +51,7 @@ const sendHandler = async (userToInvite) => {
   const decryptEmail = await Guard.decryptEmail(userToInvite.email);
   
   // Get Cart Id
-  const getCartId = userToInvite.cart.cartId;
+  const getCartId = userToInvite.cartId;
 
   // Send Email
   const sentOrNot = await Guard.sendEmail(decryptEmail, getCartId); // NOT WORKING
