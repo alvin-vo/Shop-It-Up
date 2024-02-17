@@ -7,10 +7,15 @@
 
 .login-form {
   width: 100%;
-  max-width: 320px;
+  max-width: 400px;
+  height: 400px;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  background-color:white;
+  background-image: " ./images/shopitup.png";
+  background-size: conver;
+  background-position: center;
 }
 
 .form-group {
@@ -41,4 +46,22 @@
 
 .login-button:hover {
   background-color: #0056b3;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 10px;
+
+}
+
+.image-container img{
+  width: 200px;
+  height: 200px;
+}
+
+body {
+  background: linear-gradient(to right, #ff7e5f, #feb47b); /* Example gradient */
 }
