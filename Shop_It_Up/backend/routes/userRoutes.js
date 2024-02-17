@@ -51,10 +51,10 @@ router.delete("/removeProduct", async (req, res) => {
 //Send Invite
 router.post("/invite/:userId", async (req, res) => {
   const user = await UserManager.sendInvite(req.params.userId);
-  if (user == null) {
-    res.send("Error: null.");
+  if (user == false) {
+    res.send("Error: email not sent.");
   } else {
-    res.send(user);
+    res.send("Passed: email sent.");
   }
 });
 

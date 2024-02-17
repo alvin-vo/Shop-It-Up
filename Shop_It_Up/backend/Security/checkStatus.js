@@ -54,13 +54,13 @@ async function sendEmail(passedInEmail, passedInLink) {
   }).then(
     function (response) {
       console.log('SUCCESS!', response.status, response.text);
+      return true;
     },
     function (err) {
       console.log('FAILED...', err);
+      return false;
     },
   );
-  
-  return false;
 };
 
 // CHECKER:
