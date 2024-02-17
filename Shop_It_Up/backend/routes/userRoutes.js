@@ -14,8 +14,9 @@ router.post("/create", async (req, res) => {
   const user = await UserManager.createUser(req.body);
   if (user == null) {
     res.send("Error: null.");
+  } else {
+    res.send(user);
   }
-  res.send(user);
 });
 
 //Get user Info
@@ -28,8 +29,9 @@ router.get("/getAll/", async (req, res) => {
   const users = await UserManager.getAll(req.body.password, req.body.passphrase);
   if (users == null) {
     res.send("Error: null.");
+  } else {
+    res.send(users);
   }
-  res.send(users);
 });
 
 // PRODUCTS:
@@ -51,8 +53,9 @@ router.post("/invite/:userId", async (req, res) => {
   const user = await UserManager.sendInvite(req.params.userId);
   if (user == null) {
     res.send("Error: null.");
+  } else {
+    res.send(user);
   }
-  res.send(user);
 });
 
 //Accept Invite
@@ -60,8 +63,9 @@ router.post("/invite/accept/:cartId", async (req, res) => {
   const user = await UserManager.acceptInvite(req.params.cartId);
   if (user == null) {
     res.send("Error: null.");
+  } else {
+    res.send(user);
   }
-  res.send(user);
 });
 
 module.exports = router;

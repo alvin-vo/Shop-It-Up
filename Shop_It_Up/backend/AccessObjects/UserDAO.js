@@ -53,8 +53,11 @@ const sendHandler = async (userToInvite) => {
   // Get Cart Id
   const getCartId = userToInvite.cartId;
 
+  // Make Link
+  const linkToSend = "http://localhost:3010/api/user/invite/accept/" + getCartId;
+
   // Send Email
-  const sentOrNot = await Guard.sendEmail(decryptEmail, getCartId); // NOT WORKING
+  const sentOrNot = await Guard.sendEmail(decryptEmail, linkToSend);
 
   return sentOrNot;
 };

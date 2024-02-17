@@ -1,11 +1,12 @@
 /* 
    Encrypt/Decrypt
-   Included: CryptoJS, Lodash
+   Included: CryptoJS, Lodash, EmailJs, EmailJs NodeJs
 */
 require("dotenv").config();
 
 var CryptoJS = require("crypto-js");
 var AES = require("crypto-js/aes");
+var emailjs = require("@emailjs/nodejs");
 
 var _ = require('lodash');
 
@@ -40,10 +41,25 @@ const decryptEmail = async (passedInEmail) => {
 };
 
 // TODO: ADD EMAIL IMPLEMENTATION
-async function sendEmail(passedInEmail, passedInCartId) {
-  console.log(passedInEmail);
-  console.log(passedInCartId);
+async function sendEmail(passedInEmail, passedInLink) {
 
+  var templateParams = {
+    sendToEmail: passedInEmail,
+    linkToJoin: passedInLink,
+  };
+
+  emailjs.send(process.env.SERVICE_ID, process.env.TEMPLATE_ID, templateParams, {
+    publicKey: process.env.PUBLIC_KEY,
+    privateKey: process.env.PRIVATE_KEY,
+  }).then(
+    function (response) {
+      console.log('SUCCESS!', response.status, response.text);
+    },
+    function (err) {
+      console.log('FAILED...', err);
+    },
+  );
+  
   return false;
 };
 

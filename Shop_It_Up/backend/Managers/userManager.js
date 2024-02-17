@@ -43,11 +43,20 @@ const removeProductToSell = async () => {};
 
 // INVITES:
 
+// Checks if Valid User and Valid Cart, returns TRUE
 const sendInvite = async (passedInId) => {
+  // Check if User Exists
   const valUser = await checkValidUser(passedInId);
   if(valUser == null) {
     return null;
   }
+  // Check if Cart Exists
+  const valCart = await checkValidCart(valUser);
+  if(valCart == null) {
+    return null;
+  }
+
+  // All tests passed
   return await UserDAO.sendHandler(valUser);
 };
 
@@ -65,6 +74,17 @@ async function checkValidUser(userToValidate) {
     return null;
   }
   return userResult;
+};
+
+// Validate Cart, returns TRUE
+async function checkValidCart(cartToValidate) {
+  // Get Cart Id
+  const getCartId = cartToValidate.cartId;
+  // No cartId, Can't Invite
+  if(getCartId == undefined){
+    return null;
+  }
+  return getCartId;
 };
 
 module.exports = {
