@@ -13,10 +13,6 @@ const createUser = async (userInfo) => {
   await UserDAO.createNewUser(userInfo.userId, userInfo.email);
 };
 
-const updateUser = async () => {};
-
-const deleteUser = async () => {};
-
 const getUser = async () => {};
 
 // SHOULD BE PASSWORD PROTECTED
@@ -60,11 +56,6 @@ const acceptInvite = async () => {
   return null;
 };
 
-const receiveInvite = async () => {
-
-
-};
-
 // HELPERS:
 
 // Validate User, returns TRUE
@@ -78,13 +69,10 @@ async function checkValidUser(userToValidate) {
 
 module.exports = {
   createUser,
-  updateUser,
-  deleteUser,
   getUser,
   getAll,
   addProductToSell,
   removeProductToSell,
-  receiveInvite,
   acceptInvite,
   sendInvite,
 };

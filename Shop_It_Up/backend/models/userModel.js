@@ -5,13 +5,6 @@ const userSchema = new Schema({
   userId: String,
   email: String,
   productsToSell: [String],
-  recievedInvites: [String],
-  cart: {
-    cartId: String,
-    ownerId: String,
-    contributors: [String],
-    products: [String],
-  },
 });
 
 userSchema.set("collection", "users");

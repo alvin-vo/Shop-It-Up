@@ -18,16 +18,6 @@ router.post("/create", async (req, res) => {
   res.send(user);
 });
 
-///Update user account
-router.patch("/update", async (req, res) => {
-  res.send("update user account");
-});
-
-//Delete user account
-router.delete("/delete", async (req, res) => {
-  res.send("deleting user.");
-});
-
 //Get user Info
 router.get("/getInfo", async (req, res) => {
   res.send("getting use Informaton.");
@@ -72,12 +62,6 @@ router.post("/invite/accept/:cartId", async (req, res) => {
     res.send("Error: null.");
   }
   res.send(user);
-});
-
-// Do we need this?
-//Receive Invite 
-router.get("/invite", async (req, res) => {
-  res.send("recieved invite");
 });
 
 module.exports = router;

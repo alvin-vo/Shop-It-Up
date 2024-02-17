@@ -22,13 +22,6 @@ const createNewUser = async (userId, passedInEmail) => {
       userId: userID,
       email: encryptEmail,
       productsToSell: [],
-      recievedInvites: [],
-      cart: {
-        cartId: "123434",
-        ownerId: userID,
-        contributors: [],
-        products: [],
-      },
     }).save();
 
     return userID;
@@ -36,10 +29,6 @@ const createNewUser = async (userId, passedInEmail) => {
     return null;
   }
 };
-
-const updateExistingUser = async () => {};
-
-const deleteExisitingUser = async () => {};
 
 const getExisitngUserInfo = async () => {};
 
@@ -74,11 +63,6 @@ const acceptHandler = async () => {
 
 };
 
-const receiveHandler = async () => {
-
-
-};
-
 // HELPER:
 
 // Find user, return user
@@ -93,8 +77,6 @@ async function getOnlyUser(passedInUserId) {
 
 module.exports = {
   createNewUser,
-  updateExistingUser,
-  deleteExisitingUser,
   getExisitngUserInfo,
   getAllUsers,
   getOnlyUser,
@@ -102,5 +84,4 @@ module.exports = {
   removeProduct,
   sendHandler,
   acceptHandler,
-  receiveHandler,
 };
