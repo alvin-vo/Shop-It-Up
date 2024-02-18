@@ -5,7 +5,7 @@ const express = require("express");
 */
 
 const router = express.Router();
-const userManager = require("../Managers/UserManager.js");
+const userManager = require("../Managers/user_manager.js");
 
 //Create user account
 router.post("/create", async (req, res) => {

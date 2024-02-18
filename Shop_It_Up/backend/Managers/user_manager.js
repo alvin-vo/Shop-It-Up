@@ -3,7 +3,7 @@
    It should be the only thing that commuicates with the DAOs.
 */
 
-const UserDAO = require("../AccessObjects/UserDAO.js");
+const UserDAO = require("../AccessObjects/user_dao.js");
 
 const createUser = async (userId) => {
   await UserDAO.createNewUser(userId);
@@ -11,7 +11,7 @@ const createUser = async (userId) => {
 
 const updateUser = async () => {};
 
-const deleteUser = async () => {};
+// const deleteUser = async () => {};
 
 const getUser = async () => {};
 
