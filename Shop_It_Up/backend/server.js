@@ -109,17 +109,4 @@ async function connectToDB() {
     .catch((err) => console.error(err));
 }
 
-async function authorize(userId) {
-  const authenticated = user.find(userId); // Hmm
-  if (authenticated === null) {
-    console.error("user not authenticated");
-  } else {
-    return userId;
-  }
-}
-
-function isLoggedIn(req, res, next) {
-  req.user ? next() : res.sendStatus(401);
-}
-
 // run().catch(console.dir);
