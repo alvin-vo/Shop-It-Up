@@ -5,7 +5,7 @@ The models communicate with the database.
 
 const User = require("../Models/user_model.js");
 
-const Guard = require("../Security/checkStatus.js")
+const Guard = require("../Security/check_status.js")
 
 
 // USER:
