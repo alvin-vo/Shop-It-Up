@@ -2,7 +2,6 @@
  It is only used to authorize a user if it exists.
  This is used to protect the routes*/
 
-const user = require("../Models/user_model.js");
 const userDAO = require("../AccessObjects/user_dao.js");
 
 const authorize = async (req, res, next) => {

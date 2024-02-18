@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./Routes/auth_route.js");
 const productRoutes = require("./Routes/product_route.js");
-const UserManager = require("./Managers/user_manager.js");
+const userManager = require("./Managers/user_manager.js");
 const userRoutes = require("./Routes/user_route.js");
 const passport = require("passport");
 
@@ -63,7 +63,7 @@ app.get(
 );
 
 app.get("/protected", async (req, res) => {
-  const userId = await UserManager.createUser(req.user.id);
+  const userId = await userManager.createUser(req.user.id);
   res.cookie("auth", req.user.id, { httpOnly: false });
   if (userId !== null) {
     res.json({ redirect: true, message: "login succesfull" });

@@ -26,10 +26,10 @@ const getOnlyProduct = async (passedInId) => {
 
 const createdProduct = async (passedInBody) => {
   try {
-    const product = new product(passedInBody);
-    await product.save();
+    const prod = new product(passedInBody);
+    await prod.save();
     // Return created product.
-    return product;
+    return prod;
   } catch (err) {
     return null; // Return null if error.
   }
@@ -37,9 +37,9 @@ const createdProduct = async (passedInBody) => {
 
 const deletedProduct = async (passedInId) => {
   try {
-    const product = await product.findOneAndDelete({ productId: passedInId });
+    const prod = await product.findOneAndDelete({ productId: passedInId });
     // Return empty, product deleted ?
-    return product;
+    return prod;
   } catch (err) {
     return null; // Return null if error.
   }
@@ -48,12 +48,12 @@ const deletedProduct = async (passedInId) => {
 // Might need to change later based on req setup.
 const updatedProduct = async (passedInId, passedInBody) => {
   try {
-    const product = await product.findOneAndUpdate(
+    const prod = await product.findOneAndUpdate(
       { productId: passedInId },
       passedInBody
     );
     // Return updated product.
-    return product;
+    return prod;
   } catch (err) {
     return null; // Return null if error.
   }

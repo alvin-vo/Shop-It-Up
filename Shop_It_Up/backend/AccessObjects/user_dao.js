@@ -17,7 +17,7 @@ const createNewUser = async (userId, passedInEmail) => {
   const encryptEmail = await guard.encryptEmail(passedInEmail);
 
   if (!existingUser) {
-    new User({
+    new user({
       userId: userID,
       email: encryptEmail,
       productsToSell: [],
