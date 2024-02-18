@@ -3,7 +3,7 @@ These are the interfaces that communicate with the models.
 The models communicate with the database.
 */
 
-const cartDAO = require("../models/cart_model,js");
+const cartModel = require("../models/cart_model,js");
 
 const addProduct = async (productId) => {};
 
