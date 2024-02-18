@@ -79,6 +79,17 @@ async function getOnlyUser(passedInUserId) {
   }
 };
 
+// LEGACY
+
+const checkUserExistence = async (passedInUserId) => {
+  const user = await User.findOne({ userId: passedInUserId });
+  if (user) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 module.exports = {
   createNewUser,
   getExisitngUserInfo,
@@ -88,4 +99,5 @@ module.exports = {
   removeProduct,
   sendHandler,
   acceptHandler,
+  checkUserExistence
 };
