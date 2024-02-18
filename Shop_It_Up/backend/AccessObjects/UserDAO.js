@@ -5,23 +5,24 @@ The models communicate with the database.
 
 const User = require("../models/UserModel.js");
 
-const createNewUser = async (userId) => {
-  const userID = userId;
-  console.log("user id", userID);
+const Guard = require("../Security/checkStatus.js")
 
+
+// USER:
+
+const createNewUser = async (userId, passedInEmail) => {
+  const userID = userId;
   const existingUser = await User.findOne({ userId: userID });
-  console.log(existingUser);
+  
+  // ENCRYPT EMAIL FOR INVITE
+  const encryptEmail = await Guard.encryptEmail(passedInEmail);
+
   if (!existingUser) {
     new User({
       userId: userID,
+      email: encryptEmail,
       productsToSell: [],
-      recievedInvites: [],
-      cart: {
-        cartId: "123434",
-        ownerId: userID,
-        contributors: [],
-        products: [],
-      },
+      cartId: "123434",
     }).save();
 
     return userID;
@@ -30,41 +31,73 @@ const createNewUser = async (userId) => {
   }
 };
 
-const checkUserExistence = async (userId) => {
-  const id = userId;
-  console.log("id", id);
-  const user = await User.findOne({ userId: id });
+const getExisitngUserInfo = async () => {};
+
+const getAllUsers = async () => {
+  const existingUsers = await User.find();
+  return existingUsers;
+};
+
+// PRODUCTS:
+
+const addProduct = async () => {};
+
+const removeProduct = async () => {};
+
+// INVITES:
+
+const sendHandler = async (userToInvite) => {
+  // Decrypt Email
+  const decryptEmail = await Guard.decryptEmail(userToInvite.email);
+  
+  // Get Cart Id
+  const getCartId = userToInvite.cartId;
+
+  // Make Link
+  const linkToSend = "http://localhost:3010/api/user/invite/accept/" + getCartId;
+
+  // Send Email
+  const sentOrNot = await Guard.sendEmail(decryptEmail, linkToSend);
+
+  return sentOrNot;
+};
+
+const acceptHandler = async () => {
+  
+
+};
+
+// HELPER:
+
+// Find user, return user
+async function getOnlyUser(passedInUserId) {
+  const existingUser = await User.findOne({userId: passedInUserId});
+  if (existingUser) {
+    return existingUser;
+  } else {
+    return null; // return null if no user
+  }
+};
+
+// LEGACY
+
+const checkUserExistence = async (passedInUserId) => {
+  const user = await User.findOne({ userId: passedInUserId });
   if (user) {
     return true;
   } else {
     return false;
   }
 };
-const updateExistingUser = async () => {};
-
-const deleteExisitingUser = async () => {};
-
-const getExisitngUserInfo = async () => {};
-
-const addProduct = async () => {};
-
-const removeProduct = async () => {};
-
-const sendInvitation = async () => {};
-
-const acceptInvitation = async () => {};
-
-const receiveInvitation = async () => {};
 
 module.exports = {
   createNewUser,
-  updateExistingUser,
-  deleteExisitingUser,
   getExisitngUserInfo,
+  getAllUsers,
+  getOnlyUser,
   addProduct,
   removeProduct,
-  sendInvitation,
-  acceptInvitation,
-  receiveInvitation,
-  checkUserExistence,
+  sendHandler,
+  acceptHandler,
+  checkUserExistence
 };
