@@ -3,14 +3,14 @@
    It should be the only thing that commuicates with the DAOs.
 */
 
-const UserDAO = require("../AccessObjects/user_dao.js");
+const userDao = require("../AccessObjects/user_dao.js");
 
-const Guard = require("../Security/check_status.js");
+const guard = require("../Security/check_status.js");
 
 // USER:
 
 const createUser = async (userInfo) => {
-  await UserDAO.createNewUser(userInfo.userId, userInfo.email);
+  await userDao.createNewUser(userInfo.userId, userInfo.email);
 };
 
 const getUser = async () => {};
@@ -18,31 +18,31 @@ const getUser = async () => {};
 // SHOULD BE PASSWORD PROTECTED
 const getAll = async (passedInVariablePassword, passedInVariablePassphrase) => {
   // Encrypt Server
-  const encryptedServerMessage = await Guard.encryptServer();
-  const decryptedServerMessage = await Guard.decryptNow(
+  const encryptedServerMessage = await guard.encryptServer();
+  const decryptedServerMessage = await guard.decryptNow(
     encryptedServerMessage,
     passedInVariablePassphrase
   );
 
   // Encrypt User
-  const encryptedUserMessage = await Guard.encryptNow(
+  const encryptedUserMessage = await guard.encryptNow(
     passedInVariablePassword,
     passedInVariablePassphrase
   );
-  const decryptedUserMessage = await Guard.decryptNow(
+  const decryptedUserMessage = await guard.decryptNow(
     encryptedUserMessage,
     passedInVariablePassphrase
   );
 
   // Check: Should be TRUE
-  const checkNow = await Guard.checkCorrect(
+  const checkNow = await guard.checkCorrect(
     decryptedServerMessage,
     decryptedUserMessage
   );
 
   // TRUE: Get all users
   if (checkNow) {
-    return await UserDAO.getAllUsers();
+    return await userDao.getAllUsers();
   }
   return null; // Return null if FALSE
 };
@@ -69,7 +69,7 @@ const sendInvite = async (passedInId) => {
   }
 
   // All tests passed
-  return await UserDAO.sendHandler(valUser);
+  return await userDao.sendHandler(valUser);
 };
 
 const acceptInvite = async () => {
@@ -80,7 +80,7 @@ const acceptInvite = async () => {
 
 // Validate User, returns TRUE
 async function checkValidUser(userToValidate) {
-  const userResult = await UserDAO.getOnlyUser(userToValidate);
+  const userResult = await userDao.getOnlyUser(userToValidate);
   if (userResult == null) {
     return null;
   }

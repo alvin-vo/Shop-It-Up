@@ -5,13 +5,13 @@ const express = require("express");
 */
 
 const router = express.Router();
-const UserManager = require("../Managers/user_manager.js");
+const userManager = require("../Managers/user_manager.js");
 
 // USER:
 
 //Create user account
 router.post("/create", async (req, res) => {
-  const user = await UserManager.createUser(req.body);
+  const user = await userManager.createUser(req.body);
   if (user == null) {
     res.send("Error: null.");
   } else {
@@ -26,7 +26,7 @@ router.get("/getInfo", async (req, res) => {
 
 //Get all user
 router.get("/getAll/", async (req, res) => {
-  const users = await UserManager.getAll(
+  const users = await userManager.getAll(
     req.body.password,
     req.body.passphrase
   );
@@ -53,7 +53,7 @@ router.delete("/removeProduct", async (req, res) => {
 
 //Send Invite
 router.post("/invite/:userId", async (req, res) => {
-  const user = await UserManager.sendInvite(req.params.userId);
+  const user = await userManager.sendInvite(req.params.userId);
   if (user == false) {
     res.send("Error: email not sent.");
   } else {
@@ -63,7 +63,7 @@ router.post("/invite/:userId", async (req, res) => {
 
 //Accept Invite
 router.post("/invite/accept/:cartId", async (req, res) => {
-  const user = await UserManager.acceptInvite(req.params.cartId);
+  const user = await userManager.acceptInvite(req.params.cartId);
   if (user == null) {
     res.send("Error: null.");
   } else {
