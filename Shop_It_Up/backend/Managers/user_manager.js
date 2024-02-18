@@ -3,6 +3,7 @@
    It should be the only thing that commuicates with the DAOs.
 */
 
+
 const userDao = require("../AccessObjects/user_dao.js");
 
 const guard = require("../Security/check_status.js");
@@ -47,7 +48,6 @@ const getAll = async (passedInVariablePassword, passedInVariablePassphrase) => {
   return null; // Return null if FALSE
 };
 
-// PRODUCTS:
 
 const addProductToSell = async () => {};
 
@@ -96,6 +96,26 @@ async function checkValidCart(cartToValidate) {
     return null;
   }
   return getCartId;
+
+// Function to check that req.body matches our schema!
+// RETURNS true IF req.body IS VALID, false OTHERWISE.
+async function checkBody(bodyToCheck) {
+  const bodyResult = schemaChecker.validate(bodyToCheck);
+  if (bodyResult.error) {
+    return false;
+  }
+  return true;
+}
+
+// Function to check that req.body.productId is not duplicated!
+// RETURNS true IF THERE IS NOT AN EXISTING PRODUCT, false OTHERWISE.
+async function checkId(productIdToCheck) {
+  const idResult = await ProductDAO.getOnlyProduct(productIdToCheck);
+  if (idResult == null) {
+    return true;
+  }
+  return false;
+
 }
 
 module.exports = {
@@ -104,6 +124,7 @@ module.exports = {
   getAll,
   addProductToSell,
   removeProductToSell,
+  receiveInvite,
   acceptInvite,
   sendInvite,
 };

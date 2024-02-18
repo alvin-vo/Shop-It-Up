@@ -7,10 +7,12 @@ const user = require("../Models/user_model.js");
 
 const guard = require("../Security/check_status.js");
 
+
 // USER:
 
 const createNewUser = async (userId, passedInEmail) => {
   const userID = userId;
+
   const existingUser = await user.findOne({ userId: userID });
 
   // ENCRYPT EMAIL FOR INVITE
@@ -33,7 +35,9 @@ const createNewUser = async (userId, passedInEmail) => {
 const getExisitngUserInfo = async () => {};
 
 const getAllUsers = async () => {
+  
   const existingUsers = await user.find();
+
   return existingUsers;
 };
 
@@ -47,28 +51,35 @@ const removeProduct = async () => {};
 
 const sendHandler = async (userToInvite) => {
   // Decrypt Email
+
   const decryptEmail = await guard.decryptEmail(userToInvite.email);
 
   // Get Cart Id
   const getCartId = userToInvite.cartId;
 
   // Make Link
+
   const linkToSend =
     "http://localhost:3010/api/user/invite/accept/" + getCartId;
 
   // Send Email
   const sentOrNot = await guard.sendEmail(decryptEmail, linkToSend);
 
+
   return sentOrNot;
 };
 
+
 const acceptHandler = async () => {};
+
 
 // HELPER:
 
 // Find user, return user
 async function getOnlyUser(passedInUserId) {
+
   const existingUser = await user.findOne({ userId: passedInUserId });
+
   if (existingUser) {
     return existingUser;
   } else {
@@ -76,10 +87,13 @@ async function getOnlyUser(passedInUserId) {
   }
 }
 
+
 // LEGACY
 
 const checkUserExistence = async (passedInUserId) => {
+  
   const user = await user.findOne({ userId: passedInUserId });
+
   if (user) {
     return true;
   } else {
@@ -96,5 +110,5 @@ module.exports = {
   removeProduct,
   sendHandler,
   acceptHandler,
-  checkUserExistence,
+  checkUserExistence
 };

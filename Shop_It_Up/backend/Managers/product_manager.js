@@ -23,14 +23,17 @@ const getProducts = async () => {
 
 const getOneProduct = async (req) => {
   return productDAO.getOnlyProduct(req.params.productId);
+
 };
 
 const createProduct = async (req) => {
   const checkOne = await checkId(req.body.productId); // Check product id for any matches, FALSE if match
   const checkTwo = await checkBody(req.body); // Check body to ensure correct values, FALSE if not
+
   if (checkOne && checkTwo) {
     // THIS NEEDS TO BE TRUE TRUE
     return productDAO.createdProduct(req.body);
+
   } else {
     return null;
   }
@@ -38,6 +41,7 @@ const createProduct = async (req) => {
 
 const deleteProduct = async (req) => {
   return productDAO.deletedProduct(req.params.productId);
+
 };
 
 const updateProduct = async (req) => {
@@ -47,6 +51,7 @@ const updateProduct = async (req) => {
     // THIS NEEDS TO BE !(FALSE) TRUE
     await productDAO.updatedProduct(req.params.productId, req.body); // UPDATE
     return await productDAO.getOnlyProduct(req.body.productId); // RETURN UPDATED OBJECT
+
   } else {
     return null;
   }
@@ -62,15 +67,18 @@ async function checkBody(bodyToCheck) {
   return true;
 }
 
+
 // Function to check that req.body.productId is not duplicated!
 // RETURNS true IF THERE IS NOT AN EXISTING PRODUCT, false OTHERWISE.
 async function checkId(productIdToCheck) {
+
   const idResult = await productDAO.getOnlyProduct(productIdToCheck);
   if (idResult == null) {
     return true;
   }
   return false;
 }
+
 
 module.exports = {
   getProducts,

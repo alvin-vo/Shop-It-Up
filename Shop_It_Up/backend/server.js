@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+
 const authRoutes = require("./Routes/auth_route.js");
 const productRoutes = require("./Routes/product_route.js");
 const userManager = require("./Managers/user_manager.js");
