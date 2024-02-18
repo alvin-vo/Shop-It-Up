@@ -4,14 +4,14 @@
 */
 
 
-const userDao = require("../AccessObjects/user_dao.js");
+const userDAO = require("../AccessObjects/user_dao.js");
 
 const guard = require("../Security/check_status.js");
 
 // USER:
 
 const createUser = async (userInfo) => {
-  await userDao.createNewUser(userInfo.userId, userInfo.email);
+  await userDAO.createNewUser(userInfo.userId, userInfo.email);
 };
 
 const getUser = async () => {};
@@ -43,7 +43,7 @@ const getAll = async (passedInVariablePassword, passedInVariablePassphrase) => {
 
   // TRUE: Get all users
   if (checkNow) {
-    return await userDao.getAllUsers();
+    return await userDAO.getAllUsers();
   }
   return null; // Return null if FALSE
 };
@@ -69,7 +69,7 @@ const sendInvite = async (passedInId) => {
   }
 
   // All tests passed
-  return await userDao.sendHandler(valUser);
+  return await userDAO.sendHandler(valUser);
 };
 
 const acceptInvite = async () => {
@@ -80,7 +80,7 @@ const acceptInvite = async () => {
 
 // Validate User, returns TRUE
 async function checkValidUser(userToValidate) {
-  const userResult = await userDao.getOnlyUser(userToValidate);
+  const userResult = await userDAO.getOnlyUser(userToValidate);
   if (userResult == null) {
     return null;
   }
