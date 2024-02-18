@@ -4,10 +4,10 @@ const mongoose = require("mongoose");
 const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const authRoutes = require("./routes/authRoutes.js");
-const productRoutes = require("./routes/productRoutes.js");
-const UserManager = require("./Managers/UserManager.js");
-const userRoutes = require("./routes/userRoutes.js");
+const authRoutes = require("./Routes/auth_routes.js");
+const productRoutes = require("./Routes/product_routes.js");
+const userRoutes = require("./Routes/user_routes.js");
+const userManager = require("./Managers/user_manager.js");
 const passport = require("passport");
 
 const PORT = 3010;
@@ -63,7 +63,7 @@ app.get(
 );
 
 app.get("/protected", async (req, res) => {
-  const userId = await UserManager.createUser(req.user.id);
+  const userId = await userManager.createUser(req.user.id);
   res.cookie("auth", req.user.id, { httpOnly: false });
   if (userId !== null) {
     res.json({ redirect: true, message: "login succesfull" });

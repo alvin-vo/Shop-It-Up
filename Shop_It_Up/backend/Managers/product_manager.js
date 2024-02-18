@@ -16,7 +16,7 @@ const schemaChecker = Joi.object({
   img: Joi.string().required(),
 });
 
-const ProductDAO = require("../AccessObjects/ProductDAO.js");
+const ProductDAO = require("../AccessObjects/product_dao.js");
 
 const getProducts = async () => {
   return ProductDAO.getAllProducts();
