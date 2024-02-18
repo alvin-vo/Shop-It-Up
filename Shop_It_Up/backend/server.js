@@ -110,7 +110,7 @@ async function connectToDB() {
 }
 
 async function authorize(userId) {
-  const authenticated = user.find(userId);
+  const authenticated = user.find(userId); // Hmm
   if (authenticated === null) {
     console.error("user not authenticated");
   } else {

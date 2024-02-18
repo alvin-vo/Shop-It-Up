@@ -17,7 +17,7 @@ const getAllProducts = async () => {
 
 const getOnlyProduct = async (passedInId) => {
   try {
-    const product = await Product.findOne({ productId: passedInId }); // Not working as intended, but sufficient.
+    const product = await Product.findOne({ productId: passedInId });
     return product;
   } catch (err) {
     return null; // Return null if error.
