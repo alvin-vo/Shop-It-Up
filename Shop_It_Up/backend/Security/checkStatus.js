@@ -40,7 +40,7 @@ const decryptEmail = async (passedInEmail) => {
   return originalText;
 };
 
-// TODO: ADD EMAIL IMPLEMENTATION
+// EMAIL IMPLEMENTATION
 async function sendEmail(passedInEmail, passedInLink) {
 
   var templateParams = {
