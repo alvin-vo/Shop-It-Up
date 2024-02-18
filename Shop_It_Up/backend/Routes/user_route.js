@@ -5,7 +5,7 @@ const express = require("express");
 */
 
 const router = express.Router();
-const UserManager = require("../Managers/UserManager.js");
+const UserManager = require("../Managers/user_manager.js");
 
 // USER:
 
@@ -26,7 +26,10 @@ router.get("/getInfo", async (req, res) => {
 
 //Get all user
 router.get("/getAll/", async (req, res) => {
-  const users = await UserManager.getAll(req.body.password, req.body.passphrase);
+  const users = await UserManager.getAll(
+    req.body.password,
+    req.body.passphrase
+  );
   if (users == null) {
     res.send("Error: null.");
   } else {

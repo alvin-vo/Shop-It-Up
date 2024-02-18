@@ -4,10 +4,10 @@ const mongoose = require("mongoose");
 const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const authRoutes = require("./routes/authRoutes.js");
-const productRoutes = require("./routes/productRoutes.js");
-const UserManager = require("./Managers/UserManager.js");
-const userRoutes = require("./routes/userRoutes.js");
+const authRoutes = require("./Routes/auth_route.js");
+const productRoutes = require("./Routes/product_route.js");
+const UserManager = require("./Managers/user_manager.js");
+const userRoutes = require("./Routes/user_route.js");
 const passport = require("passport");
 
 const PORT = 3010;

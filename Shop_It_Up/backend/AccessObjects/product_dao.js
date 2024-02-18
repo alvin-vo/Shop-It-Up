@@ -3,7 +3,7 @@ These are the interfaces that communicate with the models.
 The models communicate with the database.
 */
 
-const Product = require("../models/ProductsModel.js");
+const Product = require("../Models/product_model.js");
 
 // Return null if error.
 const getAllProducts = async () => {
