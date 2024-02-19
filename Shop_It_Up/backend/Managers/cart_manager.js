@@ -4,7 +4,21 @@ const addProductToCart = async (productId) => {};
 
 const removeProductFromCart = async (productId) => {};
 
-const addContributorToCart = async (cartId) => {};
+const addContributorToCart = async (cartId, userId) => {
+  const contributorCartId = cartId;
+  const contributorUserId = userId;
+
+  let confirmation = await cartDAO.addContributor(
+    contributorCartId,
+    contributorUserId
+  );
+
+  if (confirmation) {
+    return confirmation;
+  } else {
+    return null;
+  }
+};
 
 const removeContributorFromCart = async (userId) => {};
 

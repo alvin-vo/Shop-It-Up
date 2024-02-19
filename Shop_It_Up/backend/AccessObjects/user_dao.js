@@ -7,6 +7,8 @@ const User = require("../Models/user_model.js");
 
 const Guard = require("../Security/check_status.js");
 
+const { findCart, addContributor } = require("./cart_dao.js");
+
 // USER:
 
 const createNewUser = async (userId, passedInEmail) => {

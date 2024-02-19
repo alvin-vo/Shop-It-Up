@@ -33,6 +33,24 @@ router.get("/:cartId", async (req, res) => {
   }
 });
 
+//invite link instructions
+router.patch("/join/:cartId", async (req, res) => {
+  // console.log("invitation link");
+  const cartId = req.params.cartId;
+  const userId = req.body.userId;
+
+  console.log("cartId: ", cartId);
+  console.log("userId: ", userId);
+
+  let cart = await cartManager.addContributorToCart(cartId, userId);
+
+  if (cart) {
+    res.status(200).json({ msg: `able to join cart ${cart.cartId}` });
+  } else {
+    res.status(404).json({ msg: "could not join cart" });
+  }
+});
+
 //adding product to cart
 router.post("/addProduct", async (req, res) => {});
 

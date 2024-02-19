@@ -3,18 +3,33 @@ These are the interfaces that communicate with the models.
 The models communicate with the database.
 */
 
+const { v4: uuidv4 } = require("uuid");
+
 const cartModel = require("../Models/cart_model.js");
 
 const addProduct = async (productId) => {};
 
 const removeProduct = async (productId) => {};
 
-const addContributor = async (cartId) => {};
+const addContributor = async (cartId, userId) => {
+  try {
+    const confirmation = await cartModel.findOneAndUpdate(
+      { cartId: cartId },
+      { $push: { contributorIds: userId } },
+      { new: true }
+    );
+
+    return confirmation;
+  } catch (e) {
+    console.error("add contributor error: ", e);
+  }
+};
 
 const removeContributor = async (userId) => {};
 
 const checkout = async (cartId, userId) => {};
 
+//returns the whole cart
 const findCart = async (cartId) => {
   try {
     const cart = await cartModel.findOne({ cartId: cartId });
@@ -27,7 +42,7 @@ const findCart = async (cartId) => {
 const createCart = async (userId) => {
   try {
     const cart = new cartModel({
-      cartId: "cartId",
+      cartId: uuidv4(),
       contributorIds: [userId],
       products: [],
     }).save();
