@@ -12,6 +12,15 @@ const checkoutCart = async (cartId, userId) => {};
 
 const deleteCart = async (cartId) => {};
 
+const findCart = async (cartId) => {
+  try {
+    let cart = await cartDAO.findCart(cartId);
+    return cart;
+  } catch (e) {
+    console.error("Error when fiding cart: ", e);
+  }
+};
+
 const createCart = async (userId) => {
   let cart = await cartDAO.createCart(userId);
   console.log("Cart manager cart: ", cart);
@@ -30,4 +39,5 @@ module.exports = {
   addContributorToCart,
   checkoutCart,
   createCart,
+  findCart,
 };

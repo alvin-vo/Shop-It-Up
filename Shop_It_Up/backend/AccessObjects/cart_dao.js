@@ -17,7 +17,7 @@ const checkout = async (cartId, userId) => {};
 
 const findCart = async (cartId) => {
   try {
-    const cart = await cartModel.findOne({ cartId });
+    const cart = await cartModel.findOne({ cartId: cartId });
     return cart;
   } catch (err) {
     return null;
@@ -52,4 +52,5 @@ module.exports = {
   checkout,
   syncCart,
   createCart,
+  findCart,
 };

@@ -21,6 +21,18 @@ router.post("/create", async (req, res) => {
   }
 });
 
+router.get("/:cartId", async (req, res) => {
+  let cartId = req.params.cartId;
+  console.log("cartId");
+
+  let cart = await cartManager.findCart(cartId);
+  if (cart) {
+    res.status(200).json(cart);
+  } else {
+    res.status(404).json({ msg: "cart could not be found" });
+  }
+});
+
 //adding product to cart
 router.post("/addProduct", async (req, res) => {});
 
