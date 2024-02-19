@@ -9,6 +9,7 @@ const productRoutes = require("./routes/productRoutes.js");
 const UserManager = require("./Managers/UserManager.js");
 const userRoutes = require("./routes/userRoutes.js");
 const passport = require("passport");
+const cartRoutes = require("./routes/cart_route.js");
 
 const PORT = 3010;
 
@@ -33,6 +34,7 @@ app.use(cookieParser()); //makes parsing cookies easier
 app.use("/api/authorize", authRoutes);
 app.use("/api/products", productRoutes); // Break up routes for seperate files.
 app.use("/api/user", userRoutes); // Break up routes for seperate files.
+app.use("/api/cart", cartRoutes);
 
 //middleware for passport
 app.use(session({ secret: "cats", resave: false, saveUninitialized: true })); // TODO

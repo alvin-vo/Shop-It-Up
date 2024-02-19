@@ -1,4 +1,4 @@
-const cartDAO = require("../models/cart_model,js");
+const cartDAO = require("../models/cart_model.js");
 
 const addProductToCart = async (productId) => {};
 

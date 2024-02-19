@@ -4,7 +4,7 @@ const cartSchema = new Schema({
   cartId: String,
   ownerId: String,
   contributorIds: [String],
-  products: Product[String],
+  products: [String],
 });
 
 cartSchema.set("collection", "carts");
