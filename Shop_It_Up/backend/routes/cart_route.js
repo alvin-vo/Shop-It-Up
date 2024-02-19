@@ -7,6 +7,20 @@ const express = require("express");
 const router = express.Router();
 const cartManager = require("../Managers/cart_manager.js");
 
+//create new cart
+router.post("/create", async (req, res) => {
+  const userId = req.body.userId;
+
+  console.log("UserId: ", userId);
+  let cartId = await cartManager.createCart(userId);
+
+  if (cartId) {
+    res.status(201).json({ cartId: cartId });
+  } else {
+    res.status(409).json({ msg: "cart could not be created." });
+  }
+});
+
 //adding product to cart
 router.post("/addProduct", async (req, res) => {});
 
