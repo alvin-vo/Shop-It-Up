@@ -32,6 +32,23 @@ const createNewUser = async (userId, passedInEmail) => {
   }
 };
 
+const updateUser = async (id, options) => {
+  console.log("options", options);
+  const confirmation = await User.findOneAndUpdate(
+    { userId: id },
+    { ...options },
+    { new: true }
+  );
+
+  console.log("confirmation", confirmation);
+
+  if (confirmation) {
+    return confirmation;
+  } else {
+    return null;
+  }
+};
+
 const getExisitngUserInfo = async () => {};
 
 const getAllUsers = async () => {
@@ -102,4 +119,5 @@ module.exports = {
   sendHandler,
   acceptHandler,
   checkUserExistence,
+  updateUser,
 };

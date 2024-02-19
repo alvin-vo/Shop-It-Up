@@ -9,7 +9,15 @@ const createUser = async (userId) => {
   await UserDAO.createNewUser(userId);
 };
 
-const updateUser = async () => {};
+const updateUser = async (userId, options) => {
+  let update = await UserDAO.updateUser(userId, options);
+
+  if (update) {
+    return update.userId;
+  } else {
+    return null;
+  }
+};
 
 // const deleteUser = async () => {};
 

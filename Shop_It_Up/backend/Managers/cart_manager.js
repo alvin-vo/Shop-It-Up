@@ -1,4 +1,5 @@
 const cartDAO = require("../AccessObjects/cart_dao.js");
+const userDAO = require("../AccessObjects/user_dao.js");
 
 const addProductToCart = async (productId) => {};
 
@@ -8,13 +9,16 @@ const addContributorToCart = async (cartId, userId) => {
   const contributorCartId = cartId;
   const contributorUserId = userId;
 
+  console.log("cart manager: ", userId, " ", cartId);
+
   let confirmation = await cartDAO.addContributor(
     contributorCartId,
     contributorUserId
   );
 
   if (confirmation) {
-    return confirmation;
+    let updatedUserId = await userDAO.updateUser(userId, { cartId: cartId });
+    return updatedUserId;
   } else {
     return null;
   }
