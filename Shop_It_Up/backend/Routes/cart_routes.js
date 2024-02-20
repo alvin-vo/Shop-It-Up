@@ -13,8 +13,7 @@ const cartManager = require("../Managers/cart_manager.js");
 router.post("/addProduct/:cartId/:productId", async (req, res) => {
   const cart = await cartManager.addProductToCart(req);
   if (cart == null) {
-    // null or empty ?
-    res.send("Error: null.");
+    res.send("Error: null."); // ERROR
   } else {
     res.send(cart);
   }
