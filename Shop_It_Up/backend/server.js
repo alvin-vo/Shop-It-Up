@@ -9,7 +9,7 @@ const productRoutes = require("./Routes/product_routes.js");
 const userRoutes = require("./Routes/user_routes.js");
 const userManager = require("./Managers/user_manager.js");
 const passport = require("passport");
-const cartRoutes = require("./routes/cart_route.js");
+const cartRoutes = require("./Routes/cart_routes.js");
 
 const PORT = 3010;
 
