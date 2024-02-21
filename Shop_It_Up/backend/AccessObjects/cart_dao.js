@@ -3,17 +3,17 @@ These are the interfaces that communicate with the models.
 The models communicate with the database.
 */
 
-const Cart = require("../models/cart_model,js");
+const cart = require("../models/cart_model,js");
 
 // ADD PRODUCT TO CART
-const addProduct = async (fidnCartId, productId) => {
+const addProduct = async (findCartId, productId) => {
   try {
-    const cart = await Cart.findOneAndUpdate(
-      { cartId: fidnCartId },
+    const newCart = await cart.findOneAndUpdate(
+      { cartId: findCartId },
       {"products.$": productId}
     );
 
-    return cart;
+    return newCart;
   } catch (err) {
     return null;
   }
@@ -35,7 +35,7 @@ const deleteCart = async (cartId) => {};
 const createCart = async(userIdForNewCart) => {
   try {
     createdCartId = makeNewId();
-    const newCart = new Cart({
+    const newCart = new cart({
       cartId: createdCartId,
       ownerId: userIdForNewCart,
       contributorIds: [userIdForNewCart],
