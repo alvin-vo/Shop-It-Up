@@ -1,54 +1,91 @@
-import { Card, CardBody, Image, Stack, Heading, Text, Button, Flex, Spacer} from '@chakra-ui/react';
-import React, { useState } from 'react';
+import {
+    Card,
+    CardBody,
+    CardHeader,
+    CardFooter,
+    Image,
+    Heading,
+    Text,
+    Button,
+    Flex,
+    Spacer,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverArrow,
+    PopoverCloseButton,
+    PopoverHeader,
+    PopoverBody
+} from '@chakra-ui/react';
+import { useState } from 'react';
 
-function Product(props:any){
+function Product(props: any) {
     const [product, setProduct] = useState({
         title: 'Loading...',
         image: 'None',
         description: 'Loading...',
         price: 500,
-        categories: 'Loading...'
+        category: 'Loading...'
     })
 
 
     const getProducts = async () => {
         let myProducts = await props.itemInfo;
         setProduct(myProducts[props.itemNum]);
-       }
+    }
 
     getProducts()
 
     return (
         <Card maxW='sm' boxShadow='md' border='1px' borderColor='gray.200'>
-                <CardBody>
-                    <Heading size='md' pb='3'>{product.title}</Heading>
-                    <Image
-                        src={product.image}
-                        borderRadius='lg'
-                        boxSize='sm'
-                    />
-                    <Stack mt='6' spacing='3'>
-                        <Text>
-                            {product.description}
-                        </Text>
+            <CardHeader>
+                <Heading size='md' pb='3'>{product.title}</Heading>
+            </CardHeader>
+            <CardBody>
 
-                        <Flex>
-                            <Text color='blue.600' fontSize='2xl'>
-                                {'$' + product.price.toString()}
+                <Popover>
+                    <PopoverTrigger>
+                        <Image
+                            src={product.image}
+                            borderRadius='lg'
+                            boxSize='300px'
+                            objectFit='scale-down'
+                            aspectRatio={1}
+                        />
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        <PopoverArrow />
+                        <PopoverCloseButton />
+                        <PopoverHeader>
+                            <Text as='b'>
+                                Description
                             </Text>
-                            <Spacer></Spacer>
-                            <Button variant='solid' colorScheme='blue'>
-                                Add to cart
-                            </Button>
-                        </Flex>
+                        </PopoverHeader>
+                        <PopoverBody>{product.description}</PopoverBody>
+                    </PopoverContent>
+                </Popover>
 
-                    </Stack>
-                </CardBody>
 
-            </Card>
+            </CardBody>
+
+            <CardFooter>
+                    <Flex w='100%'>
+                        <Text color='blue.600' fontSize='2xl'>
+                            {'$' + product.price.toString()}
+                        </Text>
+                        <Spacer/>
+                        <Button variant='solid' colorScheme='blue'>
+                            Add to cart
+                        </Button>
+                    </Flex>
+
+
+            </CardFooter>
+
+        </Card>
     );
 
-    }
+}
 
 
 

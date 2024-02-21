@@ -48,7 +48,7 @@ async function checkId(productIdToCheck) {
 module.exports = {
   createUser,
   updateUser,
-  deleteUser,
+  //deleteUser,
   getUser,
   addProductToSell,
   removeProductToSell,
