@@ -7,6 +7,50 @@ const express = require("express");
 const router = express.Router();
 const cartManager = require("../Managers/cart_manager.js");
 
+//create new cart
+router.post("/create", async (req, res) => {
+  const userId = req.body.userId;
+
+  console.log("UserId: ", userId);
+  let cartId = await cartManager.createCart(userId);
+
+  if (cartId) {
+    res.status(201).json({ cartId: cartId });
+  } else {
+    res.status(409).json({ msg: "cart could not be created." });
+  }
+});
+
+router.get("/:cartId", async (req, res) => {
+  let cartId = req.params.cartId;
+  console.log("cartId");
+
+  let cart = await cartManager.findCart(cartId);
+  if (cart) {
+    res.status(200).json(cart);
+  } else {
+    res.status(404).json({ msg: "cart could not be found" });
+  }
+});
+
+//invite link instructions
+router.patch("/join/:cartId", async (req, res) => {
+  // console.log("invitation link");
+  const cartId = req.params.cartId;
+  const userId = req.body.userId;
+
+  console.log("cartId: ", cartId);
+  console.log("userId: ", userId);
+
+  let cart = await cartManager.addContributorToCart(cartId, userId);
+
+  if (cart) {
+    res.status(200).json({ msg: `able to join cart ${cart.cartId}` });
+  } else {
+    res.status(404).json({ msg: "could not join cart" });
+  }
+});
+
 //adding product to cart
 router.post("/addProduct", async (req, res) => {});
 

@@ -4,15 +4,15 @@ The models communicate with the database.
 */
 
 const user = require("../Models/user_model.js");
-
 const guard = require("../Security/check_status.js");
 
+
+const { findCart, addContributor } = require("./cart_dao.js");
 
 // USER:
 
 const createNewUser = async (userId, passedInEmail) => {
   const userID = userId;
-
   const existingUser = await user.findOne({ userId: userID });
 
   // ENCRYPT EMAIL FOR INVITE
@@ -27,6 +27,23 @@ const createNewUser = async (userId, passedInEmail) => {
     }).save();
 
     return userID;
+  } else {
+    return null;
+  }
+};
+
+const updateUser = async (id, options) => {
+  console.log("options", options);
+  const confirmation = await user.findOneAndUpdate(
+    { userId: id },
+    { ...options },
+    { new: true }
+  );
+
+  console.log("confirmation", confirmation);
+
+  if (confirmation) {
+    return confirmation;
   } else {
     return null;
   }
@@ -51,14 +68,12 @@ const removeProduct = async () => {};
 
 const sendHandler = async (userToInvite) => {
   // Decrypt Email
-
   const decryptEmail = await guard.decryptEmail(userToInvite.email);
 
   // Get Cart Id
   const getCartId = userToInvite.cartId;
 
   // Make Link
-
   const linkToSend =
     "http://localhost:3010/api/user/invite/accept/" + getCartId;
 
@@ -69,24 +84,22 @@ const sendHandler = async (userToInvite) => {
   return sentOrNot;
 };
 
-
-const acceptHandler = async () => {};
-
+const acceptHandler = async (userId, cartId) => {
+  //Find the cart by Id
+  //add userId to contributor list of cart
+};
 
 // HELPER:
 
 // Find user, return user
 async function getOnlyUser(passedInUserId) {
-
   const existingUser = await user.findOne({ userId: passedInUserId });
-
   if (existingUser) {
     return existingUser;
   } else {
     return null; // return null if no user
   }
 }
-
 
 // LEGACY
 
@@ -110,5 +123,6 @@ module.exports = {
   removeProduct,
   sendHandler,
   acceptHandler,
-  checkUserExistence
+  checkUserExistence,
+  updateUser,
 };

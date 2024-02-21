@@ -8,7 +8,15 @@ const userDAO = require("../AccessObjects/user_dao.js");
 
 const guard = require("../Security/check_status.js");
 
-// USER:
+const updateUser = async (userId, options) => {
+  let update = await UserDAO.updateUser(userId, options);
+
+  if (update) {
+    return update.userId;
+  } else {
+    return null;
+  }
+};
 
 const createUser = async (userInfo) => {
   await userDAO.createNewUser(userInfo.userId, userInfo.email);
@@ -110,7 +118,7 @@ async function checkBody(bodyToCheck) {
 // Function to check that req.body.productId is not duplicated!
 // RETURNS true IF THERE IS NOT AN EXISTING PRODUCT, false OTHERWISE.
 async function checkId(productIdToCheck) {
-  const idResult = await ProductDAO.getOnlyProduct(productIdToCheck);
+  const idResult = await productDAO.getOnlyProduct(productIdToCheck);
   if (idResult == null) {
     return true;
   }
@@ -120,6 +128,7 @@ async function checkId(productIdToCheck) {
 
 module.exports = {
   createUser,
+  updateUser,
   getUser,
   getAll,
   addProductToSell,
