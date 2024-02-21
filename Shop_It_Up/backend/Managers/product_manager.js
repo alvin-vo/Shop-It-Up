@@ -3,50 +3,55 @@
    It should be the only thing that commuicates with the DAOs.
 */
 
-
-const Joi = require('joi');
+const joi = require("joi");
 // MIRROR CHANGES HERE!
-const schemaChecker = Joi.object({
-  productId: Joi.string().required(),
-  sellerId: Joi.string().required(),
-  title: Joi.string().required(),
-  quantity: Joi.number().required(),
-  description: Joi.string().required(),
-  price: Joi.number().required(),
-  img: Joi.string().required(),
+const schemaChecker = joi.object({
+  productId: joi.string().required(),
+  sellerId: joi.string().required(),
+  title: joi.string().required(),
+  quantity: joi.number().required(),
+  description: joi.string().required(),
+  price: joi.number().required(),
+  img: joi.string().required(),
 });
 
-const ProductDAO = require("../AccessObjects/product_dao.js");
+const productDAO = require("../AccessObjects/product_dao.js");
 
 const getProducts = async () => {
-  return ProductDAO.getAllProducts();
+  return productDAO.getAllProducts();
 };
 
 const getOneProduct = async (req) => {
-  return ProductDAO.getOnlyProduct(req.params.productId);
+  return productDAO.getOnlyProduct(req.params.productId);
 
 };
 
 const createProduct = async (req) => {
   const checkOne = await checkId(req.body.productId); // Check product id for any matches, FALSE if match
   const checkTwo = await checkBody(req.body); // Check body to ensure correct values, FALSE if not
-  if(checkOne && checkTwo) { // THIS NEEDS TO BE TRUE TRUE
-    return ProductDAO.createdProduct(req.body);
+
+  if (checkOne && checkTwo) {
+    // THIS NEEDS TO BE TRUE TRUE
+    return productDAO.createdProduct(req.body);
+
   } else {
     return null;
   }
 };
 
 const deleteProduct = async (req) => {
-  return ProductDAO.deletedProduct(req.params.productId);
+  return productDAO.deletedProduct(req.params.productId);
+
 };
 
 const updateProduct = async (req) => {
   const checkOne = await checkId(req.params.productId); // Check product id for any matches, FALSE if match
   const checkTwo = await checkBody(req.body); // Check body to ensure correct values, FALSE if not
-  if(!checkOne && checkTwo) { // THIS NEEDS TO BE !(FALSE) TRUE
-    await ProductDAO.updatedProduct(req.params.productId, req.body); // UPDATE
-    return await ProductDAO.getOnlyProduct(req.body.productId); // RETURN UPDATED OBJECT
+  if (!checkOne && checkTwo) {
+    // THIS NEEDS TO BE !(FALSE) TRUE
+    await productDAO.updatedProduct(req.params.productId, req.body); // UPDATE
+    return await productDAO.getOnlyProduct(req.body.productId); // RETURN UPDATED OBJECT
+
   } else {
     return null;
   }
@@ -56,21 +61,23 @@ const updateProduct = async (req) => {
 // RETURNS true IF req.body IS VALID, false OTHERWISE.
 async function checkBody(bodyToCheck) {
   const bodyResult = schemaChecker.validate(bodyToCheck);
-  if(bodyResult.error) {
+  if (bodyResult.error) {
     return false;
   }
   return true;
-};
+}
+
 
 // Function to check that req.body.productId is not duplicated!
 // RETURNS true IF THERE IS NOT AN EXISTING PRODUCT, false OTHERWISE.
 async function checkId(productIdToCheck) {
-  const idResult = await ProductDAO.getOnlyProduct(productIdToCheck); 
-  if(idResult == null) {
+
+  const idResult = await productDAO.getOnlyProduct(productIdToCheck);
+  if (idResult == null) {
     return true;
   }
   return false;
-};
+}
 
 
 module.exports = {

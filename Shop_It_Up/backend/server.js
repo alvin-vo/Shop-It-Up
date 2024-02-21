@@ -4,10 +4,11 @@ const mongoose = require("mongoose");
 const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const authRoutes = require("./Routes/auth_routes.js");
-const productRoutes = require("./Routes/product_routes.js");
-const userRoutes = require("./Routes/user_routes.js");
+
+const authRoutes = require("./Routes/auth_route.js");
+const productRoutes = require("./Routes/product_route.js");
 const userManager = require("./Managers/user_manager.js");
+const userRoutes = require("./Routes/user_route.js");
 const passport = require("passport");
 const cartRoutes = require("./routes/cart_route.js");
 
@@ -109,19 +110,6 @@ async function connectToDB() {
       dbName: "Shop_it_up_database",
     })
     .catch((err) => console.error(err));
-}
-
-async function authorize(userId) {
-  const authenticated = user.find(userId); // Hmm
-  if (authenticated === null) {
-    console.error("user not authenticated");
-  } else {
-    return userId;
-  }
-}
-
-function isLoggedIn(req, res, next) {
-  req.user ? next() : res.sendStatus(401);
 }
 
 // run().catch(console.dir);
