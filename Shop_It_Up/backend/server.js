@@ -16,7 +16,6 @@ const cartRoutes = require("./Routes/cart_routes.js");
 const userManager = require("./Managers/user_manager.js");
 // AUTHORIZATION
 const passport = require("passport");
-const cartRoutes = require("./Routes/cart_routes.js");
 
 const PORT = 3010;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
