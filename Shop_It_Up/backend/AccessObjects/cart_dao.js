@@ -3,7 +3,7 @@ These are the interfaces that communicate with the models.
 The models communicate with the database.
 */
 
-const Cart = require("../models/cart_model,js");
+const Cart = require("../Models/cart_model.js");
 
 // ADD PRODUCT TO CART
 const addProduct = async (fidnCartId, productId) => {
@@ -49,6 +49,15 @@ const createCart = async(userIdForNewCart) => {
   }
 };
 
+const getAllCarts = async () => {
+  try {
+    const carts = await Cart.find({});
+    return carts;
+  } catch (err) {
+    return null;
+  }
+};
+
 // HELPER FUNCTIONS
 
 // MAKE NEW ID (FOR CART) OF LENGTH 13
@@ -77,4 +86,5 @@ module.exports = {
   syncCart,
   deleteCart,
   createCart,
+  getAllCarts,
 };
