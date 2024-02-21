@@ -23,7 +23,8 @@
     "lodash": "^4.17.21",
     "mongoose": "^8.1.1",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "cors": "^2.8.5",
