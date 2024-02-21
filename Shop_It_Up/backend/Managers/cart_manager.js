@@ -7,10 +7,10 @@ const productManager = require("../Managers/product_manager.js");
 // 0: CHECK IF CART IS EMPTY
 // 1: CHECK IF PRODUCT EXISTS
 // 2: RETURN IF PRODUCT DOESN'T EXIST
-// 1: IF CART IS EMPTY -> 2, ELSE -> 3
-// 2: CREATE CART 
-// 3: ADD PRODUCT TO CART
-// 4: RETURN NEW CART
+// 3: IF CART IS EMPTY -> 4, ELSE -> 5
+// 4: CREATE CART 
+// 5: ADD PRODUCT TO CART
+// 6: RETURN NEW CART
 const addProductToCart = async (passedInInfo) => {
   const realCart = await userManager.checkValidCart(passedInInfo.params.cartId); // Should be TRUE
   const realProduct = await productManager.getOneProduct(passedInInfo); // Should be set to a valid product
