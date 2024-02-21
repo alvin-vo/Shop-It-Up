@@ -1,4 +1,4 @@
-const cartDAO = require("../models/cart_dao.js");
+const cartDAO = require("../AccessObjects/cart_dao.js");
 const userManager = require("../Managers/user_manager.js");
 const productManager = require("../Managers/product_manager.js");
 
@@ -43,6 +43,12 @@ const checkoutCart = async (cartId, userId) => {};
 
 const deleteCart = async (cartId) => {};
 
+// CART SHOW ALL:
+
+const getCarts = async (cartId) => {
+  return cartDAO.getAllCarts();
+};
+
 // HELPER FUNCTIONS
 
 async function createCart(passedInUserId) {
@@ -60,4 +66,5 @@ module.exports = {
   removeProductFromCart,
   addContributorToCart,
   checkoutCart,
+  getCarts,
 };
