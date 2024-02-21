@@ -3,27 +3,99 @@
    It should be the only thing that commuicates with the DAOs.
 */
 
-const UserDAO = require("../AccessObjects/user_dao.js");
 
-const createUser = async (userId) => {
-  await UserDAO.createNewUser(userId);
+const userDAO = require("../AccessObjects/user_dao.js");
+
+const guard = require("../Security/check_status.js");
+
+// USER:
+
+const createUser = async (userInfo) => {
+  await userDAO.createNewUser(userInfo.userId, userInfo.email);
 };
 
-const updateUser = async () => {};
-
-// const deleteUser = async () => {};
-
 const getUser = async () => {};
+
+// SHOULD BE PASSWORD PROTECTED
+const getAll = async (passedInVariablePassword, passedInVariablePassphrase) => {
+  // Encrypt Server
+  const encryptedServerMessage = await guard.encryptServer();
+  const decryptedServerMessage = await guard.decryptNow(
+    encryptedServerMessage,
+    passedInVariablePassphrase
+  );
+
+  // Encrypt User
+  const encryptedUserMessage = await guard.encryptNow(
+    passedInVariablePassword,
+    passedInVariablePassphrase
+  );
+  const decryptedUserMessage = await guard.decryptNow(
+    encryptedUserMessage,
+    passedInVariablePassphrase
+  );
+
+  // Check: Should be TRUE
+  const checkNow = await guard.checkCorrect(
+    decryptedServerMessage,
+    decryptedUserMessage
+  );
+
+  // TRUE: Get all users
+  if (checkNow) {
+    return await userDAO.getAllUsers();
+  }
+  return null; // Return null if FALSE
+};
+
 
 const addProductToSell = async () => {};
 
 const removeProductToSell = async () => {};
 
-const sendInvite = async () => {};
+// INVITES:
 
-const acceptInvite = async () => {};
+// Checks if Valid User and Valid Cart, returns TRUE
+const sendInvite = async (passedInId) => {
+  // Check if User Exists
+  const valUser = await checkValidUser(passedInId);
+  if (valUser == null) {
+    return null;
+  }
+  // Check if Cart Exists
+  const valCart = await checkValidCart(valUser);
+  if (valCart == null) {
+    return null;
+  }
 
-const receiveInvite = async () => {};
+  // All tests passed
+  return await userDAO.sendHandler(valUser);
+};
+
+const acceptInvite = async () => {
+  return null;
+};
+
+// HELPERS:
+
+// Validate User, returns TRUE
+async function checkValidUser(userToValidate) {
+  const userResult = await userDAO.getOnlyUser(userToValidate);
+  if (userResult == null) {
+    return null;
+  }
+  return userResult;
+}
+
+// Validate Cart, returns TRUE
+async function checkValidCart(cartToValidate) {
+  // Get Cart Id
+  const getCartId = cartToValidate.cartId;
+  // No cartId, Can't Invite
+  if (getCartId == undefined) {
+    return null;
+  }
+  return getCartId;
 
 // Function to check that req.body matches our schema!
 // RETURNS true IF req.body IS VALID, false OTHERWISE.
@@ -43,13 +115,13 @@ async function checkId(productIdToCheck) {
     return true;
   }
   return false;
+
 }
 
 module.exports = {
   createUser,
-  updateUser,
-  deleteUser,
   getUser,
+  getAll,
   addProductToSell,
   removeProductToSell,
   receiveInvite,

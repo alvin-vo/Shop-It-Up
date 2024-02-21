@@ -3,22 +3,23 @@ These are the interfaces that communicate with the models.
 The models communicate with the database.
 */
 
-const User = require("../Models/user_model.js");
+const user = require("../Models/user_model.js");
 
-const Guard = require("../Security/check_status.js")
+const guard = require("../Security/check_status.js");
 
 
 // USER:
 
 const createNewUser = async (userId, passedInEmail) => {
   const userID = userId;
-  const existingUser = await User.findOne({ userId: userID });
-  
+
+  const existingUser = await user.findOne({ userId: userID });
+
   // ENCRYPT EMAIL FOR INVITE
-  const encryptEmail = await Guard.encryptEmail(passedInEmail);
+  const encryptEmail = await guard.encryptEmail(passedInEmail);
 
   if (!existingUser) {
-    new User({
+    new user({
       userId: userID,
       email: encryptEmail,
       productsToSell: [],
@@ -34,7 +35,9 @@ const createNewUser = async (userId, passedInEmail) => {
 const getExisitngUserInfo = async () => {};
 
 const getAllUsers = async () => {
-  const existingUsers = await User.find();
+  
+  const existingUsers = await user.find();
+
   return existingUsers;
 };
 
@@ -48,41 +51,49 @@ const removeProduct = async () => {};
 
 const sendHandler = async (userToInvite) => {
   // Decrypt Email
-  const decryptEmail = await Guard.decryptEmail(userToInvite.email);
-  
+
+  const decryptEmail = await guard.decryptEmail(userToInvite.email);
+
   // Get Cart Id
   const getCartId = userToInvite.cartId;
 
   // Make Link
-  const linkToSend = "http://localhost:3010/api/user/invite/accept/" + getCartId;
+
+  const linkToSend =
+    "http://localhost:3010/api/user/invite/accept/" + getCartId;
 
   // Send Email
-  const sentOrNot = await Guard.sendEmail(decryptEmail, linkToSend);
+  const sentOrNot = await guard.sendEmail(decryptEmail, linkToSend);
+
 
   return sentOrNot;
 };
 
-const acceptHandler = async () => {
-  
 
-};
+const acceptHandler = async () => {};
+
 
 // HELPER:
 
 // Find user, return user
 async function getOnlyUser(passedInUserId) {
-  const existingUser = await User.findOne({userId: passedInUserId});
+
+  const existingUser = await user.findOne({ userId: passedInUserId });
+
   if (existingUser) {
     return existingUser;
   } else {
     return null; // return null if no user
   }
-};
+}
+
 
 // LEGACY
 
 const checkUserExistence = async (passedInUserId) => {
-  const user = await User.findOne({ userId: passedInUserId });
+  
+  const user = await user.findOne({ userId: passedInUserId });
+
   if (user) {
     return true;
   } else {
