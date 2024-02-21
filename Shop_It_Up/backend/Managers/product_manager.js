@@ -5,16 +5,16 @@
 
 
 // SCHEMA
-const Joi = require('joi');
+const joi = require('joi');
 // MIRROR CHANGES HERE! (FROM "../Models/products_model.js")
-const schemaChecker = Joi.object({
-  productId: Joi.string().required(),
-  sellerId: Joi.string().required(),
-  title: Joi.string().required(),
-  quantity: Joi.number().required(),
-  description: Joi.string().required(),
-  price: Joi.number().required(),
-  img: Joi.string().required(),
+const schemaChecker = joi.object({
+  productId: joi.string().required(),
+  sellerId: joi.string().required(),
+  title: joi.string().required(),
+  quantity: joi.number().required(),
+  description: joi.string().required(),
+  price: joi.number().required(),
+  img: joi.string().required(),
 });
 
 const productDAO = require("../AccessObjects/product_dao.js");

@@ -20,9 +20,9 @@ const getAllProducts = async () => {
 
 const getOnlyProduct = async (passedInId) => {
   try {
-    const product = await product.findOne({ productId: passedInId });
+    const products = await product.findOne({ productId: passedInId });
 
-    return product;
+    return products;
   } catch (err) {
     return null; // Return null if error.
   }
@@ -31,10 +31,10 @@ const getOnlyProduct = async (passedInId) => {
 const createdProduct = async (passedInBody) => {
   try {
 
-    const prod = new product(passedInBody);
-    await prod.save();
+    const products = new product(passedInBody);
+    await products.save();
     // Return created product.
-    return prod;
+    return products;
 
   } catch (err) {
     return null; // Return null if error.
@@ -43,9 +43,9 @@ const createdProduct = async (passedInBody) => {
 
 const deletedProduct = async (passedInId) => {
   try {
-    const prod = await product.findOneAndDelete({ productId: passedInId });
+    const products = await product.findOneAndDelete({ productId: passedInId });
     // Return empty, product deleted ?
-    return prod;
+    return products;
 
   } catch (err) {
     return null; // Return null if error.
@@ -55,14 +55,14 @@ const deletedProduct = async (passedInId) => {
 // Might need to change later based on req setup.
 const updatedProduct = async (passedInId, passedInBody) => {
   try {
-    const prod = await product.findOneAndUpdate(
+    const products = await product.findOneAndUpdate(
 
       { productId: passedInId },
       passedInBody
     );
     // Return updated product.
 
-    return prod;
+    return products;
 
   } catch (err) {
     return null; // Return null if error.
