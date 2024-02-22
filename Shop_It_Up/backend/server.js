@@ -72,13 +72,13 @@ app.get(
 
 app.get("/protected", async (req, res) => {
   // const userId = await UserManager.createUser(req.user.id, req.user.email);
-  const userId = null;
+  const userId = req.user.id;
+  const userEmail = req.user.emails[0].value;
+  console.log(req.user);
+
+  const token = jwt.sign({ id: userId, email: userEmail }, process.env.HASH);
 
   res.cookie("auth", req.user.id, { httpOnly: false });
-
-  console.log(req.user.id);
-
-  const token = jwt.sign({ id: req.user.id }, process.env.HASH);
 
   res.cookie("auth", token, { httpOnly: true });
   if (userId !== null) {

@@ -16,7 +16,10 @@ router.get(
 
 router.get("/authorizeTest", authorize, (req, res) => {
   const id = req.userId;
-  res.status(200).send(`This is your id: ${id} `);
+  const email = req.userEmail;
+  res
+    .status(200)
+    .send(`This is your id: ${id} and this is your email ${email}`);
 });
 
 module.exports = router;

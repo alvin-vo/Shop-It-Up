@@ -47,7 +47,8 @@ router.post("/create", async (req, res) => {
 // RETURNS DELETED PRODUCT
 router.delete("/delete/:productId", async (req, res) => {
   const product = await productManager.deleteProduct(req); // not working?
-  if (product == null) { // null or empty ?
+  if (product == null) {
+    // null or empty ?
     res.send("Error: null.");
   } else {
     res.send(product);

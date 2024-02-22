@@ -23,6 +23,7 @@ const authorize = async (req, res, next) => {
     if (doesUserExists) {
       //decrypted user Id returned (This is used to get the google Id we encrypted).
       req.userId = data.id;
+      req.userEmail = data.email;
       next();
     } else {
       res
