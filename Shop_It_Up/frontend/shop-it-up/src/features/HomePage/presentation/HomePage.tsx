@@ -1,6 +1,6 @@
 import "./HomePage.css";
 import ProductsGrid from '../../Products/Presentation/ProductsGrid';
-import Navbar from '../../NavBar/Presentation/Navbar'
+import NavBar from "../../NavBar/Presentation/NavBar";
 import LoginPage from "../../LoginPage/presentation/LoginPage";
 
 const HomePage = () => {
@@ -10,7 +10,6 @@ const HomePage = () => {
             <Navbar/>
                 <ProductsGrid/>
         </div>
-
 
     );
 }

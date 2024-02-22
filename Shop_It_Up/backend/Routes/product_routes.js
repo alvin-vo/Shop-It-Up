@@ -6,10 +6,6 @@ const express = require("express");
 
 const router = express.Router();
 const productManager = require("../Managers/product_manager.js");
-const {
-  createProduct,
-  deleteProduct,
-} = require("../AccessObjects/product_dao.js");
 const { authorize } = require("../Managers/authorize_manager.js");
 
 // Get all products.

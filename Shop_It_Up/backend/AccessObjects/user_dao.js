@@ -3,9 +3,8 @@ These are the interfaces that communicate with the models.
 The models communicate with the database.
 */
 
-const User = require("../Models/user_model.js");
-
-const Guard = require("../Security/check_status.js")
+const User = require("../Models/user_model.js"); // OBJECT
+const guard = require("../Security/check_status.js")
 
 
 // USER:
@@ -15,7 +14,7 @@ const createNewUser = async (userId, passedInEmail) => {
   const existingUser = await User.findOne({ userId: userID });
   
   // ENCRYPT EMAIL FOR INVITE
-  const encryptEmail = await Guard.encryptEmail(passedInEmail);
+  const encryptEmail = await guard.encryptEmail(passedInEmail);
 
   if (!existingUser) {
     new User({
@@ -48,7 +47,7 @@ const removeProduct = async () => {};
 
 const sendHandler = async (userToInvite) => {
   // Decrypt Email
-  const decryptEmail = await Guard.decryptEmail(userToInvite.email);
+  const decryptEmail = await guard.decryptEmail(userToInvite.email);
   
   // Get Cart Id
   const getCartId = userToInvite.cartId;
@@ -57,7 +56,7 @@ const sendHandler = async (userToInvite) => {
   const linkToSend = "http://localhost:3010/api/user/invite/accept/" + getCartId;
 
   // Send Email
-  const sentOrNot = await Guard.sendEmail(decryptEmail, linkToSend);
+  const sentOrNot = await guard.sendEmail(decryptEmail, linkToSend);
 
   return sentOrNot;
 };

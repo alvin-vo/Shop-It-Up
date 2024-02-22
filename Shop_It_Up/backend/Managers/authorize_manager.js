@@ -2,17 +2,27 @@
  It is only used to authorize a user if it exists.
  This is used to protect the routes*/
 
-const User = require("../Models/user_model.js");
-const UserDAO = require("../AccessObjects/user_dao.js");
+const jwt = require("jsonwebtoken");
+
+const userDAO = require("../AccessObjects/user_dao.js");
 
 const authorize = async (req, res, next) => {
   try {
     const id = req.cookies.auth;
 
-    const doesUserExists = await UserDAO.checkUserExistence(id);
-    console.log(doesUserExists);
+    console.log(id);
+
+    let data = await jwt.verify(id, process.env.HASH);
+
+    console.log("data: ", data);
+
+    const doesUserExists = await userDAO.checkUserExistence(data.id);
+
+    console.log("user exsistence", doesUserExists);
 
     if (doesUserExists) {
+      //decrypted user Id returned (This is used to get the google Id we encrypted).
+      req.userId = data.id;
       next();
     } else {
       res

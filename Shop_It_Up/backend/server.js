@@ -1,18 +1,24 @@
+// IMPORTED MODULES
 const express = require("express");
 const session = require("express-session");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+// APP INITIALIZER
 const app = express();
+// PARSERS
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+// ROUTES
 const authRoutes = require("./Routes/auth_routes.js");
 const productRoutes = require("./Routes/product_routes.js");
 const userRoutes = require("./Routes/user_routes.js");
+const cartRoutes = require("./Routes/cart_routes.js");
+// USER MANAGER
 const userManager = require("./Managers/user_manager.js");
+// AUTHORIZATION
 const passport = require("passport");
-const cartRoutes = require("./routes/cart_route.js");
 
 const PORT = 3010;
-
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GOOGLE_CLIENT_ID =
   "1005337001636-7bpm9ohobj26vvvm3bg57tlftqf7nmln.apps.googleusercontent.com";
@@ -65,8 +71,16 @@ app.get(
 );
 
 app.get("/protected", async (req, res) => {
-  const userId = await userManager.createUser(req.user.id);
+  // const userId = await UserManager.createUser(req.user.id, req.user.email);
+  const userId = null;
+
   res.cookie("auth", req.user.id, { httpOnly: false });
+
+  console.log(req.user.id);
+
+  const token = jwt.sign({ id: req.user.id }, process.env.HASH);
+
+  res.cookie("auth", token, { httpOnly: true });
   if (userId !== null) {
     res.json({ redirect: true, message: "login succesfull" });
   } else {
