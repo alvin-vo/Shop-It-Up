@@ -3,13 +3,25 @@ These are the interfaces that communicate with the models.
 The models communicate with the database.
 */
 
-const cartModel = require("../models/cart_model,js");
+const cartModel = require("../models/cart_model.js");
 
 const addProduct = async (productId) => {};
 
 const removeProduct = async (productId) => {};
 
-const addContributor = async (cartId) => {};
+const addContributor = async (cartId, userId) => {
+  try {
+    const confirmation = await cartModel.findOneAndUpdate(
+      { cartId: cartId },
+      { $push: { contributorIds: userId } },
+      { new: true }
+    );
+
+    return confirmation;
+  } catch (e) {
+    console.error("add contributor error: ", e);
+  }
+};
 
 const removeContributor = async (userId) => {};
 
