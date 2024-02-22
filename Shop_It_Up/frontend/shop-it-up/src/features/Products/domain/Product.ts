@@ -1,10 +1,10 @@
 export default interface Product {
-    productsId: string;
-    userId: string;
-    title: string;
-    quantity: number;
-    description: string;
-    price: number;
-    img: string;
+    productId: string
+    title: string
+    price: number
+    category: string
+    description: string
+    quantity: number
+    sellerId: string
+    image: string
 }
-

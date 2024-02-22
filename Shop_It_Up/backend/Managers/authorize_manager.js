@@ -2,14 +2,17 @@
  It is only used to authorize a user if it exists.
  This is used to protect the routes*/
 
-const User = require("../models/UserModel.js");
-const UserDAO = require("../AccessObjects/UserDAO.js");
+
+const userDAO = require("../AccessObjects/user_dao.js");
+
 
 const authorize = async (req, res, next) => {
   try {
     const id = req.cookies.auth;
 
-    const doesUserExists = await UserDAO.checkUserExistence(id);
+
+    const doesUserExists = await userDAO.checkUserExistence(id);
+
     console.log(doesUserExists);
 
     if (doesUserExists) {

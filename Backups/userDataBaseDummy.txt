@@ -1,0 +1,93 @@
+[
+    {
+        "cart": {
+            "cartId": "123434",
+            "ownerId": "102537222162702225956",
+            "contributors": [],
+            "products": []
+        },
+        "_id": "65cae31605f09e171f4e5f3a",
+        "userId": "102537222162702225956",
+        "productsToSell": [],
+        "recievedInvites": [],
+        "__v": 0
+    },
+    {
+        "cart": {
+            "cartId": "123434",
+            "ownerId": "456",
+            "contributors": [],
+            "products": []
+        },
+        "_id": "65cfc3e73cefe9bb002dc3af",
+        "userId": "456",
+        "productsToSell": [],
+        "recievedInvites": [],
+        "__v": 0
+    },
+    {
+        "cart": {
+            "cartId": "123434",
+            "ownerId": "1234",
+            "contributors": [],
+            "products": []
+        },
+        "_id": "65cfc3e73cefe9bb002dc3b1",
+        "userId": "1234",
+        "productsToSell": [],
+        "recievedInvites": [],
+        "__v": 0
+    },
+    {
+        "cart": {
+            "cartId": "123434",
+            "ownerId": "707",
+            "contributors": [],
+            "products": []
+        },
+        "_id": "65cfc3e73cefe9bb002dc3b3",
+        "userId": "707",
+        "productsToSell": [],
+        "recievedInvites": [],
+        "__v": 0
+    },
+    {
+        "cart": {
+            "cartId": "123434",
+            "ownerId": "100",
+            "contributors": [],
+            "products": []
+        },
+        "_id": "65cfc48e5a8b502842df60a6",
+        "userId": "100",
+        "productsToSell": [],
+        "recievedInvites": [],
+        "__v": 0
+    },
+    {
+        "cart": {
+            "cartId": "123434",
+            "ownerId": "102",
+            "contributors": [],
+            "products": []
+        },
+        "_id": "65cfc48e5a8b502842df60a9",
+        "userId": "102",
+        "productsToSell": [],
+        "recievedInvites": [],
+        "__v": 0
+    },
+    {
+        "cart": {
+            "cartId": "123434",
+            "ownerId": "703",
+            "contributors": [],
+            "products": []
+        },
+        "_id": "65cfc48e5a8b502842df60ac",
+        "userId": "703",
+        "productsToSell": [],
+        "recievedInvites": [],
+        "__v": 0
+    }
+]

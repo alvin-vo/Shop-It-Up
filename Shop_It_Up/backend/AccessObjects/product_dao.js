@@ -3,12 +3,15 @@ These are the interfaces that communicate with the models.
 The models communicate with the database.
 */
 
-const Product = require("../models/ProductsModel.js");
+
+const product = require("../Models/product_model.js");
+
 
 // Return null if error.
 const getAllProducts = async () => {
   try {
-    const products = await Product.find({});
+    const products = await product.find({});
+
     return products;
   } catch (err) {
     return null;
@@ -17,7 +20,8 @@ const getAllProducts = async () => {
 
 const getOnlyProduct = async (passedInId) => {
   try {
-    const product = await Product.findOne({ productId: passedInId }); // Not working as intended, but sufficient.
+    const product = await product.findOne({ productId: passedInId });
+
     return product;
   } catch (err) {
     return null; // Return null if error.
@@ -26,10 +30,12 @@ const getOnlyProduct = async (passedInId) => {
 
 const createdProduct = async (passedInBody) => {
   try {
-    const product = new Product(passedInBody);
-    await product.save();
+
+    const prod = new product(passedInBody);
+    await prod.save();
     // Return created product.
-    return product;
+    return prod;
+
   } catch (err) {
     return null; // Return null if error.
   }
@@ -37,9 +43,10 @@ const createdProduct = async (passedInBody) => {
 
 const deletedProduct = async (passedInId) => {
   try {
-    const product = await Product.findOneAndDelete({ productId: passedInId });
+    const prod = await product.findOneAndDelete({ productId: passedInId });
     // Return empty, product deleted ?
-    return product;
+    return prod;
+
   } catch (err) {
     return null; // Return null if error.
   }
@@ -48,12 +55,15 @@ const deletedProduct = async (passedInId) => {
 // Might need to change later based on req setup.
 const updatedProduct = async (passedInId, passedInBody) => {
   try {
-    const product = await Product.findOneAndUpdate(
+    const prod = await product.findOneAndUpdate(
+
       { productId: passedInId },
       passedInBody
     );
     // Return updated product.
-    return product;
+
+    return prod;
+
   } catch (err) {
     return null; // Return null if error.
   }

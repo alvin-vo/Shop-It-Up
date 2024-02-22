@@ -5,12 +5,8 @@ const express = require("express");
 */
 
 const router = express.Router();
-const productManager = require("../Managers/ProductManager.js");
-const {
-  createProduct,
-  deleteProduct,
-} = require("../AccessObjects/ProductDAO.js");
-const { authorize } = require("../Managers/AuthorizeManager.js");
+const productManager = require("../Managers/product_manager.js");
+const { authorize } = require("../Managers/authorize_manager.js");
 
 // Get all products.
 // RETURNS ALL PRODUCTS
@@ -51,8 +47,7 @@ router.post("/create", async (req, res) => {
 // RETURNS DELETED PRODUCT
 router.delete("/delete/:productId", async (req, res) => {
   const product = await productManager.deleteProduct(req); // not working?
-  if (product == null) {
-    // null or empty ?
+  if (product == null) { // null or empty ?
     res.send("Error: null.");
   } else {
     res.send(product);
