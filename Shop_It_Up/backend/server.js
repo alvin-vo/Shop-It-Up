@@ -1,18 +1,23 @@
+// IMPORTED MODULES
 const express = require("express");
 const session = require("express-session");
 const mongoose = require("mongoose");
+// APP INITIALIZER
 const app = express();
+// PARSERS
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+// ROUTES
 const authRoutes = require("./Routes/auth_routes.js");
 const productRoutes = require("./Routes/product_routes.js");
 const userRoutes = require("./Routes/user_routes.js");
+const cartRoutes = require("./Routes/cart_routes.js");
+// USER MANAGER
 const userManager = require("./Managers/user_manager.js");
+// AUTHORIZATION
 const passport = require("passport");
-const cartRoutes = require("./routes/cart_route.js");
 
 const PORT = 3010;
-
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GOOGLE_CLIENT_ID =
   "1005337001636-7bpm9ohobj26vvvm3bg57tlftqf7nmln.apps.googleusercontent.com";

@@ -1,6 +1,5 @@
 const { Schema, mongoose } = require("mongoose");
 
-
 // IF YOU CHANGE SCHEMA, REMEMBER TO GO TO PRODUCT MANAGER AND MIRROR THE CHANGES!
 const productSchema = new Schema({
   productId: String,
@@ -14,6 +13,6 @@ const productSchema = new Schema({
 
 productSchema.set("collection", "products");
 
-const Product = mongoose.model("product", productSchema);
+const product = mongoose.model("product", productSchema);
 
-module.exports = Product;
+module.exports = product;

@@ -14,7 +14,7 @@ const createNewUser = async (userId, passedInEmail) => {
   const existingUser = await User.findOne({ userId: userID });
 
   // ENCRYPT EMAIL FOR INVITE
-  const encryptEmail = await Guard.encryptEmail(passedInEmail);
+  const encryptEmail = await guard.encryptEmail(passedInEmail);
 
   if (!existingUser) {
     new User({
@@ -74,7 +74,7 @@ const sendHandler = async (userToInvite) => {
     "http://localhost:3010/api/user/invite/accept/" + getCartId;
 
   // Send Email
-  const sentOrNot = await Guard.sendEmail(decryptEmail, linkToSend);
+  const sentOrNot = await guard.sendEmail(decryptEmail, linkToSend);
 
   return sentOrNot;
 };
