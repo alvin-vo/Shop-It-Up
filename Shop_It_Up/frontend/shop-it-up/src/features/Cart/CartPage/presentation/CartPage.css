@@ -1,0 +1,45 @@
+.shopping-cart {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .item-info span {
+    display: block;
+  }
+  
+  .item-controls input[type="number"] {
+    width: 60px;
+    margin-right: 10px;
+  }
+  
+  .total {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+    bottom: 20px
+  }
+
+  .checkout-button {
+    display: block; /* Make the button block to occupy the full width if needed */
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding for better touch */
+    background-color: #0000FF; /* A nice green color */
+    color: white; /* Text color */
+    font-size: 16px; /* Slightly larger font */
+    cursor: pointer; /* Cursor to pointer to indicate it's clickable */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    margin-top: 10px; /* Space from the total */
+}
+
+.checkout-button:hover {
+    background-color: #0000FF; /* Darker shade on hover */
+}
