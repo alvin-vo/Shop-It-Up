@@ -6,6 +6,7 @@ const express = require("express");
 
 const router = express.Router();
 const userManager = require("../Managers/user_manager.js");
+const { authorize } = require("passport");
 
 // USER:
 
@@ -26,7 +27,10 @@ router.get("/getInfo", async (req, res) => {
 
 //Get all user
 router.get("/getAll/", async (req, res) => {
-  const users = await userManager.getAll(req.body.password, req.body.passphrase);
+  const users = await userManager.getAll(
+    req.body.password,
+    req.body.passphrase
+  );
   if (users == null) {
     res.send("Error: null.");
   } else {
@@ -59,10 +63,14 @@ router.post("/invite/:userId", async (req, res) => {
 });
 
 //Accept Invite
-router.post("/invite/accept/:cartId", async (req, res) => {
-  const user = await userManager.acceptInvite(req.params.cartId);
+router.patch("/invite/accept/:cartId", async (req, res) => {
+  // res.send("accept invite route called");
+  const user = await userManager.acceptInvite(
+    req.params.cartId,
+    req.body.userId
+  );
   if (user == null) {
-    res.send("Error: null.");
+    res.send("Could not add user to cart");
   } else {
     res.send(user);
   }

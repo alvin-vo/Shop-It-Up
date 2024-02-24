@@ -4,13 +4,14 @@ The models communicate with the database.
 */
 
 const Cart = require("../Models/cart_model.js");
+const User = require("../Models/user_model.js");
 
 // ADD PRODUCT TO CART
 const addProduct = async (fidnCartId, productId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
       { cartId: fidnCartId },
-      {"products.$": productId}
+      { "products.$": productId }
     );
 
     return cart;
@@ -21,7 +22,34 @@ const addProduct = async (fidnCartId, productId) => {
 
 const removeProduct = async (productId) => {};
 
-const addContributor = async (cartId) => {};
+const addContributor = async (cartId, userId) => {
+  //if user is already apart of the cart
+  if (await doesContributorExsistsInCart(cartId, userId)) {
+    console.log("user already exists in cart.");
+    return null;
+  }
+
+  try {
+    //update users cart Id
+    await User.findOneAndUpdate(
+      { userId: userId },
+      { cartId: cartId },
+      { new: true }
+    );
+
+    //add user Id to cart
+    const confirmation = await Cart.findOneAndUpdate(
+      { cartId: cartId },
+      { $push: { contributorIds: userId } },
+      { new: true }
+    );
+
+    return confirmation;
+  } catch (e) {
+    // console.error("add contributor error: ", e);
+    return null;
+  }
+};
 
 const removeContributor = async (userId) => {};
 
@@ -32,7 +60,7 @@ const syncCart = async (userId) => {};
 
 const deleteCart = async (cartId) => {};
 
-const createCart = async(userIdForNewCart) => {
+const createCart = async (userIdForNewCart) => {
   try {
     createdCartId = makeNewId();
     const newCart = new Cart({
@@ -40,8 +68,8 @@ const createCart = async(userIdForNewCart) => {
       ownerId: userIdForNewCart,
       contributorIds: [userIdForNewCart],
       products: [],
-  })
-  newCart.save();
+    });
+    newCart.save();
     // Return created cartId.
     return createdCartId;
   } catch (err) {
@@ -63,10 +91,11 @@ const getAllCarts = async () => {
 // MAKE NEW ID (FOR CART) OF LENGTH 13
 function makeNewId() {
   // SET VALUES CARTID CAN BE
-  const validChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-=!@#$%^&*()_+';
+  const validChar =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-=!@#$%^&*()_+";
   const validCharLength = validChar.length;
   // VALUE TO RETURN
-  var returnVal = '';
+  var returnVal = "";
   // CREATE VALUE
   let count = 0;
   while (count < 13) {
@@ -76,6 +105,16 @@ function makeNewId() {
   // RETURN
   return returnVal;
 }
+
+const doesContributorExsistsInCart = async (cartId, userId) => {
+  try {
+    const carts = await Cart.findOne({ cartId: cartId });
+    const exists = carts.contributorIds.includes(userId);
+    return exists;
+  } catch (err) {
+    return null;
+  }
+};
 
 module.exports = {
   addProduct,
