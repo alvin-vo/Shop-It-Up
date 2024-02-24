@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './LoginPage.css'; // Make sure the CSS file is correctly linked
 //import img1 from " ./images/shopitup.png";
 import { Box } from '@chakra-ui/react'
+//import { GoogleLogin } from 'react-google-login'; // Import the GoogleLogin component
 
 
 
