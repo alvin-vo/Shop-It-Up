@@ -13,7 +13,9 @@ var _ = require('lodash');
 // ENCRYPT DECRYPT SECURITY
 
 const encryptServer = async () => {
+
   var encrypted = CryptoJS.AES.encrypt(process.env.USER_PASSWORD, process.env.USER_PASSPHRASE);
+
   return encrypted;
 };
 
@@ -40,13 +42,14 @@ const decryptEmail = async (passedInEmail) => {
   return originalText;
 };
 
-// TODO: ADD EMAIL IMPLEMENTATION
+// EMAIL IMPLEMENTATION
 async function sendEmail(passedInEmail, passedInLink) {
-
+  
   var templateParams = {
     sendToEmail: passedInEmail,
     linkToJoin: passedInLink,
   };
+
 
   emailjs.send(process.env.SERVICE_ID, process.env.TEMPLATE_ID, templateParams, {
     publicKey: process.env.PUBLIC_KEY,
