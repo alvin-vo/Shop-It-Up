@@ -36,27 +36,6 @@ const addProductToCart = async (passedInInfo) => {
 
 const removeProductFromCart = async (productId) => {};
 
-// USER UPDATE:
-
-const addContributorToCart = async (cartId, userId) => {
-  const contributorCartId = cartId;
-  const contributorUserId = userId;
-
-  console.log("cart manager: ", userId, " ", cartId);
-
-  let confirmation = await cartDAO.addContributor(
-    contributorCartId,
-    contributorUserId
-  );
-
-  if (confirmation) {
-    let updatedUserId = await userDAO.updateUser(userId, { cartId: cartId });
-    return updatedUserId;
-  } else {
-    return null;
-  }
-};
-
 const removeContributorFromCart = async (userId) => {};
 
 // CART UPDATE
