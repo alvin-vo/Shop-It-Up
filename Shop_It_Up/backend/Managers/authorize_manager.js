@@ -2,9 +2,11 @@
  It is only used to authorize a user if it exists.
  This is used to protect the routes*/
 
+
 const jwt = require("jsonwebtoken");
 
 const userDAO = require("../AccessObjects/user_dao.js");
+
 
 const authorize = async (req, res, next) => {
   try {
@@ -19,6 +21,7 @@ const authorize = async (req, res, next) => {
     const doesUserExists = await userDAO.checkUserExistence(data.id);
 
     console.log("user exsistence", doesUserExists);
+
 
     if (doesUserExists) {
       //decrypted user Id returned (This is used to get the google Id we encrypted).
