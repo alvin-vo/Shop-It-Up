@@ -3,13 +3,13 @@ import ProductEntity from "../entity/ProductEntity";
 
 export const mapProductEntityToProduct = (productEntity: ProductEntity): Product =>{
     return{
-        productsId: productEntity.productsId,
-        userId: productEntity.userId,
+        productId: productEntity.productId,
+        sellerId: productEntity.sellerId,
         title: productEntity.title,
         quantity: productEntity.quantity,
         description: productEntity.description,
+        category: productEntity.category,
         price: productEntity.price,
-        img: productEntity.img,
-        
+        image: productEntity.image
     };
 };

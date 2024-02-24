@@ -1,7 +1,8 @@
 const { Schema, mongoose } = require("mongoose");
 
+
+// IF YOU CHANGE SCHEMA, REMEMBER TO GO TO PRODUCT MANAGER AND MIRROR THE CHANGES!
 const productSchema = new Schema({
-  version: Number,
   productId: String,
   sellerId: String,
   title: String,

@@ -1,13 +1,15 @@
 import "./HomePage.css";
-//import "./LoginPage.tsx";
-import { Box } from '@chakra-ui/react'
+import ProductsGrid from '../../Products/Presentation/ProductsGrid';
+import Navbar from '../../NavBar/Presentation/Navbar'
+import LoginPage from "../../LoginPage/presentation/LoginPage";
 
 const HomePage = () => {
-
-
     return (
-        <div className = "home-page">
+        <div>
+            <Navbar/>
+                <ProductsGrid/>
         </div>
+
 
     );
 }
