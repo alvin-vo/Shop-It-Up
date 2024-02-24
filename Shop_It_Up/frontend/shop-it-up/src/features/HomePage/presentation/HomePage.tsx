@@ -6,9 +6,9 @@ import LoginPage from "../../LoginPage/presentation/LoginPage";
 const HomePage = () => {
     return (
         <div>
-            <LoginPage/>
+            {/* <LoginPage/> */}
             <NavBar/>
-            <ProductsGrid/>
+            {/* <ProductsGrid/> */}
         </div>
 
     );
