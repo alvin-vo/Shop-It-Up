@@ -8,8 +8,8 @@ const guard = require("../Security/check_status.js");
 
 // USER:
 
-const createUser = async (userInfo) => {
-  await userDAO.createNewUser(userInfo.userId, userInfo.email);
+const createUser = async (userId, userEmail) => {
+  await userDAO.createNewUser(userId, userEmail);
 };
 
 const getUser = async () => {};

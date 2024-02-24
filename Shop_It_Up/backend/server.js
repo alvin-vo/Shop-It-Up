@@ -71,17 +71,22 @@ app.get(
 );
 
 app.get("/protected", async (req, res) => {
-  // const userId = await UserManager.createUser(req.user.id, req.user.email);
+  console.log(req.user.id, " ", req.user.emails[0].value);
+  const confirmation = await userManager.createUser(
+    req.user.id,
+    req.user.emails[0].value
+  );
   const userId = req.user.id;
   const userEmail = req.user.emails[0].value;
-  console.log(req.user);
+  //console.log(req.user);
 
   const token = jwt.sign({ id: userId, email: userEmail }, process.env.HASH);
 
   res.cookie("auth", req.user.id, { httpOnly: false });
 
   res.cookie("auth", token, { httpOnly: true });
-  if (userId !== null) {
+  console.log(confirmation);
+  if (confirmation !== null) {
     res.json({ redirect: true, message: "login succesfull" });
   } else {
     res.json({ redirect: true, message: "new user created." });
