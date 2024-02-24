@@ -73,9 +73,19 @@ const sendInvite = async (passedInId) => {
 };
 
 const acceptInvite = async (cartId, userId) => {
-  const confirmation = await cartDAO.addContributor(cartId, userId);
+  const contributorCartId = cartId;
+  const contributorUserId = userId;
+
+  console.log("cart manager: ", userId, " ", cartId);
+
+  let confirmation = await cartDAO.addContributor(
+    contributorCartId,
+    contributorUserId
+  );
+
   if (confirmation) {
-    return confirmation;
+    let updatedUserId = await userDAO.updateUser(userId, { cartId: cartId });
+    return updatedUserId;
   } else {
     return null;
   }

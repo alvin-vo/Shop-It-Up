@@ -30,13 +30,6 @@ const addContributor = async (cartId, userId) => {
   }
 
   try {
-    //update users cart Id
-    await User.findOneAndUpdate(
-      { userId: userId },
-      { cartId: cartId },
-      { new: true }
-    );
-
     //add user Id to cart
     const confirmation = await Cart.findOneAndUpdate(
       { cartId: cartId },
