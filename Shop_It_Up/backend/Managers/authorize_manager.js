@@ -26,14 +26,18 @@ const authorize = async (req, res, next) => {
       req.userEmail = data.email;
       next();
     } else {
-      res
-        .status(404)
-        .json({ authenticated: false, message: "User is not authenticated." });
+      // res
+      //   .status(404)
+      //   .json({ authenticated: false, message: "User is not authenticated." });
+      /* CHANGE REDIRECT TO LOGIN PAGE URL */
+      res.redirect("/api/authorize/auth/google");
     }
   } catch (e) {
-    res
-      .status(404)
-      .json({ authenticated: false, message: "User is not authenticated." });
+    // res
+    //   .status(404)
+    //   .json({ authenticated: false, message: "User is not authenticated." });
+    /* CHANGE REDIRECT TO LOGIN PAGE URL */
+      res.redirect("/api/authorize/auth/google");
   }
 };
 
