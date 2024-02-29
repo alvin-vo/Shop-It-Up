@@ -8,60 +8,59 @@ const router = express.Router();
 const cartManager = require("../Managers/cart_manager.js");
 
 // PRODUCT UPDATE:
-
 // ADD TO CART: THIS SHOULD ADD TO CART AND RETURN THE NEW CART
 router.post("/addProduct/:cartId/:productId", async (req, res) => {
   const cart = await cartManager.addProductToCart(req);
   if (cart == null) {
-    res.send("Error: null."); // ERROR
+    res.status(400).json({ errorMsg: "Failed to add product to cart." });
   } else {
-    res.send(cart);
+    res.status(200).json(cart);
   }
 });
 
-// ADD TO CART: THIS SHOULD REMOVE PRODUCT RELATED TO CART AND RETURN THE NEW CART
-router.post("/removeProduct/:cartId/:productId", async (req, res) => {
+// REMOVE FROM CART: THIS SHOULD REMOVE PRODUCT RELATED TO CART AND RETURN THE NEW CART
+router.delete("/removeProduct/:cartId/:productId", async (req, res) => {
   const cart = await cartManager.removeProductFromCart(req);
   if (cart == null) {
-    // null or empty ?
-    res.send("Error: null.");
+    res.status(400).json({ errorMsg: "Failed to remove product from cart." });
   } else {
-    res.send(cart);
+    res.status(200).json(cart);
   }
 });
 
 // USER UPDATE:
 
 // REMOVE CONTRIBUTOR: SHOULD RETURN NEW CART WITH NEW CONTRIBUTORS
-router.post("/removeUser/:cartid/:userId", async (req, res) => {
+router.post("/removeUser/:cartId/:userId", async (req, res) => {
   const cart = await cartManager.removeContributorFromCart(req);
   if (cart == null) {
-    // null or empty ?
-    res.send("Error: null.");
+    res
+      .status(400)
+      .json({ errorMsg: "Failed to remove user from contributors." });
   } else {
-    res.send(cart);
+    res.status(200).json(cart);
   }
 });
 
 // ADD CONTRIBUTOR: SHOULD RETURN NEW CART WITH NEW CONTRIBUTORS
-router.post("/addUser/:cartid/:userId", async (req, res) => {
+router.post("/addUser/:cartId/:userId", async (req, res) => {
   const cart = await cartManager.addContributorToCart(req);
   if (cart == null) {
-    // null or empty ?
-    res.send("Error: null.");
+    res.status(400).json({ errorMsg: "Failed to add user to contributors." });
   } else {
-    res.send(cart);
+    res.status(200).json(cart);
   }
 });
 
 // CART UPDATE:
 
+// GET ALL CARTS
 router.get("/", async (req, res) => {
-  const carts = await cartManager.getCarts(req);;
+  const carts = await cartManager.getCarts(req);
   if (carts == null) {
-    res.send("Error: null.");
+    res.status(400).json({ errorMsg: "Failed to retrieve carts." });
   } else {
-    res.send(carts);
+    res.status(200).json(carts);
   }
 });
 
@@ -69,21 +68,19 @@ router.get("/", async (req, res) => {
 router.get("/checkout/:userId", async (req, res) => {
   const cart = await cartManager.checkoutCart(req);
   if (cart == null) {
-    // null or empty ?
-    res.send("Error: null.");
+    res.status(400).json({ errorMsg: "Failed to checkout cart for the user." });
   } else {
-    res.send(cart);
+    res.status(200).json(cart);
   }
 });
 
 // REMOVE CART: SHOULD RETURN NULL
-router.delete("/removeCart/:cartid", async (req, res) => {
+router.delete("/removeCart/:cartId", async (req, res) => {
   const cart = await cartManager.deleteCart(req);
   if (cart == null) {
-    // null or empty ?
-    res.send("Error: null.");
+    res.status(400).json({ errorMsg: " Failed to remove cart." });
   } else {
-    res.send(cart);
+    res.status(200).json(cart);
   }
 });
 

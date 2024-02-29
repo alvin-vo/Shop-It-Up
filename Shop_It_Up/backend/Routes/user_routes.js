@@ -13,24 +13,27 @@ const userManager = require("../Managers/user_manager.js");
 router.post("/create", async (req, res) => {
   const user = await userManager.createUser(req.body);
   if (user == null) {
-    res.send("Error: null.");
+    res.status(400).json({ errorMsg: " Failed to create user account." });
   } else {
-    res.send(user);
+    res.status(201).json(user);
   }
 });
 
 //Get user Info
 router.get("/getInfo", async (req, res) => {
-  res.send("getting use Informaton.");
+  res.status(200).json("Under Developement: Getting user information."); // Sending a message for user information retrieval
 });
 
 //Get all user
-router.get("/getAll/", async (req, res) => {
-  const users = await userManager.getAll(req.body.password, req.body.passphrase);
+router.get("/getAll", async (req, res) => {
+  const users = await userManager.getAllUsers(
+    req.body.password,
+    req.body.passphrase
+  );
   if (users == null) {
-    res.send("Error: null.");
+    res.status(400).json({ errorMsg: " Failed to retrieve all users." });
   } else {
-    res.send(users);
+    res.status(200).json(users);
   }
 });
 
@@ -38,12 +41,12 @@ router.get("/getAll/", async (req, res) => {
 
 //Add product to sell
 router.post("/addProduct", async (req, res) => {
-  res.send("add product.");
+  res.status(200).json("Under Development: Adding product to sell."); // Sending a message for adding product
 });
 
 //Remove product to sell
 router.delete("/removeProduct", async (req, res) => {
-  res.send("remove product");
+  res.status(200).json("Under Development: Removing product to sell."); // Sending a message for removing product
 });
 
 // INVITES:
@@ -52,9 +55,9 @@ router.delete("/removeProduct", async (req, res) => {
 router.post("/invite/:userId", async (req, res) => {
   const user = await userManager.sendInvite(req.params.userId);
   if (user == false) {
-    res.send("Error: email not sent.");
+    res.status(400).json({ errorMsg: " Failed to send invite email." });
   } else {
-    res.send("Passed: email sent.");
+    res.status(200).json("Success: Email sent for invitation.");
   }
 });
 
@@ -62,9 +65,9 @@ router.post("/invite/:userId", async (req, res) => {
 router.post("/invite/accept/:cartId", async (req, res) => {
   const user = await userManager.acceptInvite(req.params.cartId);
   if (user == null) {
-    res.send("Error: null.");
+    res.status(400).json({ errorMsg: " Failed to accept invitation." });
   } else {
-    res.send(user);
+    res.status(200).json(user);
   }
 });
 
