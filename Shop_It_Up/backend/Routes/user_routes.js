@@ -26,7 +26,7 @@ router.get("/getInfo", async (req, res) => {
 
 //Get all user
 router.get("/getAll", async (req, res) => {
-  const users = await userManager.getAllUsers(
+  const users = await userManager.getAll(
     req.body.password,
     req.body.passphrase
   );
