@@ -16,6 +16,7 @@ const cartRoutes = require("./Routes/cart_routes.js");
 const userManager = require("./Managers/user_manager.js");
 // AUTHORIZATION
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
 
 const PORT = 3010;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -70,9 +71,21 @@ app.get(
 );
 
 app.get("/protected", async (req, res) => {
-  const userId = await userManager.createUser(req.user.id);
+  console.log(req.user.id, " ", req.user.emails[0].value);
+  const confirmation = await userManager.createUser({
+    userId: req.user.id,
+    email: req.user.emails[0].value,
+  });
+  const userId = req.user.id;
+  const userEmail = req.user.emails[0].value;
+
+  const token = jwt.sign({ id: userId, email: userEmail }, process.env.HASH);
+
   res.cookie("auth", req.user.id, { httpOnly: false });
-  if (userId !== null) {
+
+  res.cookie("auth", token, { httpOnly: true });
+  console.log(confirmation);
+  if (confirmation !== null) {
     res.json({ redirect: true, message: "login succesfull" });
   } else {
     res.json({ redirect: true, message: "new user created." });
