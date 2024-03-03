@@ -1,21 +1,39 @@
-import { Button, Input } from "@chakra-ui/react";
-import { useState } from "react";
-import { ProductsRepositoryImpl } from '../features/Products/ProductsRepo/ProductsRepo';
+import { Button, GridItem, Input, SimpleGrid } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import { ProductsRepositoryImpl } from '../../Products/ProductsRepo/ProductsRepo';
+import SearchButts from "./search_butts";
+
+// productsTypes.ts
+export interface Product {
+  productId: string;
+  title: string;
+  // Add other properties of the Product type here
+}
 
 
-function SearchFunc(props:any) {
-    const [searchTerm, setSearchTerm] = useState('')
-    const [searchResult, setSearchResult] = useState('')
-    let foo:ProductsRepositoryImpl = new ProductsRepositoryImpl()
+const SearchFunc = () => {  
 
-    const getProducts = async () => {
-        let myProducts = await props.itemInfo;
-        setSearchResult(myProducts[props.category]);
-       }
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredRec, setFilteredRec] = useState<Product[]>([]); // Specify type as Product[]
+    const [numRec, setNumRec] = useState<number>(0); // Specify type as number
+    let foo = new ProductsRepositoryImpl();
 
-    getProducts()
+    useEffect(() => {
+        async function getProducts() {
+            let myRecs = await foo.fetchProducts();
+            // Filter the recommendations based on the search term
+            const filteredProducts = myRecs.filter(product =>
+                product.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredRec(filteredProducts);
+            setNumRec(filteredProducts.length);
+        }
+        getProducts();
+    }, [searchTerm]);
+
 
     return (
+      <div>
         <Input
             placeholder="Search Shop-It-Up"
             htmlSize={80}
@@ -23,13 +41,18 @@ function SearchFunc(props:any) {
             variant={"ghost"}
             onChange={event => {setSearchTerm(event.target.value)}}
         />
-        
-        {}
 
-        <Button width={700} height={10}>
-            {val.searchResult}
-        </Button>
+        <SimpleGrid columns={1} spacing={1}>
+
+          {[...Array(numRec)].map((x,i) =>
+              <SearchButts ley={i} itemNum={i} itemTitle={foo.fetchProducts()}/>
+          )}
+
+        </SimpleGrid>
+
+      </div>
+      
     );
 }
 
-export default SearchFunc
+export default SearchFunc;
