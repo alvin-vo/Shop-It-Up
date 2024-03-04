@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './CartPage.css'; // Assume we have some CSS for basic styling
 //import Navbar from './features/NavBar/Presentation/Navbar'
-import Navbar from '../../../NavBar/Presentation/Navbar';
+import Navbar from '../../../NavBar/Presentation/nav_bar';
 
 type CartItem = {
   id: number;
