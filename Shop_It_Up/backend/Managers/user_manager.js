@@ -15,12 +15,23 @@ const createUser = async (userInfo) => {
   await userDAO.createNewUser(userInfo.userId, userInfo.email);
 };
 
-const getUser = async (userToFind) => {
-  const userResult = await userDAO.getExisitngUserInfo(userToFind);
-  if(userResult == null) {
-    return null;
+const getUser = async (userToFind, passedInVariablePassword, passedInVariablePassphrase) => {
+  // Encrypt Server
+  const encryptedServerMessage = await guard.encryptServer();
+  const decryptedServerMessage = await guard.decryptNow(encryptedServerMessage, passedInVariablePassphrase);
+  
+  // Encrypt User
+  const encryptedUserMessage = await guard.encryptNow(passedInVariablePassword, passedInVariablePassphrase);
+  const decryptedUserMessage = await guard.decryptNow(encryptedUserMessage, passedInVariablePassphrase);
+
+  // Check: Should be TRUE
+  const checkNow = await guard.checkCorrect(decryptedServerMessage, decryptedUserMessage);
+
+  // TRUE: Get all users
+  if(checkNow) {
+    return await await userDAO.getExisitngUserInfo(userToFind); 
   }
-  return userResult;
+  return null; // Return null if FALSE
 };
 
 // SHOULD BE PASSWORD PROTECTED

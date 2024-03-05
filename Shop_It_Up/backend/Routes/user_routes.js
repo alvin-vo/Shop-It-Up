@@ -22,11 +22,15 @@ router.post("/create", async (req, res) => {
 
 //Get user Info
 router.get("/getInfo/:userId", async (req, res) => {
-  const user = await userManager.getUser(req.params.userId);
-  if (user == null) {
+  if(!Object.keys(req.body).length) {
     res.send("Error: null.");
   } else {
-    res.send(user);
+    const user = await userManager.getUser(req.params.userId, req.body.password, req.body.passphrase);
+    if (user == null) {
+      res.send("Error: null.");
+    } else {
+      res.send(user);
+    }
   }
 });
 
