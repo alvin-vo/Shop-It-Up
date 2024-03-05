@@ -19,7 +19,32 @@ const addProduct = async (findCartId, productId) => {
   }
 };
 
-const removeProduct = async (productId) => {};
+const removeProduct = async (findCartId, productId) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { cartId: findCartId },
+      {$pull: {"products": productId}}
+    );
+
+    return true;
+  } catch (err) {
+    return null;
+  }
+};
+
+const inCart = async (findCartId, userId) => {
+  try {
+    const cart = await Cart.findOne(
+      { cartId: findCartId },
+      { $in : { "contributorIds" : userId } }
+    );
+
+    return cart;
+  } catch (err) {
+    return null;
+  }
+
+};
 
 const addContributor = async (cartId) => {
   
@@ -41,7 +66,16 @@ const getOnlyCart = async (cartId) => {
   }
 };
 
-const deleteCart = async (cartId) => {};
+const deleteCart = async (passedInCartId) => {
+  try {
+    const cart = await Cart.findOneAndDelete({ productId: passedInCartId });
+    // Return empty, product deleted ?
+    return cart;
+
+  } catch (err) {
+    return null; // Return null if error.
+  }
+};
 
 const createCart = async(userIdForNewCart) => {
   try {
@@ -98,4 +132,5 @@ module.exports = {
   createCart,
   getAllCarts,
   getOnlyCart,
+  inCart,
 };

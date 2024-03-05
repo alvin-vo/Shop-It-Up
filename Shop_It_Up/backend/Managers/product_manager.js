@@ -20,11 +20,11 @@ const schemaChecker = Joi.object({
 const productDAO = require("../AccessObjects/product_dao.js");
 
 const getProducts = async () => {
-  return productDAO.getAllProducts();
+  return await productDAO.getAllProducts();
 };
 
 const getOneProduct = async (req) => {
-  return productDAO.getOnlyProduct(req.params.productId);
+  return await productDAO.getOnlyProduct(req.params.productId);
 
 };
 
@@ -32,14 +32,14 @@ const createProduct = async (req) => {
   const checkOne = await checkId(req.body.productId); // Check product id for any matches, FALSE if match
   const checkTwo = await checkBody(req.body); // Check body to ensure correct values, FALSE if not
   if(checkOne && checkTwo) { // THIS NEEDS TO BE TRUE TRUE
-    return productDAO.createdProduct(req.body);
+    return await productDAO.createdProduct(req.body);
   } else {
     return null;
   }
 };
 
 const deleteProduct = async (req) => {
-  return productDAO.deletedProduct(req.params.productId);
+  return await productDAO.deletedProduct(req.params.productId);
 };
 
 const updateProduct = async (req) => {
