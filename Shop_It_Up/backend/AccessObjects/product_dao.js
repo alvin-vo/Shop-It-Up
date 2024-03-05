@@ -4,13 +4,13 @@ The models communicate with the database.
 */
 
 
-const product = require("../Models/product_model.js");
+const Product = require("../Models/product_model.js");
 
 
 // Return null if error.
 const getAllProducts = async () => {
   try {
-    const products = await product.find({});
+    const products = await Product.find({});
 
     return products;
   } catch (err) {
@@ -20,8 +20,7 @@ const getAllProducts = async () => {
 
 const getOnlyProduct = async (passedInId) => {
   try {
-    const product = await product.findOne({ productId: passedInId });
-
+    const product = await Product.findOne({ productId: passedInId });
     return product;
   } catch (err) {
     return null; // Return null if error.
@@ -31,10 +30,10 @@ const getOnlyProduct = async (passedInId) => {
 const createdProduct = async (passedInBody) => {
   try {
 
-    const prod = new product(passedInBody);
-    await prod.save();
+    const product = new Product(passedInBody);
+    await product.save();
     // Return created product.
-    return prod;
+    return product;
 
   } catch (err) {
     return null; // Return null if error.
@@ -43,9 +42,9 @@ const createdProduct = async (passedInBody) => {
 
 const deletedProduct = async (passedInId) => {
   try {
-    const prod = await product.findOneAndDelete({ productId: passedInId });
+    const product = await Product.findOneAndDelete({ productId: passedInId });
     // Return empty, product deleted ?
-    return prod;
+    return product;
 
   } catch (err) {
     return null; // Return null if error.
@@ -55,14 +54,14 @@ const deletedProduct = async (passedInId) => {
 // Might need to change later based on req setup.
 const updatedProduct = async (passedInId, passedInBody) => {
   try {
-    const prod = await product.findOneAndUpdate(
+    const product = await Product.findOneAndUpdate(
 
       { productId: passedInId },
       passedInBody
     );
     // Return updated product.
 
-    return prod;
+    return product;
 
   } catch (err) {
     return null; // Return null if error.

@@ -39,8 +39,8 @@ app.use(cookieParser()); //makes parsing cookies easier
 //Routes
 app.use("/api/authorize", authRoutes);
 app.use("/api/products", productRoutes); // Break up routes for seperate files.
-app.use("/api/user", userRoutes); // Break up routes for seperate files.
-app.use("/api/cart", cartRoutes);
+app.use("/api/users", userRoutes); // Break up routes for seperate files.
+app.use("/api/carts", cartRoutes);
 
 //middleware for passport
 app.use(session({ secret: "cats", resave: false, saveUninitialized: true })); // TODO
