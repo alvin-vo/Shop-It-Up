@@ -99,11 +99,16 @@ router.post("/invite/:email", authorize, async (req, res) => {
 
 //Accept Invite
 router.post("/invite/accept/:cartId", authorize, async (req, res) => {
-  const user = await userManager.acceptInvite(req.params.cartId);
-  if (user == null) {
-    res.send("Error: null.");
+  const userId = req.body.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
   } else {
-    res.send(user);
+    const user = await userManager.acceptInvite(req.params.cartId, userId);
+    if (user == null) {
+      res.send("Error: null.");
+    } else {
+      res.send(user);
+    }
   }
 });
 

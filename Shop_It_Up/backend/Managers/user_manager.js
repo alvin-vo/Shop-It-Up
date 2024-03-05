@@ -8,6 +8,7 @@ const guard = require("../Security/check_status.js");
 
 const { getOnlyProduct } = require("../AccessObjects/product_dao.js");
 const { checkBody } = require("../Managers/product_manager.js");
+const { getOnlyCart } = require("../AccessObjects/cart_dao.js");
 
 // USER:
 
@@ -95,7 +96,7 @@ const sendInvite = async (passedInId, passedInEmail) => {
     return null;
   }
   // Check if Cart Exists
-  const valCart = await checkValidCart(valUser);
+  const valCart = await checkValidCart(valUser.cartId);
   if(valCart == null) {
     return null;
   }
@@ -104,7 +105,11 @@ const sendInvite = async (passedInId, passedInEmail) => {
   return await userDAO.sendHandler(valUser, passedInEmail);
 };
 
-const acceptInvite = async () => {
+const acceptInvite = async (passedInCartId, passedInUserId) => {
+  const valCart = await checkValidCart(passedInCartId);
+  if(valCart == null) {
+    return true;
+  }
 
   return null;
 };
@@ -123,12 +128,12 @@ async function checkValidUser(userToValidate) {
 // Validate Cart, returns TRUE
 async function checkValidCart(cartToValidate) {
   // Get Cart Id
-  const getCartId = cartToValidate.cartId;
+  const getCartId = await getOnlyCart(cartToValidate);
   // No cartId, Can't Invite
-  if(getCartId == undefined){
+  if(getCartId == null){
     return null;
   }
-  return getCartId;
+  return getCartId.cartId;
 };
 
 // Validate Product Doesn't Exist

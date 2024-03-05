@@ -4,6 +4,8 @@ The models communicate with the database.
 */
 
 const User = require("../Models/user_model.js"); // OBJECT
+const Cart = require("../Models/cart_model.js");
+
 const guard = require("../Security/check_status.js")
 
 const { createdProduct } = require("../AccessObjects/product_dao.js");
@@ -84,8 +86,17 @@ const sendHandler = async (userToInvite, emailToSend) => {
   return sentOrNot;
 };
 
-const acceptHandler = async () => {
-  
+const acceptHandler = async (cartIdToEdit, userToAdd) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { cartId: cartIdToEdit },
+      {"contributorIds.$": userToAdd}
+    );
+
+    return cart;
+  } catch (err) {
+    return null;
+  }
 
 };
 
@@ -121,5 +132,5 @@ module.exports = {
   removeProduct,
   sendHandler,
   acceptHandler,
-  checkUserExistence
+  checkUserExistence,
 };
