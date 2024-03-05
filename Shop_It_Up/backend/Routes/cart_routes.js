@@ -6,27 +6,39 @@ const express = require("express");
 
 const router = express.Router();
 const cartManager = require("../Managers/cart_manager.js");
+const { authorize } = require("../Managers/authorize_manager");
+
 
 // PRODUCT UPDATE:
 
 // ADD TO CART: THIS SHOULD ADD TO CART AND RETURN THE NEW CART
-router.post("/addProduct/:cartId/:productId", async (req, res) => {
-  const cart = await cartManager.addProductToCart(req);
-  if (cart == null) {
-    res.send("Error: null."); // ERROR
+router.post("/addProduct/:cartId/:productId", authorize, async (req, res) => {
+  const userId = req.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
   } else {
-    res.send(cart);
+    const cart = await cartManager.addProductToCart(req, userId);
+    if (cart == null) {
+      res.send("Error: null."); // ERROR
+    } else {
+      res.send(cart);
+    }
   }
 });
 
 // ADD TO CART: THIS SHOULD REMOVE PRODUCT RELATED TO CART AND RETURN THE NEW CART
-router.post("/removeProduct/:cartId/:productId", async (req, res) => {
-  const cart = await cartManager.removeProductFromCart(req);
-  if (cart == null) {
-    // null or empty ?
-    res.send("Error: null.");
+router.post("/removeProduct/:cartId/:productId", authorize, async (req, res) => {
+  const userId = req.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
   } else {
-    res.send(cart);
+    const cart = await cartManager.removeProductFromCart(req, userId);
+    if (cart == null) {
+      // null or empty ?
+      res.send("Error: null.");
+    } else {
+      res.send(cart);
+    }
   }
 });
 

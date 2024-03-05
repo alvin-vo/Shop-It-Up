@@ -11,7 +11,7 @@ const productManager = require("../Managers/product_manager.js");
 // 4: CREATE CART 
 // 5: ADD PRODUCT TO CART
 // 6: RETURN NEW CART
-const addProductToCart = async (passedInInfo) => {
+const addProductToCart = async (passedInInfo, passedInUserId) => {
   const realCart = await userManager.checkValidCart(passedInInfo.params.cartId); // Should be TRUE
   const realProduct = await productManager.getOneProduct(passedInInfo); // Should be set to a valid product
 
@@ -19,7 +19,7 @@ const addProductToCart = async (passedInInfo) => {
     if(realCart) { // REAL CART
       return await cartDAO.addProduct(passedInInfo.params.cartId, realProduct.productId);
     } else { // NEW CART
-      const userIdForCart = "707"; // TEMPORARY ID
+      const userIdForCart = passedInUserId; 
       const newCart = await createCart(userIdForCart); // PASS IN USER ID -> RETURNS NEW CART ID
       return await cartDAO.addProduct(newCart, realProduct.productId);
     }
@@ -28,7 +28,21 @@ const addProductToCart = async (passedInInfo) => {
   return null;  // PRODUCT DOESN'T EXIST, ERROR
 };
 
-const removeProductFromCart = async (productId) => {};
+const removeProductFromCart = async (passedInInfo, passedInUserId) => {
+  const realCart = await userManager.checkValidCart(passedInInfo.params.cartId); // Should be TRUE
+  const realProduct = await productManager.getOneProduct(passedInInfo); // Should be set to a valid product
+
+
+  if(realProduct) { // REAL PRODUCT
+    if(realCart) { // REAL CART
+      const validUser = await cartDAO.inCart(passedInInfo.params.cartId, passedInUserId);
+      if(validUser) {
+        return await cartDAO.removeProduct(passedInInfo.params.cartId, realProduct.productId);
+      }
+    }
+  }
+  return null;  // PRODUCT DOESN'T EXIST, ERROR
+};
 
 
 // USER UPDATE:
