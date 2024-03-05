@@ -66,7 +66,16 @@ const getOnlyCart = async (cartId) => {
   }
 };
 
-const deleteCart = async (cartId) => {};
+const deleteCart = async (passedInCartId) => {
+  try {
+    const cart = await Cart.findOneAndDelete({ productId: passedInCartId });
+    // Return empty, product deleted ?
+    return cart;
+
+  } catch (err) {
+    return null; // Return null if error.
+  }
+};
 
 const createCart = async(userIdForNewCart) => {
   try {

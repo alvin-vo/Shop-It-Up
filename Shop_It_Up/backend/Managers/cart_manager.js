@@ -55,7 +55,9 @@ const removeContributorFromCart = async (userId) => {};
 
 const checkoutCart = async (cartId, userId) => {};
 
-const deleteCart = async (cartId) => {};
+const deleteCart = async (passedInReq) => {
+  return await cartDAO.deleteCart(passedInReq.params.cartId);
+};
 
 // CART SHOW ALL:
 
