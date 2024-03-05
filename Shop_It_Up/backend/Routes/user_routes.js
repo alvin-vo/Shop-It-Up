@@ -66,33 +66,39 @@ router.post("/addProduct/:productId", authorize, async (req, res) => {
 });
 
 //Remove product to sell
-router.delete("/removeProduct/:productId", async (req, res) => {
-  // GET USER INFO
-  //const userId = req.userId;
-  const userId = "222";
-
-  const user = await userManager.removeProductToSell(userId, req.params.productId);
-  if (user == false) {
-    res.send("Error: product not removed.");
+router.delete("/removeProduct/:productId", authorize, async (req, res) => {
+  const userId = req.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
   } else {
-    res.send("Passed: product removed.");
+    const user = await userManager.removeProductToSell(userId, req.params.productId);
+    if (user == false) {
+      res.send("Error: product not removed.");
+    } else {
+      res.send("Passed: product removed.");
+    }
   }
 });
 
 // INVITES:
 
 //Send Invite
-router.post("/invite/:userId", async (req, res) => {
-  const user = await userManager.sendInvite(req.params.userId);
-  if (user == false) {
-    res.send("Error: email not sent.");
+router.post("/invite/:email", authorize, async (req, res) => {
+  const userId = req.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
   } else {
-    res.send("Passed: email sent.");
+    const user = await userManager.sendInvite(userId, req.params.email);
+    if (user == false) {
+      res.send("Error: email not sent.");
+    } else {
+      res.send("Passed: email sent.");
+    }
   }
 });
 
 //Accept Invite
-router.post("/invite/accept/:cartId", async (req, res) => {
+router.post("/invite/accept/:cartId", authorize, async (req, res) => {
   const user = await userManager.acceptInvite(req.params.cartId);
   if (user == null) {
     res.send("Error: null.");
