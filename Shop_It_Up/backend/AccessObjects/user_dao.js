@@ -11,7 +11,6 @@ const guard = require("../Security/check_status.js")
 const { createdProduct } = require("../AccessObjects/product_dao.js");
 const { deletedProduct } = require("../AccessObjects/product_dao.js");
 
-
 // USER:
 
 const createNewUser = async (userId, passedInEmail) => {
@@ -26,7 +25,7 @@ const createNewUser = async (userId, passedInEmail) => {
       userId: userID,
       email: encryptEmail,
       productsToSell: [],
-      cartId: "123434",
+      cartId: "",
     }).save();
 
     return userID;
@@ -90,9 +89,8 @@ const acceptHandler = async (cartIdToEdit, userToAdd) => {
   try {
     const cart = await Cart.findOneAndUpdate(
       { cartId: cartIdToEdit },
-      {"contributorIds.$": userToAdd}
+      { $push: {"contributorIds": userToAdd} }
     );
-
     return cart;
   } catch (err) {
     return null;
