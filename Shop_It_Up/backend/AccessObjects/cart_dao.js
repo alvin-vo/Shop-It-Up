@@ -10,7 +10,7 @@ const addProduct = async (findCartId, productId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
       { cartId: findCartId },
-      {"products.$": productId}
+      {$push: {"products": productId}}
     );
 
     return cart;

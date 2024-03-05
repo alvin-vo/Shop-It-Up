@@ -107,10 +107,9 @@ const sendInvite = async (passedInId, passedInEmail) => {
 
 const acceptInvite = async (passedInCartId, passedInUserId) => {
   const valCart = await checkValidCart(passedInCartId);
-  if(valCart == null) {
-    return true;
+  if(valCart != null) {
+    return await userDAO.acceptHandler(passedInCartId, passedInUserId);
   }
-
   return null;
 };
 

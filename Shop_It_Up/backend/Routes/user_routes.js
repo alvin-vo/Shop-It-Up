@@ -99,7 +99,7 @@ router.post("/invite/:email", authorize, async (req, res) => {
 
 //Accept Invite
 router.post("/invite/accept/:cartId", authorize, async (req, res) => {
-  const userId = req.body.userId;
+  const userId = req.userId;
   if(userId == undefined) {
     res.send("Error: invalid user.");
   } else {
