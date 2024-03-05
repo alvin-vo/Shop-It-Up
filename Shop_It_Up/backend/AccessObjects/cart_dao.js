@@ -6,10 +6,10 @@ The models communicate with the database.
 const Cart = require("../Models/cart_model.js");
 
 // ADD PRODUCT TO CART
-const addProduct = async (fidnCartId, productId) => {
+const addProduct = async (findCartId, productId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { cartId: fidnCartId },
+      { cartId: findCartId },
       {"products.$": productId}
     );
 
@@ -21,14 +21,25 @@ const addProduct = async (fidnCartId, productId) => {
 
 const removeProduct = async (productId) => {};
 
-const addContributor = async (cartId) => {};
+const addContributor = async (cartId) => {
+  
+};
 
 const removeContributor = async (userId) => {};
 
 const checkout = async (cartId, userId) => {};
 
-//I can't remeber why we have this
-const syncCart = async (userId) => {};
+const getOnlyCart = async (cartId) => {
+  try {
+    const cart = await Cart.findOne(
+      { cartId: cartId },
+    );
+
+    return cart;
+  } catch (err) {
+    return null;
+  }
+};
 
 const deleteCart = async (cartId) => {};
 
@@ -83,8 +94,8 @@ module.exports = {
   removeContributor,
   addContributor,
   checkout,
-  syncCart,
   deleteCart,
   createCart,
   getAllCarts,
+  getOnlyCart,
 };
