@@ -4,7 +4,10 @@
 */
 
 const userDAO = require("../AccessObjects/user_dao.js");
-const guard = require("../Security/check_status.js")
+const guard = require("../Security/check_status.js");
+
+const { getOnlyProduct } = require("../AccessObjects/product_dao.js");
+const { checkBody } = require("../Managers/product_manager.js");
 
 // USER:
 
@@ -36,9 +39,34 @@ const getAll = async (passedInVariablePassword, passedInVariablePassphrase) => {
 
 // PRODUCTS:
 
-const addProductToSell = async () => {};
+const addProductToSell = async (passedInUserId, passedInProductId, passedInBody)=> {
+  // Product Doesn't Exist
+  const checkOne = await checkValidProductToSell(passedInProductId);
+  if(checkOne == true) {
+    // Req.body is Correct
+    const checkTwo = await checkBody(passedInBody);
+    if(checkTwo == true) {
+      const confirmation = await userDAO.addProduct(passedInUserId, passedInProductId, passedInBody)
+      if(confirmation == true) {
+        return true;
+      }  
+    }
+  }
+  return false;
+};
 
-const removeProductToSell = async () => {};
+const removeProductToSell = async (passedInUserId, passedInProductId) => {
+  const valUser = await checkValidOwner(passedInUserId, passedInProductId);
+  if(valUser == null) {
+    return false;
+  } else if (valUser == true) {
+    const confirmation = await userDAO.removeProduct(passedInProductId);  
+    if(confirmation == true) {
+      return true;
+    } 
+  }  
+  return false;
+};
 
 // INVITES:
 
@@ -84,6 +112,27 @@ async function checkValidCart(cartToValidate) {
     return null;
   }
   return getCartId;
+};
+
+// Validate Product Doesn't Exist
+async function checkValidProductToSell(productIdToValidate) {
+  const product = await getOnlyProduct(productIdToValidate);
+  if(product == null) {
+    return true;
+  }
+  return false;
+};
+
+// Validate Product Belongs to User
+async function checkValidOwner(userIdToValidate, productIdToValidate) {
+  const product = await getOnlyProduct(productIdToValidate);
+  if(product == null) {
+    return null;
+  }
+  if(product.sellerId == userIdToValidate) {
+    return true;
+  }
+  return false;
 };
 
 module.exports = {

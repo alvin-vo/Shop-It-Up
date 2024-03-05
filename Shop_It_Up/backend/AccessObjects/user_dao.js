@@ -6,6 +6,9 @@ The models communicate with the database.
 const User = require("../Models/user_model.js"); // OBJECT
 const guard = require("../Security/check_status.js")
 
+const { createdProduct } = require("../AccessObjects/product_dao.js");
+const { deletedProduct } = require("../AccessObjects/product_dao.js");
+
 
 // USER:
 
@@ -39,9 +42,25 @@ const getAllUsers = async () => {
 
 // PRODUCTS:
 
-const addProduct = async () => {};
+const addProduct = async (passedInUserId, passedInProductId, passedInBody) => {
+  passedInBody.productId = passedInProductId;
+  passedInBody.sellerId = passedInUserId;
+  try {
+  const product = createdProduct(passedInBody);
+  return true;
+} catch (err) {
+  return false; // Return null if error.
+}
+};
 
-const removeProduct = async () => {};
+const removeProduct = async (passedInProductId) => {
+  try {
+    const product = deletedProduct(passedInProductId);
+    return true;
+  } catch (err) {
+    return false; // Return null if error.
+  }
+};
 
 // INVITES:
 
