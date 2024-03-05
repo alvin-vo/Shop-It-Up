@@ -15,7 +15,13 @@ const createUser = async (userInfo) => {
   await userDAO.createNewUser(userInfo.userId, userInfo.email);
 };
 
-const getUser = async () => {};
+const getUser = async (userToFind) => {
+  const userResult = await userDAO.getExisitngUserInfo(userToFind);
+  if(userResult == null) {
+    return null;
+  }
+  return userResult;
+};
 
 // SHOULD BE PASSWORD PROTECTED
 const getAll = async (passedInVariablePassword, passedInVariablePassphrase) => {

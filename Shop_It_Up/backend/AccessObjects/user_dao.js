@@ -33,7 +33,14 @@ const createNewUser = async (userId, passedInEmail) => {
   }
 };
 
-const getExisitngUserInfo = async () => {};
+const getExisitngUserInfo = async (passedInUserId) => {
+  const existingUser = await User.findOne({userId: passedInUserId});
+  if (existingUser) {
+    return existingUser;
+  } else {
+    return null; // return null if no user
+  }
+};
 
 const getAllUsers = async () => {
   const existingUsers = await User.find();

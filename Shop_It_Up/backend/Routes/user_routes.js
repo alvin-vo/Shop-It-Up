@@ -21,8 +21,8 @@ router.post("/create", async (req, res) => {
 });
 
 //Get user Info
-router.get("/getInfo", async (req, res) => {
-  const user = await userManager.createUser(req.body.password, req.body.passphrase);
+router.get("/getInfo/:userId", async (req, res) => {
+  const user = await userManager.getUser(req.params.userId);
   if (user == null) {
     res.send("Error: null.");
   } else {
@@ -32,11 +32,15 @@ router.get("/getInfo", async (req, res) => {
 
 //Get all user
 router.get("/getAll/", async (req, res) => {
-  const users = await userManager.getAll(req.body.password, req.body.passphrase);
-  if (users == null) {
+  if(!Object.keys(req.body).length) {
     res.send("Error: null.");
   } else {
-    res.send(users);
+    const users = await userManager.getAll(req.body.password, req.body.passphrase);
+    if (users == null) {
+      res.send("Error: null.");
+    } else {
+      res.send(users);
+    }
   }
 });
 
