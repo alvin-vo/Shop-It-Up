@@ -71,10 +71,7 @@ const removeProduct = async (passedInProductId) => {
 
 // INVITES:
 
-const sendHandler = async (userToInvite) => {
-  // Decrypt Email
-  const decryptEmail = await guard.decryptEmail(userToInvite.email);
-  
+const sendHandler = async (userToInvite, emailToSend) => {
   // Get Cart Id
   const getCartId = userToInvite.cartId;
 
@@ -82,7 +79,7 @@ const sendHandler = async (userToInvite) => {
   const linkToSend = "http://localhost:3010/api/user/invite/accept/" + getCartId;
 
   // Send Email
-  const sentOrNot = await guard.sendEmail(decryptEmail, linkToSend);
+  const sentOrNot = await guard.sendEmail(emailToSend, linkToSend);
 
   return sentOrNot;
 };

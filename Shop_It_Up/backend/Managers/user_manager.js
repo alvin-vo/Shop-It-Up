@@ -88,7 +88,7 @@ const removeProductToSell = async (passedInUserId, passedInProductId) => {
 // INVITES:
 
 // Checks if Valid User and Valid Cart, returns TRUE
-const sendInvite = async (passedInId) => {
+const sendInvite = async (passedInId, passedInEmail) => {
   // Check if User Exists
   const valUser = await checkValidUser(passedInId);
   if(valUser == null) {
@@ -101,7 +101,7 @@ const sendInvite = async (passedInId) => {
   }
 
   // All tests passed
-  return await userDAO.sendHandler(valUser);
+  return await userDAO.sendHandler(valUser, passedInEmail);
 };
 
 const acceptInvite = async () => {
