@@ -92,7 +92,7 @@ router.post("/invite/:email", authorize, async (req, res) => {
     if (user == false) {
       res.send("Error: email not sent.");
     } else {
-      res.send("Passed: email sent.");
+      res.send(user);
     }
   }
 });
