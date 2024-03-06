@@ -79,10 +79,10 @@ const sendHandler = async (userToInvite, emailToSend) => {
   // Make Link
   const linkToSend = "http://localhost:3010/api/user/invite/accept/" + getCartId;
 
-  // Send Email
-  const sentOrNot = await guard.sendEmail(emailToSend, linkToSend);
+  // Send Email (Broken: Google Banned Email)
+  // const sentOrNot = await guard.sendEmail(emailToSend, linkToSend);
 
-  return sentOrNot;
+  return linkToSend; // IMMEDIATE SOLUTION: RETURN INVITE LINK
 };
 
 const acceptHandler = async (cartIdToEdit, userToAdd) => {
@@ -91,7 +91,11 @@ const acceptHandler = async (cartIdToEdit, userToAdd) => {
       { cartId: cartIdToEdit },
       { $push: {"contributorIds": userToAdd} }
     );
-    return cart;
+    const existingUser = await User.findOneAndUpdate(
+      { userId: userToAdd },
+      { cartId: cartIdToEdit } 
+    );
+    return true;
   } catch (err) {
     return null;
   }
