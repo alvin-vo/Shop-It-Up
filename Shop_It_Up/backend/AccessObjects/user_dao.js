@@ -55,15 +55,23 @@ const addProduct = async (passedInUserId, passedInProductId, passedInBody) => {
   passedInBody.sellerId = passedInUserId;
   try {
   const product = createdProduct(passedInBody);
+  const user = await User.findOneAndUpdate(
+    { cartId: passedInUserId },
+    { $push: {"productsToSell": passedInProductId} }
+  );
   return true;
 } catch (err) {
   return false; // Return null if error.
 }
 };
 
-const removeProduct = async (passedInProductId) => {
+const removeProduct = async (passedInUserId, passedInProductId) => {
   try {
     const product = deletedProduct(passedInProductId);
+    const user = await User.findOneAndUpdate(
+      { cartId: passedInUserId },
+      { $pull: {"productsToSell": passedInProductId} }
+    );
     return true;
   } catch (err) {
     return false; // Return null if error.
@@ -85,6 +93,7 @@ const sendHandler = async (userToInvite, emailToSend) => {
   return linkToSend; // IMMEDIATE SOLUTION: RETURN INVITE LINK
 };
 
+// RETURNS TRUE/FALSE
 const acceptHandler = async (cartIdToEdit, userToAdd) => {
   try {
     const cart = await Cart.findOneAndUpdate(
@@ -100,6 +109,36 @@ const acceptHandler = async (cartIdToEdit, userToAdd) => {
     return null;
   }
 
+};
+
+// RETURNS NEW USER
+const updateUserWithCart = async (passedInCartId, passedInUserId) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { cartId: passedInCartId },
+      { $push: {"contributorIds": passedInUserId} }
+    );
+    const existingUser = await User.findOneAndUpdate(
+      { userId: passedInUserId },
+      { cartId: passedInCartId } 
+    );
+    return existingUser;
+  } catch (err) {
+    return null;
+  }
+};
+
+// RETURNS NEW USER
+const setEmptyCart = async (passedInUserId) => {
+  try {
+    const existingUser = await User.findOneAndUpdate(
+      { userId: passedInUserId },
+      { cartId: "" } 
+    );
+    return existingUser;
+  } catch (err) {
+    return null;
+  }
 };
 
 // HELPER:
@@ -135,4 +174,6 @@ module.exports = {
   sendHandler,
   acceptHandler,
   checkUserExistence,
+  updateUserWithCart,
+  setEmptyCart,
 };
