@@ -10,10 +10,22 @@ const addProduct = async (findCartId, productId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
       { cartId: findCartId },
-      {$push: {"products": productId}}
+      { $push: {"products": productId} }
     );
+    return true;
+  } catch (err) {
+    return null;
+  }
+};
 
-    return cart;
+const firstProduct = async (findCartId, passedInProductId, passedInUserId) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { cartId: findCartId },
+      { $set: {"products": passedInProductId} },
+      { $set: {"contributorIds": passedInUserId} },
+    );
+    return true;
   } catch (err) {
     return null;
   }
@@ -23,7 +35,7 @@ const removeProduct = async (findCartId, productId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
       { cartId: findCartId },
-      {$pull: {"products": productId}}
+      { $pull: {"products": productId} }
     );
 
     return true;
@@ -32,14 +44,16 @@ const removeProduct = async (findCartId, productId) => {
   }
 };
 
-const inCart = async (findCartId, userId) => {
+const inCart = async (findCartId, passedInUserId) => {
   try {
     const cart = await Cart.findOne(
       { cartId: findCartId },
-      { $in : { "contributorIds" : userId } }
+      { "contributorIds": passedInUserId }
     );
-
-    return cart;
+    if(cart.contributorIds.length == 0) {
+      return false;
+    }
+    return true;
   } catch (err) {
     return null;
   }
@@ -54,10 +68,10 @@ const removeContributor = async (userId) => {};
 
 const checkout = async (cartId, userId) => {};
 
-const getOnlyCart = async (cartId) => {
+const getOnlyCart = async (passedInCartId) => {
   try {
     const cart = await Cart.findOne(
-      { cartId: cartId },
+      { "cartId": passedInCartId },
     );
 
     return cart;
@@ -68,24 +82,19 @@ const getOnlyCart = async (cartId) => {
 
 const deleteCart = async (passedInCartId) => {
   try {
-    const cart = await Cart.findOneAndDelete({ productId: passedInCartId });
-    // Return empty, product deleted ?
+    const cart = await Cart.findOneAndDelete({ "cartId": passedInCartId });
     return cart;
-
   } catch (err) {
     return null; // Return null if error.
   }
 };
 
-const createCart = async(userIdForNewCart) => {
+const createCart = async () => {
   try {
     createdCartId = makeNewId();
     const newCart = new Cart({
-      cartId: createdCartId,
-      ownerId: userIdForNewCart,
-      contributorIds: [userIdForNewCart],
-      products: [],
-  })
+      "cartId": createdCartId
+  });
   newCart.save();
     // Return created cartId.
     return createdCartId;
@@ -108,7 +117,7 @@ const getAllCarts = async () => {
 // MAKE NEW ID (FOR CART) OF LENGTH 13
 function makeNewId() {
   // SET VALUES CARTID CAN BE
-  const validChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-=!@#$%^&*()_+';
+  const validChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   const validCharLength = validChar.length;
   // VALUE TO RETURN
   var returnVal = '';
@@ -133,4 +142,5 @@ module.exports = {
   getAllCarts,
   getOnlyCart,
   inCart,
+  firstProduct,
 };

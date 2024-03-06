@@ -90,7 +90,7 @@ router.post("/invite/:email", authorize, async (req, res) => {
   } else {
     const user = await userManager.sendInvite(userId, req.params.email);
     if (user == false) {
-      res.send("Error: email not sent.");
+      res.send("Error: user has no cart.");
     } else {
       res.send(user);
     }

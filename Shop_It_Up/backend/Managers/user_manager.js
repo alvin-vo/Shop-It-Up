@@ -78,7 +78,7 @@ const removeProductToSell = async (passedInUserId, passedInProductId) => {
   if(valUser == null) {
     return false;
   } else if (valUser == true) {
-    const confirmation = await userDAO.removeProduct(passedInProductId);  
+    const confirmation = await userDAO.removeProduct(passedInUserId, passedInProductId);  
     if(confirmation == true) {
       return true;
     } 
@@ -164,4 +164,5 @@ module.exports = {
   removeProductToSell,
   acceptInvite,
   sendInvite,
+  checkValidCart,
 };
