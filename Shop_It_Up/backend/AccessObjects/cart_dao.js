@@ -9,7 +9,7 @@ const Cart = require("../Models/cart_model.js");
 const addProduct = async (findCartId, passedInProductId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { cartId: findCartId },
+      { "cartId": findCartId },
       { $push: {"products": passedInProductId} }
 
     );
@@ -22,7 +22,7 @@ const addProduct = async (findCartId, passedInProductId) => {
 const firstProduct = async (findCartId, passedInProductId, passedInUserId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { cartId: findCartId },
+      { "cartId": findCartId },
       { $set: {"products": passedInProductId} },
       { $set: {"contributorIds": passedInUserId} },
     );
@@ -35,7 +35,7 @@ const firstProduct = async (findCartId, passedInProductId, passedInUserId) => {
 const removeProduct = async (findCartId, productId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { cartId: findCartId },
+      { "cartId": findCartId },
       { $pull: {"products": productId} }
     );
 
@@ -48,7 +48,7 @@ const removeProduct = async (findCartId, productId) => {
 const inCart = async (findCartId, passedInUserId) => {
   try {
     const cart = await Cart.findOne(
-      { cartId: findCartId },
+      { "cartId": findCartId },
       { "contributorIds": passedInUserId }
     );
     if(cart.contributorIds.length == 0) {
@@ -64,10 +64,9 @@ const inCart = async (findCartId, passedInUserId) => {
 const removeUser = async (findCartId, passedInUserId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { cartId: findCartId },
+      { "cartId": findCartId },
       { $pull: {"contributorIds": passedInUserId} }
     );
-    console.log(cart);
 
     return true;
   } catch (err) {
@@ -81,7 +80,18 @@ const addContributor = async (cartId) => {
 
 const removeContributor = async (userId) => {};
 
-const checkout = async (cartId, userId) => {
+const checkout = async (passedInCartId) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { "cartId": passedInCartId },
+    );
+    if(cart.contributorIds.length == 0) {
+      await Cart.findOneAndDelete({ "cartId": passedInCartId });
+    }
+    return true;
+  } catch (err) {
+    return null;
+  }
 
 };
 

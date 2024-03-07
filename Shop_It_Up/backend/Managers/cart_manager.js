@@ -96,6 +96,7 @@ const checkoutCart = async (passedInUserId) => {
     } else {
       const updatedCart = await cartDAO.removeUser(realUser.cartId, realUser.userId);
       const updatedUser = await setEmptyCart(passedInUserId);
+      const updatedCheckout = await cartDAO.checkout(realUser.cartId);
       return true;
     }
   }
