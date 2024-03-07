@@ -3,20 +3,20 @@ import { useState, useEffect } from "react";
 import { ProductsRepositoryImpl } from '../../Products/ProductsRepo/ProductsRepo';
 import SearchButts from "./search_butts";
 
-// productsTypes.ts
 export interface Product {
   productId: string;
   title: string;
-  // Add other properties of the Product type here
 }
 
 
 const SearchFunc = () => {  
 
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredRec, setFilteredRec] = useState<Product[]>([]); // Specify type as Product[]
-    const [numRec, setNumRec] = useState<number>(0); // Specify type as number
+    const [filteredRec, setFilteredRec] = useState<Product[]>([]); 
+    const [numRec, setNumRec] = useState<number>(0); 
+    const [inputFocused, setInputFocused] = useState(false);
     let foo = new ProductsRepositoryImpl();
+
 
     useEffect(() => {
         async function getProducts() {
@@ -40,15 +40,18 @@ const SearchFunc = () => {
             borderColor={"black"}
             variant={"ghost"}
             onChange={event => {setSearchTerm(event.target.value)}}
+            onFocus={() => setInputFocused(true)}
+            onBlur={() => setInputFocused(false)}
         />
+        {inputFocused && (
+          <SimpleGrid columns={1} spacing={0}>
 
-        <SimpleGrid columns={1} spacing={1}>
+            {[...Array(numRec)].map((x,i) =>
+                <SearchButts key={i} itemNum={i} itemInfo={filteredRec}/>
+            )}
 
-          {[...Array(numRec)].map((x,i) =>
-              <SearchButts ley={i} itemNum={i} itemTitle={foo.fetchProducts()}/>
-          )}
-
-        </SimpleGrid>
+          </SimpleGrid>
+        )}
 
       </div>
       

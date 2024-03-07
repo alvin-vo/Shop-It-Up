@@ -9,10 +9,10 @@ const SearchBar = () => {
   return (
     <Flex>
       <Box>
-        <ButtonGroup isAttached variant="ghost" _hover={{ bg: "##FFFF" }}>
+        <ButtonGroup isAttached variant="outline" borderRadius={'none'} _hover={{ bg: "##FFFF" }}>
           <FilterFunc/>
           <SearchFunc/>
-          <IconButton aria-label="Search Button" icon={<SearchIcon/>} />
+          <IconButton aria-label="Search Button" icon={<SearchIcon/>} borderRadius={'none'}/>
         </ButtonGroup>
       </Box>
     </Flex>

@@ -8,16 +8,19 @@ function SearchButts(props:any){
         title: 'Loading...'
     })
 
-    const getProductRec = async() => {
-        let myRecs = await props.itemInfo;
-        setProductRec(myRecs[props.itemNum]);
-    }
+    useEffect(() => {
+        const getProductRec = async() => {
+            let myRecs = await props.itemInfo;
+            setProductRec(myRecs[props.itemNum]);
+        }
 
-    getProductRec();
+        getProductRec();
+    }, [props.itemInfo, props.itemNum]);
+        
     
     return (
         
-        <Button width={700} height={10}>
+        <Button width={620} height={10} backgroundColor={'white'} borderRadius={'none'} >
             {productRec.title}
         </Button>
 
