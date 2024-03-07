@@ -6,11 +6,12 @@ The models communicate with the database.
 const Cart = require("../Models/cart_model.js");
 
 // ADD PRODUCT TO CART
-const addProduct = async (findCartId, productId) => {
+const addProduct = async (findCartId, passedInProductId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { cartId: findCartId },
-      { $push: {"products": productId} }
+      { "cartId": findCartId },
+      { $push: {"products": passedInProductId} }
+
     );
     return true;
   } catch (err) {
@@ -21,7 +22,7 @@ const addProduct = async (findCartId, productId) => {
 const firstProduct = async (findCartId, passedInProductId, passedInUserId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { cartId: findCartId },
+      { "cartId": findCartId },
       { $set: {"products": passedInProductId} },
       { $set: {"contributorIds": passedInUserId} },
     );
@@ -34,7 +35,7 @@ const firstProduct = async (findCartId, passedInProductId, passedInUserId) => {
 const removeProduct = async (findCartId, productId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { cartId: findCartId },
+      { "cartId": findCartId },
       { $pull: {"products": productId} }
     );
 
@@ -47,7 +48,7 @@ const removeProduct = async (findCartId, productId) => {
 const inCart = async (findCartId, passedInUserId) => {
   try {
     const cart = await Cart.findOne(
-      { cartId: findCartId },
+      { "cartId": findCartId },
       { "contributorIds": passedInUserId }
     );
     if(cart.contributorIds.length == 0) {
@@ -60,13 +61,39 @@ const inCart = async (findCartId, passedInUserId) => {
 
 };
 
+const removeUser = async (findCartId, passedInUserId) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { "cartId": findCartId },
+      { $pull: {"contributorIds": passedInUserId} }
+    );
+
+    return true;
+  } catch (err) {
+    return null;
+  }
+};
+
 const addContributor = async (cartId) => {
   
 };
 
 const removeContributor = async (userId) => {};
 
-const checkout = async (cartId, userId) => {};
+const checkout = async (passedInCartId) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { "cartId": passedInCartId },
+    );
+    if(cart.contributorIds.length == 0) {
+      await Cart.findOneAndDelete({ "cartId": passedInCartId });
+    }
+    return true;
+  } catch (err) {
+    return null;
+  }
+
+};
 
 const getOnlyCart = async (passedInCartId) => {
   try {
@@ -143,4 +170,5 @@ module.exports = {
   getOnlyCart,
   inCart,
   firstProduct,
+  removeUser,
 };

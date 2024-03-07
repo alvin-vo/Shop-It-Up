@@ -86,7 +86,23 @@ const removeContributorFromCart = async (userId) => {};
 
 // CART UPDATE
 
-const checkoutCart = async (cartId, userId) => {};
+const checkoutCart = async (passedInUserId) => {
+  const realUser = await getExisitngUserInfo(passedInUserId);
+
+  if(realUser.cartId.length != 0) { // HAS CART
+    const existingCart = await cartDAO.getOnlyCart(realUser.cartId);
+    if(existingCart == null || existingCart.products.length == 0 || existingCart.products == undefined) { // CART EMPTY
+      return null;
+    } else {
+      const updatedCart = await cartDAO.removeUser(realUser.cartId, realUser.userId);
+      const updatedUser = await setEmptyCart(passedInUserId);
+      const updatedCheckout = await cartDAO.checkout(realUser.cartId);
+      return true;
+    }
+  }
+
+  return null;
+};
 
 const deleteCart = async (passedInReq) => {
   return await cartDAO.deleteCart(passedInReq.params.cartId);
