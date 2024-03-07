@@ -31,7 +31,7 @@ const addProductToCart = async (passedInInfo, passedInUserId) => {
 
   if(realProduct) { // REAL PRODUCT
     if(realUserPostChange.cartId.length != 0) { // REAL CART
-      const checkTrue = await cartDAO.addProduct(realUser.cartId, realProduct.productId, realUser.userId);
+      const checkTrue = await cartDAO.addProduct(realUser.cartId, realProduct.productId);
       if(checkTrue) {
         return await cartDAO.getOnlyCart(realUser.cartId);
       }

@@ -6,7 +6,7 @@ The models communicate with the database.
 const Cart = require("../Models/cart_model.js");
 
 // ADD PRODUCT TO CART
-const addProduct = async (findCartId, passedInProductId, passedInUserId) => {
+const addProduct = async (findCartId, passedInProductId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
       { cartId: findCartId },
