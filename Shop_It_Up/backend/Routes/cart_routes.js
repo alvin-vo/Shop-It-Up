@@ -6,27 +6,42 @@ const express = require("express");
 
 const router = express.Router();
 const cartManager = require("../Managers/cart_manager.js");
+const { authorize } = require("../Managers/authorize_manager");
+
 
 // PRODUCT UPDATE:
 
 // ADD TO CART: THIS SHOULD ADD TO CART AND RETURN THE NEW CART
-router.post("/addProduct/:cartId/:productId", async (req, res) => {
-  const cart = await cartManager.addProductToCart(req);
-  if (cart == null) {
-    res.send("Error: null."); // ERROR
+router.post("/addProduct/:productId", authorize, async (req, res) => {
+  const userId = req.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
   } else {
-    res.send(cart);
+    const cart = await cartManager.addProductToCart(req, userId);
+    if (cart == null) {
+      res.send("Error: null."); // ERROR
+    } else {
+      res.send(cart);
+    }
   }
 });
 
 // ADD TO CART: THIS SHOULD REMOVE PRODUCT RELATED TO CART AND RETURN THE NEW CART
-router.post("/removeProduct/:cartId/:productId", async (req, res) => {
-  const cart = await cartManager.removeProductFromCart(req);
-  if (cart == null) {
-    // null or empty ?
-    res.send("Error: null.");
+router.post("/removeProduct/:productId", authorize, async (req, res) => {
+  const userId = req.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
   } else {
-    res.send(cart);
+    const cart = await cartManager.removeProductFromCart(req, userId);
+    if (cart == null) {
+      // null or empty ?
+      res.send("Error: null.");
+    } else if (cart == false) {
+      // empty cart, delete cart
+      res.send("Cart Empty: Deleted.");
+    } else {
+      res.send("Product Removed.");
+    }
   }
 });
 
@@ -57,7 +72,7 @@ router.post("/addUser/:cartid/:userId", async (req, res) => {
 // CART UPDATE:
 
 router.get("/", async (req, res) => {
-  const carts = await cartManager.getCarts(req);;
+  const carts = await cartManager.getCarts();;
   if (carts == null) {
     res.send("Error: null.");
   } else {
@@ -77,7 +92,7 @@ router.get("/checkout/:userId", async (req, res) => {
 });
 
 // REMOVE CART: SHOULD RETURN NULL
-router.delete("/removeCart/:cartid", async (req, res) => {
+router.delete("/removeCart/:cartId", async (req, res) => {
   const cart = await cartManager.deleteCart(req);
   if (cart == null) {
     // null or empty ?

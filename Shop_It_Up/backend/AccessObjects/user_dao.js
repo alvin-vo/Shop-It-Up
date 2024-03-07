@@ -4,8 +4,12 @@ The models communicate with the database.
 */
 
 const User = require("../Models/user_model.js"); // OBJECT
+const Cart = require("../Models/cart_model.js");
+
 const guard = require("../Security/check_status.js")
 
+const { createdProduct } = require("../AccessObjects/product_dao.js");
+const { deletedProduct } = require("../AccessObjects/product_dao.js");
 
 // USER:
 
@@ -21,7 +25,7 @@ const createNewUser = async (userId, passedInEmail) => {
       userId: userID,
       email: encryptEmail,
       productsToSell: [],
-      cartId: "123434",
+      cartId: "",
     }).save();
 
     return userID;
@@ -30,7 +34,14 @@ const createNewUser = async (userId, passedInEmail) => {
   }
 };
 
-const getExisitngUserInfo = async () => {};
+const getExisitngUserInfo = async (passedInUserId) => {
+  const existingUser = await User.findOne({userId: passedInUserId});
+  if (existingUser) {
+    return existingUser;
+  } else {
+    return null; // return null if no user
+  }
+};
 
 const getAllUsers = async () => {
   const existingUsers = await User.find();
@@ -39,31 +50,95 @@ const getAllUsers = async () => {
 
 // PRODUCTS:
 
-const addProduct = async () => {};
+const addProduct = async (passedInUserId, passedInProductId, passedInBody) => {
+  passedInBody.productId = passedInProductId;
+  passedInBody.sellerId = passedInUserId;
+  try {
+  const product = createdProduct(passedInBody);
+  const user = await User.findOneAndUpdate(
+    { cartId: passedInUserId },
+    { $push: {"productsToSell": passedInProductId} }
+  );
+  return true;
+} catch (err) {
+  return false; // Return null if error.
+}
+};
 
-const removeProduct = async () => {};
+const removeProduct = async (passedInUserId, passedInProductId) => {
+  try {
+    const product = deletedProduct(passedInProductId);
+    const user = await User.findOneAndUpdate(
+      { cartId: passedInUserId },
+      { $pull: {"productsToSell": passedInProductId} }
+    );
+    return true;
+  } catch (err) {
+    return false; // Return null if error.
+  }
+};
 
 // INVITES:
 
-const sendHandler = async (userToInvite) => {
-  // Decrypt Email
-  const decryptEmail = await guard.decryptEmail(userToInvite.email);
-  
+const sendHandler = async (userToInvite, emailToSend) => {
   // Get Cart Id
   const getCartId = userToInvite.cartId;
 
   // Make Link
   const linkToSend = "http://localhost:3010/api/user/invite/accept/" + getCartId;
 
-  // Send Email
-  const sentOrNot = await guard.sendEmail(decryptEmail, linkToSend);
+  // Send Email (Broken: Google Banned Email)
+  // const sentOrNot = await guard.sendEmail(emailToSend, linkToSend);
 
-  return sentOrNot;
+  return linkToSend; // IMMEDIATE SOLUTION: RETURN INVITE LINK
 };
 
-const acceptHandler = async () => {
-  
+// RETURNS TRUE/FALSE
+const acceptHandler = async (cartIdToEdit, userToAdd) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { cartId: cartIdToEdit },
+      { $push: {"contributorIds": userToAdd} }
+    );
+    const existingUser = await User.findOneAndUpdate(
+      { userId: userToAdd },
+      { cartId: cartIdToEdit } 
+    );
+    return true;
+  } catch (err) {
+    return null;
+  }
 
+};
+
+// RETURNS NEW USER
+const updateUserWithCart = async (passedInCartId, passedInUserId) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { cartId: passedInCartId },
+      { $push: {"contributorIds": passedInUserId} }
+    );
+    const existingUser = await User.findOneAndUpdate(
+      { userId: passedInUserId },
+      { cartId: passedInCartId } 
+    );
+    return existingUser;
+  } catch (err) {
+    return null;
+  }
+};
+
+// RETURNS NEW USER
+const setEmptyCart = async (passedInUserId) => {
+  try {
+    const existingUser = await User.findOneAndUpdate(
+      { userId: passedInUserId },
+      { cartId: "" } 
+    );
+    return existingUser;
+  } catch (err) {
+    return null;
+  }
 };
 
 // HELPER:
@@ -98,5 +173,7 @@ module.exports = {
   removeProduct,
   sendHandler,
   acceptHandler,
-  checkUserExistence
+  checkUserExistence,
+  updateUserWithCart,
+  setEmptyCart,
 };

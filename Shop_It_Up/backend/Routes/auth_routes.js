@@ -5,6 +5,7 @@
 
 const express = require("express");
 const passport = require("passport");
+const { authorize } = require("../Managers/authorize_manager");
 
 const router = express.Router();
 
@@ -12,5 +13,13 @@ router.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["email", "profile", "openid"] })
 );
+
+router.get("/authorizeTest", authorize, (req, res) => {
+  const id = req.userId;
+  const email = req.userEmail;
+  res
+    .status(200)
+    .send(`This is your id: ${id} and this is your email ${email}`);
+});
 
 module.exports = router;

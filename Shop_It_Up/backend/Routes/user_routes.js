@@ -6,6 +6,7 @@ const express = require("express");
 
 const router = express.Router();
 const userManager = require("../Managers/user_manager.js");
+const { authorize } = require("../Managers/authorize_manager");
 
 // USER:
 
@@ -20,51 +21,94 @@ router.post("/create", async (req, res) => {
 });
 
 //Get user Info
-router.get("/getInfo", async (req, res) => {
-  res.send("getting use Informaton.");
+router.get("/getInfo/:userId", async (req, res) => {
+  if(!Object.keys(req.body).length) {
+    res.send("Error: null.");
+  } else {
+    const user = await userManager.getUser(req.params.userId, req.body.password, req.body.passphrase);
+    if (user == null) {
+      res.send("Error: null.");
+    } else {
+      res.send(user);
+    }
+  }
 });
 
 //Get all user
 router.get("/getAll/", async (req, res) => {
-  const users = await userManager.getAll(req.body.password, req.body.passphrase);
-  if (users == null) {
+  if(!Object.keys(req.body).length) {
     res.send("Error: null.");
   } else {
-    res.send(users);
+    const users = await userManager.getAll(req.body.password, req.body.passphrase);
+    if (users == null) {
+      res.send("Error: null.");
+    } else {
+      res.send(users);
+    }
   }
 });
 
 // PRODUCTS:
 
 //Add product to sell
-router.post("/addProduct", async (req, res) => {
-  res.send("add product.");
+router.post("/addProduct/:productId", authorize, async (req, res) => {
+  const userId = req.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
+  } else {
+    const user = await userManager.addProductToSell(userId, req.params.productId, req.body);
+    if (user == false) {
+      res.send("Error: product not added.");
+    } else {
+      res.send("Passed: product added.");
+    }
+  }
 });
 
 //Remove product to sell
-router.delete("/removeProduct", async (req, res) => {
-  res.send("remove product");
+router.delete("/removeProduct/:productId", authorize, async (req, res) => {
+  const userId = req.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
+  } else {
+    const user = await userManager.removeProductToSell(userId, req.params.productId);
+    if (user == false) {
+      res.send("Error: product not removed.");
+    } else {
+      res.send("Passed: product removed.");
+    }
+  }
 });
 
 // INVITES:
 
 //Send Invite
-router.post("/invite/:userId", async (req, res) => {
-  const user = await userManager.sendInvite(req.params.userId);
-  if (user == false) {
-    res.send("Error: email not sent.");
+router.post("/invite/:email", authorize, async (req, res) => {
+  const userId = req.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
   } else {
-    res.send("Passed: email sent.");
+    const user = await userManager.sendInvite(userId, req.params.email);
+    if (user == false) {
+      res.send("Error: user has no cart.");
+    } else {
+      res.send(user);
+    }
   }
 });
 
 //Accept Invite
-router.post("/invite/accept/:cartId", async (req, res) => {
-  const user = await userManager.acceptInvite(req.params.cartId);
-  if (user == null) {
-    res.send("Error: null.");
+router.post("/invite/accept/:cartId", authorize, async (req, res) => {
+  const userId = req.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
   } else {
-    res.send(user);
+    const user = await userManager.acceptInvite(req.params.cartId, userId);
+    if (user == null) {
+      res.send("Error: null.");
+    } else {
+      res.send(user);
+    }
   }
 });
 

@@ -6,11 +6,72 @@ The models communicate with the database.
 const Cart = require("../Models/cart_model.js");
 
 // ADD PRODUCT TO CART
-const addProduct = async (fidnCartId, productId) => {
+const addProduct = async (findCartId, productId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { cartId: fidnCartId },
-      {"products.$": productId}
+      { cartId: findCartId },
+      { $push: {"products": productId} }
+    );
+    return true;
+  } catch (err) {
+    return null;
+  }
+};
+
+const firstProduct = async (findCartId, passedInProductId, passedInUserId) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { cartId: findCartId },
+      { $set: {"products": passedInProductId} },
+      { $set: {"contributorIds": passedInUserId} },
+    );
+    return true;
+  } catch (err) {
+    return null;
+  }
+};
+
+const removeProduct = async (findCartId, productId) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { cartId: findCartId },
+      { $pull: {"products": productId} }
+    );
+
+    return true;
+  } catch (err) {
+    return null;
+  }
+};
+
+const inCart = async (findCartId, passedInUserId) => {
+  try {
+    const cart = await Cart.findOne(
+      { cartId: findCartId },
+      { "contributorIds": passedInUserId }
+    );
+    if(cart.contributorIds.length == 0) {
+      return false;
+    }
+    return true;
+  } catch (err) {
+    return null;
+  }
+
+};
+
+const addContributor = async (cartId) => {
+  
+};
+
+const removeContributor = async (userId) => {};
+
+const checkout = async (cartId, userId) => {};
+
+const getOnlyCart = async (passedInCartId) => {
+  try {
+    const cart = await Cart.findOne(
+      { "cartId": passedInCartId },
     );
 
     return cart;
@@ -19,28 +80,21 @@ const addProduct = async (fidnCartId, productId) => {
   }
 };
 
-const removeProduct = async (productId) => {};
+const deleteCart = async (passedInCartId) => {
+  try {
+    const cart = await Cart.findOneAndDelete({ "cartId": passedInCartId });
+    return cart;
+  } catch (err) {
+    return null; // Return null if error.
+  }
+};
 
-const addContributor = async (cartId) => {};
-
-const removeContributor = async (userId) => {};
-
-const checkout = async (cartId, userId) => {};
-
-//I can't remeber why we have this
-const syncCart = async (userId) => {};
-
-const deleteCart = async (cartId) => {};
-
-const createCart = async(userIdForNewCart) => {
+const createCart = async () => {
   try {
     createdCartId = makeNewId();
     const newCart = new Cart({
-      cartId: createdCartId,
-      ownerId: userIdForNewCart,
-      contributorIds: [userIdForNewCart],
-      products: [],
-  })
+      "cartId": createdCartId
+  });
   newCart.save();
     // Return created cartId.
     return createdCartId;
@@ -63,7 +117,7 @@ const getAllCarts = async () => {
 // MAKE NEW ID (FOR CART) OF LENGTH 13
 function makeNewId() {
   // SET VALUES CARTID CAN BE
-  const validChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-=!@#$%^&*()_+';
+  const validChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   const validCharLength = validChar.length;
   // VALUE TO RETURN
   var returnVal = '';
@@ -83,8 +137,10 @@ module.exports = {
   removeContributor,
   addContributor,
   checkout,
-  syncCart,
   deleteCart,
   createCart,
   getAllCarts,
+  getOnlyCart,
+  inCart,
+  firstProduct,
 };
