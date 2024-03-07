@@ -1,33 +1,60 @@
-import { Button, Input } from "@chakra-ui/react";
+import { Button, GridItem, Input, SimpleGrid } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { ProductsRepositoryImpl } from '../../Products/ProductsRepo/ProductsRepo';
+import SearchButts from "./search_butts";
 
-function SearchFunc(props: any) {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [searchResult, setSearchResult] = useState('');
+export interface Product {
+  productId: string;
+  title: string;
+}
+
+
+const SearchFunc = () => {  
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredRec, setFilteredRec] = useState<Product[]>([]); 
+    const [numRec, setNumRec] = useState<number>(0); 
+    const [inputFocused, setInputFocused] = useState(false);
+    let foo = new ProductsRepositoryImpl();
+
 
     useEffect(() => {
-        const getProducts = async () => {
-            // Assuming props.itemInfo is a Promise
-            let myProducts = await props.itemInfo;
-            setSearchResult(myProducts[props.category]);
-        };
+        async function getProducts() {
+            let myRecs = await foo.fetchProducts();
+            // Filter the recommendations based on the search term
+            const filteredProducts = myRecs.filter(product =>
+                product.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredRec(filteredProducts);
+            setNumRec(filteredProducts.length);
+        }
         getProducts();
-    }, [props.itemInfo, props.category]); // Re-run when these props change
+    }, [searchTerm]);
+
 
     return (
-        <>
-            <Input
-                placeholder="Search Shop-It-Up"
-                htmlSize={80}
-                borderColor={"black"}
-                variant={"ghost"}
-                onChange={event => setSearchTerm(event.target.value)}
-            />
-            <Button width={700} height={10}>
-                {searchResult}
-            </Button>
-        </>
+      <div>
+        <Input
+            placeholder="Search Shop-It-Up"
+            htmlSize={80}
+            borderColor={"black"}
+            variant={"ghost"}
+            onChange={event => {setSearchTerm(event.target.value)}}
+            onFocus={() => setInputFocused(true)}
+            onBlur={() => setInputFocused(false)}
+        />
+        {inputFocused && (
+          <SimpleGrid columns={1} spacing={0}>
+
+            {[...Array(numRec)].map((x,i) =>
+                <SearchButts key={i} itemNum={i} itemInfo={filteredRec}/>
+            )}
+
+          </SimpleGrid>
+        )}
+
+      </div>
+      
     );
 }
 

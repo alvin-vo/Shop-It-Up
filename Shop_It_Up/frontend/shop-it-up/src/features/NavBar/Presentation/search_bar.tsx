@@ -3,15 +3,16 @@ import { IconButton } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import FilterFunc from "./filter_button";
 import SearchFunc from "./search_func";
+
 const SearchBar = () => {
 
   return (
     <Flex>
       <Box>
-        <ButtonGroup isAttached variant="ghost" _hover={{ bg: "##FFFF" }}>
+        <ButtonGroup isAttached variant="outline" borderRadius={'none'} _hover={{ bg: "##FFFF" }}>
           <FilterFunc/>
           <SearchFunc/>
-          <IconButton aria-label="Search Button" icon={<SearchIcon />} />
+          <IconButton aria-label="Search Button" icon={<SearchIcon/>} borderRadius={'none'}/>
         </ButtonGroup>
       </Box>
     </Flex>
