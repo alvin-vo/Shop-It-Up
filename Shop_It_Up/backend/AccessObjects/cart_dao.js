@@ -6,11 +6,12 @@ The models communicate with the database.
 const Cart = require("../Models/cart_model.js");
 
 // ADD PRODUCT TO CART
-const addProduct = async (findCartId, productId) => {
+const addProduct = async (findCartId, passedInProductId, passedInUserId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
       { cartId: findCartId },
-      { $push: {"products": productId} }
+      { $push: {"products": passedInProductId} }
+
     );
     return true;
   } catch (err) {
@@ -60,13 +61,29 @@ const inCart = async (findCartId, passedInUserId) => {
 
 };
 
+const removeUser = async (findCartId, passedInUserId) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      { cartId: findCartId },
+      { $pull: {"contributorIds": passedInUserId} }
+    );
+    console.log(cart);
+
+    return true;
+  } catch (err) {
+    return null;
+  }
+};
+
 const addContributor = async (cartId) => {
   
 };
 
 const removeContributor = async (userId) => {};
 
-const checkout = async (cartId, userId) => {};
+const checkout = async (cartId, userId) => {
+
+};
 
 const getOnlyCart = async (passedInCartId) => {
   try {
@@ -143,4 +160,5 @@ module.exports = {
   getOnlyCart,
   inCart,
   firstProduct,
+  removeUser,
 };

@@ -81,13 +81,18 @@ router.get("/", async (req, res) => {
 });
 
 // CHECKOUT CART: SHOULD RETURN ALL PRODUCTS BASED ON USERID'S CART
-router.get("/checkout/:userId", async (req, res) => {
-  const cart = await cartManager.checkoutCart(req);
-  if (cart == null) {
-    // null or empty ?
-    res.send("Error: null.");
+router.post("/checkout/", authorize, async (req, res) => {
+  const userId = req.userId;
+  if(userId == undefined) {
+    res.send("Error: invalid user.");
   } else {
-    res.send(cart);
+    const cart = await cartManager.checkoutCart(userId);
+    if (cart == null) {
+      // null or empty ?
+      res.send("Error: null.");
+    } else {
+      res.send(cart);
+    }
   }
 });
 

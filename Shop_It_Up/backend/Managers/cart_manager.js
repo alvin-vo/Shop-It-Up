@@ -31,7 +31,7 @@ const addProductToCart = async (passedInInfo, passedInUserId) => {
 
   if(realProduct) { // REAL PRODUCT
     if(realUserPostChange.cartId.length != 0) { // REAL CART
-      const checkTrue = await cartDAO.addProduct(realUser.cartId, realProduct.productId);
+      const checkTrue = await cartDAO.addProduct(realUser.cartId, realProduct.productId, realUser.userId);
       if(checkTrue) {
         return await cartDAO.getOnlyCart(realUser.cartId);
       }
@@ -86,7 +86,22 @@ const removeContributorFromCart = async (userId) => {};
 
 // CART UPDATE
 
-const checkoutCart = async (cartId, userId) => {};
+const checkoutCart = async (passedInUserId) => {
+  const realUser = await getExisitngUserInfo(passedInUserId);
+
+  if(realUser.cartId.length != 0) { // HAS CART
+    const existingCart = await cartDAO.getOnlyCart(realUser.cartId);
+    if(existingCart == null || existingCart.products.length == 0 || existingCart.products == undefined) { // CART EMPTY
+      return null;
+    } else {
+      const updatedCart = await cartDAO.removeUser(realUser.cartId);
+      const updatedUser = await setEmptyCart(passedInUserId);
+      return true;
+    }
+  }
+
+  return null;
+};
 
 const deleteCart = async (passedInReq) => {
   return await cartDAO.deleteCart(passedInReq.params.cartId);
