@@ -8,7 +8,7 @@
 .login-form {
   width: 100%;
   max-width: 400px;
-  height: 400px;
+  height: 550px;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -63,5 +63,22 @@
 }
 
 body {
-  background: linear-gradient(to right, #ff7e5f, #feb47b); /* Example gradient */
+  background: linear-gradient(to right, #0408d7, #0408d7); /* Example gradient */
+}
+
+.facebook-login-button{
+  top: 10%;
+  left: 12%;
+}
+
+.google-login-button{
+  top: 10%;
+  left: 8%;
+}
+.login-page {
+  background: linear-gradient(to right, #56CCF2, #2F80ED);
+
+  height: 100vh; 
+  justify-content: center;
+  align-items: center;
 }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './CartPage.css'; // Assume we have some CSS for basic styling
-//import Navbar from './features/NavBar/Presentation/Navbar'
 import Navbar from '../../../NavBar/Presentation/nav_bar';
 
 type CartItem = {
@@ -19,11 +18,12 @@ const ShoppingCartPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
 
   const updateQuantity = (id: number, quantity: number) => {
-    setCartItems(cartItems.map(item => item.id === id ? { ...item, quantity: quantity } : item));
+    setCartItems(cartItems.map(item => item.id === id ? { ...item, quantity } : item));
   };
 
-  const removeItemFromCart = (id: number) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
+  // Modify this function to call the removeProductFromCartAPI
+  const removeItemFromCart = (cartId: number, productId: number) => {
+    removeProductFromCartAPI(cartId, productId);
   };
 
   const calculateTotal = () => {
@@ -33,33 +33,59 @@ const ShoppingCartPage: React.FC = () => {
   const handleCheckout = () => {
     console.log('Proceeding to checkout...');
   };
+
+  // Function to call API for removing product from cart
+  const removeProductFromCartAPI = async (cartId: number, productId: number) => {
+    try {
+      const response = await fetch(`/api/cart/removeProduct/${cartId}/${productId}`, {
+        method: 'POST', // Even though we are "removing", the method specified is POST
+        headers: {
+          'Content-Type': 'application/json',
+          // Include other headers as required, such as authorization tokens
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to remove product from cart');
+      }
+
+      const updatedCart = await response.json();
+      // Assuming updatedCart is an array of CartItems
+      setCartItems(updatedCart);
+      console.log('Product removed from cart', updatedCart);
+    } catch (error) {
+      console.error('Error removing product from cart:', error);
+    }
+  };
+
   return (
     <div>
-    <Navbar/>
-    <div className="shopping-cart">
-      <h2>Your Shopping Cart</h2>
-      {cartItems.map(item => (
-        <div key={item.id} className="cart-item">
-          <div className="item-info">
-            <span>{item.name}</span>
-            <span>${item.price}</span>
+      <Navbar/>
+      <div className="shopping-cart">
+        <h2>Your Shopping Cart</h2>
+        {cartItems.map(item => (
+          <div key={item.id} className="cart-item">
+            <div className="item-info">
+              <span>{item.name}</span>
+              <span>${item.price}</span>
+            </div>
+            <div className="item-controls">
+              <input 
+                type="number" 
+                value={item.quantity} 
+                onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
+                min="1"
+              />
+              {/* Modify the onClick handler to pass the correct cartId and productId */}
+              <button onClick={() => removeItemFromCart(1, item.id)}>Remove</button>
+            </div>
           </div>
-          <div className="item-controls">
-            <input 
-              type="number" 
-              value={item.quantity} 
-              onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
-              min="1"
-            />
-            <button onClick={() => removeItemFromCart(item.id)}>Remove</button>
-          </div>
+        ))}
+        <div className="total">
+          Total: ${calculateTotal()}
         </div>
-      ))}
-      <div className="total">
-        Total: ${calculateTotal()}
+        <button className="checkout-button" onClick={handleCheckout}>Checkout</button>
       </div>
-      <button className="checkout-button" onClick={handleCheckout}>Checkout</button>
-    </div>
     </div>
   );
 };
