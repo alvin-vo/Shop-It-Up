@@ -11,7 +11,7 @@ const HomePage = () => {
             {/* <LoginPage/> */}
             <NavBar/>
             {/* <SearchBar/> */}
-            {/* <ProductsGrid/> */}
+            { <ProductsGrid/>}
 
         </div>
 
