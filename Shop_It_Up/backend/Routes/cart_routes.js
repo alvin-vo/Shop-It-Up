@@ -12,7 +12,7 @@ const { authorize } = require("../Managers/authorize_manager");
 
 // ADD TO CART: THIS SHOULD ADD TO CART AND RETURN THE NEW CART
 router.post("/addProduct/:productId", async (req, res) => {
-  const userId = "102537222162702225956";
+  const userId = req.userId;
   if (userId == undefined) {
     res.send("Error: invalid user.");
   } else {
