@@ -36,8 +36,8 @@ function Product(props: any) {
 
 
     const getProducts = async () => {
-        let myProducts = await props.itemInfo;
-        setProduct(myProducts[props.itemNum]);
+        let myProduct = await props.itemInfo;
+        setProduct(myProduct);
     }
 
     getProducts()

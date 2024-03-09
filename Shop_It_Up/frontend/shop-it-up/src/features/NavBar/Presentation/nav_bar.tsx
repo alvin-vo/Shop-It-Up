@@ -14,7 +14,7 @@ import {
   Spacer,
 } from "@chakra-ui/layout";
 
-const NavBar = () => {
+function NavBar(props: any){
   return (
     <Flex
       h="75"
@@ -41,7 +41,7 @@ const NavBar = () => {
       <Spacer />
 
       <Box w="700px" h="10" bg="white">
-        <SearchBar />
+        <SearchBar onQuery={props.onQuery}/>
       </Box>
 
       <Spacer />
