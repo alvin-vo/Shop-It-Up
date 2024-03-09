@@ -3,8 +3,6 @@ import { IconButton } from "@chakra-ui/react";
 import { PiListPlusLight, PiUserList, PiShoppingCart } from "react-icons/pi";
 import DropDownMenu from "./drop_down_menu";
 import SearchBar from "./search_bar";
-import { useNavigate } from 'react-router-dom';
-
 import {
   Box,
   Flex,
@@ -16,9 +14,7 @@ import {
   Spacer,
 } from "@chakra-ui/layout";
 
-
-const NavBar = () => {
-  const navigate = useNavigate();
+function NavBar(props: any){
   return (
     <Flex
       h="75"
@@ -35,8 +31,7 @@ const NavBar = () => {
           variant="ghost"
           size="auto"
           _hover={{ bg: "##FFFF" }}
-          onClick={() => navigate('/')}
-        />  
+        />
       </Box>
 
       <Box w="350px">
@@ -46,7 +41,7 @@ const NavBar = () => {
       <Spacer />
 
       <Box w="700px" h="10" bg="white">
-        <SearchBar />
+        <SearchBar onQuery={props.onQuery}/>
       </Box>
 
       <Spacer />
@@ -75,7 +70,6 @@ const NavBar = () => {
             icon={<PiShoppingCart />}
             variant="ghost"
             fontSize={30}
-            onClick={() => navigate('/shoppingcart')}
           />
         </Box>
 

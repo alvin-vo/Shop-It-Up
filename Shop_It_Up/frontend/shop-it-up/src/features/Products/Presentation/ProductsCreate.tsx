@@ -1,4 +1,5 @@
 import { useFormik } from 'formik';
+import { v4 as uuidv4 } from 'uuid';
 import {
     Box,
     FormControl,
@@ -150,8 +151,8 @@ function ProductsCreate(props: any) {
                                 let foo:ProductsRepositoryImpl = new ProductsRepositoryImpl()
                                 let myProducts = await foo.fetchProducts();
                                 formik.values.productId = (myProducts.length + 1).toString();
-                                formik.values.sellerId = (myProducts.length + 1).toString();
-                                const request = await axios.post('http://localhost:3010/api/products/create', formik.values)
+                                formik.values.sellerId = uuidv4();
+                                const request = await axios.post('/api/products/create', formik.values)
                                 console.log(request)
                                 return request;
 

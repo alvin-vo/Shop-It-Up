@@ -1,14 +1,7 @@
 import {
-  Input,
   Flex,
-  ButtonGroup,
-  Box,
-  HStack,
-  IconButton,
 } from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
 import FilterFunc from "./filter_button";
-import SearchFunc from "./search_func";
 import { useState, useEffect } from "react";
 import { ProductsRepositoryImpl } from "../../Products/ProductsRepo/ProductsRepo";
 
@@ -17,10 +10,16 @@ import {
   AutoCompleteInput,
   AutoCompleteItem,
   AutoCompleteList,
-  AutoCompleteGroup,  
 } from "@choc-ui/chakra-autocomplete";
 
-const SearchBar = () => {
+function SearchBar(props:any){
+  function handleInput(e: any){
+    if (e){
+      props.onQuery(e.target.value)
+    }
+    
+  }
+
   const [options, setOptions] = useState(Array<string>);
   let foo: ProductsRepositoryImpl = new ProductsRepositoryImpl();
 
@@ -44,6 +43,8 @@ const SearchBar = () => {
       <Flex w="100%" h="100%" bg={"white"} justifyContent="center">
         <AutoComplete rollNavigation>
           <AutoCompleteInput
+            onChange={handleInput}
+            onKeyDown={handleInput}
             variant="outline"
             placeholder="Search Shop-It-Up"
             autoFocus
