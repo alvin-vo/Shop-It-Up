@@ -82,7 +82,7 @@ router.get("/", async (req, res) => {
 
 //GET CART: SHOULD RETURN USER SPECIFIC CART
 router.get("/cart", async (req, res) => {
-  const userId = "102537222162702225956";
+  const userId = req.userId;
   if (userId == undefined) {
     res.send("Error: invalid user.");
   } else {
