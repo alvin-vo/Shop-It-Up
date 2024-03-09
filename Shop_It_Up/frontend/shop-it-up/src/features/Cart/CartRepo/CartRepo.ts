@@ -3,18 +3,17 @@ import { mapCartEntitytoCart } from "../mapper/cartMapper";
 export interface CartRepo{
     // operations
     removeProductFromCart(cartId: string, productId: string): Promise<Cart>;
-
+    fetchShoppingCart(): Promise<Cart>;
 }
 
 export class CartRepoImp implements CartRepo{
     baseUrl = "http://localhost:3010";
 
     async removeProductFromCart(cartId: string, productId: string): Promise<Cart> {
-
+        
         try{
-             const response = await fetch(`${this.baseUrl}/api/cart/removeProduct/${cartId}/${productId}`, {
-
-            method: "POST",
+            const response = await fetch(`/api/cart/removeProduct/${cartId}/${productId}`, {
+            method: "DELETE",
             headers: {
             'Content-Type': 'application/json',
             },
@@ -35,4 +34,30 @@ export class CartRepoImp implements CartRepo{
        
 
     }
-}
+
+    async fetchShoppingCart(): Promise<Cart> {
+        try {
+            const response = await fetch(`${this.baseUrl}/api/carts/checkout`, {
+                mode: 'no-cors',
+                method: "GET", // Use GET method to fetch data
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Include other headers as required, such as authorization tokens
+                }, 
+                credentials: "include",//
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch shopping cart");
+            }
+
+            const cartEntity = await response.json();
+            const cart: Cart = mapCartEntitytoCart(cartEntity);
+            return cart;
+        } catch (error) {
+            console.error("Error fetching shopping cart:", error);
+            throw error;
+        }
+    }
+    }
+    

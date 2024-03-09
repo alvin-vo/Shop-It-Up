@@ -81,7 +81,7 @@ router.get("/", async (req, res) => {
 });
 
 // CHECKOUT CART: SHOULD RETURN ALL PRODUCTS BASED ON USERID'S CART
-router.post("/checkout/", authorize, async (req, res) => {
+router.get("/checkout", authorize, async (req, res) => {
   const userId = req.userId;
   if(userId == undefined) {
     res.send("Error: invalid user.");
@@ -91,7 +91,7 @@ router.post("/checkout/", authorize, async (req, res) => {
       // null or empty ?
       res.send("Error: null.");
     } else {
-      res.send(cart);
+      res.json(cart);
     }
   }
 });

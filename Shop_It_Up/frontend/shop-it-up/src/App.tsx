@@ -5,7 +5,11 @@ import LoginPage from './features/LoginPage/presentation/LoginPage'; // Adjust t
 import CartPage from './features/Cart/CartPage/presentation/CartPage';
 import CheckoutPage from './features/CheckoutPage/presentation/CheckoutPage';
 
+
+
 const App: React.FC = () => {
+
+  
   return (
     <Router>
       <Routes>

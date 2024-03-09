@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CartPage.css'; // Assume we have some CSS for basic styling
 import Navbar from '../../../NavBar/Presentation/nav_bar';
 import Cart from 'features/Cart/domain/Cart';
 import { CartRepoImp } from "../../CartRepo/CartRepo";
+
+const getCookieValue = (name: any) => (
+  document.cookie.split('; ').find(row => row.startsWith(`${name}=`))?.split('=')[1]
+);
+
 const ShoppingCartPage: React.FC = () => {
   // const initialCartItems: Car[] = [
   //   { id: 1, name: "Echo Dot", price: 49.99, quantity: 1 },
   // ];
 
   const [cartItems, setCartItems] = useState<Cart | null> (null);
-
+  
   // const updateQuantity = (id: number, quantity: number) => {
   //   setCartItems(cartItems.map(item => item.id === id ? { ...item, quantity } : item));
   // };
@@ -24,15 +29,28 @@ const ShoppingCartPage: React.FC = () => {
   //   console.log('Proceeding to checkout...');
   // };
 
+  const cartRepo = new CartRepoImp();
+
+  useEffect(() => {
+
+    const fetchCart = async () => {
+      try {
+        const fetchedCart = await cartRepo.fetchShoppingCart();
+        setCartItems(fetchedCart);
+      } catch (error) {
+        console.error("Failed to fetch cart:", error);
+      }
+    };
+
+    fetchCart();
+  }, []);
   const removeProduct = async (productId: string) => {
       if(cartItems == null){
         return;
       }
 
     try{
-      
-          const cartRepo = new CartRepoImp();
-
+    
           const updatedCart = await cartRepo.removeProductFromCart(cartItems.cartId, productId);
           setCartItems(updatedCart);
       }catch (error){
