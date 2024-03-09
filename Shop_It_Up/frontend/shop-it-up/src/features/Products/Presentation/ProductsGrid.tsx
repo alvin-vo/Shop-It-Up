@@ -21,6 +21,14 @@ function ProductsGrid(props: any) {
       }
       console.log(temp);
     }
+    else if (props.filtPrice1 !== 0 && props.filtPrice2 !== 0) {
+      for (let i = 0; i < myProducts.length; i++) {
+        if (myProducts[i].price > props.filtPrice1 && myProducts[i].price < props.filtPrice2) {
+          temp.push(myProducts[i]);
+        }
+      }
+      console.log(temp)
+    }
     else{
       temp = myProducts;
     }
@@ -30,7 +38,7 @@ function ProductsGrid(props: any) {
 
   useEffect(() => {
     getProducts();
-  }, [props.query]);
+  }, [props.query, props.filtPrice1, props.filtPrice2]);
   
 
   return (
