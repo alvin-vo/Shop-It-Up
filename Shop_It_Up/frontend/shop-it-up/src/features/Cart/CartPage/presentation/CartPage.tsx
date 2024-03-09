@@ -1,90 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CartPage.css'; // Assume we have some CSS for basic styling
 import Navbar from '../../../NavBar/Presentation/nav_bar';
+import Cart from 'features/Cart/domain/Cart';
+import { CartRepoImp } from "../../CartRepo/CartRepo";
 
-type CartItem = {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-};
+const getCookieValue = (name: any) => (
+  document.cookie.split('; ').find(row => row.startsWith(`${name}=`))?.split('=')[1]
+);
 
 const ShoppingCartPage: React.FC = () => {
-  const initialCartItems: CartItem[] = [
-    { id: 1, name: "Echo Dot", price: 49.99, quantity: 1 },
-    { id: 2, name: "Amazon Fire Stick", price: 39.99, quantity: 2 },
-  ];
+  // const initialCartItems: Car[] = [
+  //   { id: 1, name: "Echo Dot", price: 49.99, quantity: 1 },
+  // ];
 
-  const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
+  const [cartItems, setCartItems] = useState<Cart | null> (null);
+  
+  // const updateQuantity = (id: number, quantity: number) => {
+  //   setCartItems(cartItems.map(item => item.id === id ? { ...item, quantity } : item));
+  // };
 
-  const updateQuantity = (id: number, quantity: number) => {
-    setCartItems(cartItems.map(item => item.id === id ? { ...item, quantity } : item));
-  };
 
-  // Modify this function to call the removeProductFromCartAPI
-  const removeItemFromCart = (cartId: number, productId: number) => {
-    removeProductFromCartAPI(cartId, productId);
-  };
 
-  const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
-  };
+  // const calculateTotal = () => {
+  //   return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+  // };
 
-  const handleCheckout = () => {
-    console.log('Proceeding to checkout...');
-  };
+  // const handleCheckout = () => {
+  //   console.log('Proceeding to checkout...');
+  // };
 
-  // Function to call API for removing product from cart
-  const removeProductFromCartAPI = async (cartId: number, productId: number) => {
-    try {
-      const response = await fetch(`/api/cart/removeProduct/${cartId}/${productId}`, {
-        method: 'POST', // Even though we are "removing", the method specified is POST
-        headers: {
-          'Content-Type': 'application/json',
-          // Include other headers as required, such as authorization tokens
-        },
-      });
+  const cartRepo = new CartRepoImp();
 
-      if (!response.ok) {
-        throw new Error('Failed to remove product from cart');
+  useEffect(() => {
+
+    const fetchCart = async () => {
+      try {
+        const fetchedCart = await cartRepo.fetchShoppingCart();
+        setCartItems(fetchedCart);
+      } catch (error) {
+        console.error("Failed to fetch cart:", error);
+      }
+    };
+
+    fetchCart();
+  }, []);
+  const removeProduct = async (productId: string) => {
+      if(cartItems == null){
+        return;
       }
 
-      const updatedCart = await response.json();
-      // Assuming updatedCart is an array of CartItems
-      setCartItems(updatedCart);
-      console.log('Product removed from cart', updatedCart);
-    } catch (error) {
-      console.error('Error removing product from cart:', error);
-    }
-  };
+    try{
+    
+          const updatedCart = await cartRepo.removeProductFromCart(cartItems.cartId, productId);
+          setCartItems(updatedCart);
+      }catch (error){
+        console.error("Failed to remove product");
+      }
+
+  }
 
   return (
     <div>
       <Navbar/>
       <div className="shopping-cart">
         <h2>Your Shopping Cart</h2>
-        {cartItems.map(item => (
-          <div key={item.id} className="cart-item">
+        {cartItems?.products.map((product) => (
+          <div key={product.productId} className="cart-item">
             <div className="item-info">
-              <span>{item.name}</span>
-              <span>${item.price}</span>
+              <span>{product.title}</span>
+              <span>${product.price}</span>
             </div>
-            <div className="item-controls">
-              <input 
-                type="number" 
-                value={item.quantity} 
-                onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
-                min="1"
-              />
               {/* Modify the onClick handler to pass the correct cartId and productId */}
-              <button onClick={() => removeItemFromCart(1, item.id)}>Remove</button>
+              <button onClick={() => removeProduct(product.productId)}>Remove</button>
             </div>
-          </div>
         ))}
-        <div className="total">
-          Total: ${calculateTotal()}
-        </div>
-        <button className="checkout-button" onClick={handleCheckout}>Checkout</button>
+        {/* <button className="checkout-button" onClick={handleCheckout}>Checkout</button> */}
       </div>
     </div>
   );

@@ -20,6 +20,7 @@ const LoginPage: React.FC = () => {
   const navigateToGoogleAuth = () => {
     window.location.href = "http://localhost:3010/api/authorize/auth/google"; // Redirects to Google Auth
   };
+  
 
   return (
     <div className="login-page">

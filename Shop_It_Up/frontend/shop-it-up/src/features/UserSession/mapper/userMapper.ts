@@ -5,7 +5,8 @@ export const mapUserEntitytoUserDomain = (userEntity: UserEntity): User =>{
     return{
         userId: userEntity.userId,
         productsToSell: userEntity.productsToSell,
-        receivedInvites: userEntity.receivedInvites
+        email: userEntity.email,
+        cartId: userEntity.cartId
     };
 };
 
