@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { IconButton } from "@chakra-ui/react";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 const DropDownMenu = () => {
   return (
@@ -25,15 +26,19 @@ const DropDownMenu = () => {
 
       <MenuList>
         <MenuGroup title="Profile">
-          <MenuItem>My Cart</MenuItem>
-          <MenuItem>My Personal Items List</MenuItem>
+          <Link to="/shoppingcart">
+            <MenuItem>My Cart</MenuItem>
+          </Link>
+          
+          {/* <MenuItem>My Personal Items List</MenuItem>
           <MenuItem>My Account</MenuItem>
-          <MenuItem>Settings</MenuItem>
+          <MenuItem>Settings</MenuItem> */}
         </MenuGroup>
 
         <MenuDivider />
-
-        <MenuItem>Log Out</MenuItem>
+        <Link to="/login">
+          <MenuItem>Log Out</MenuItem>
+        </Link>
       </MenuList>
     </Menu>
   );
