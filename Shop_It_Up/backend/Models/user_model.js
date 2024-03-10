@@ -13,7 +13,6 @@ const userSchema = new Schema({
   productsToSell: [String],
   cartId: {
     type: String,
-    required: true,
   },
 });
 

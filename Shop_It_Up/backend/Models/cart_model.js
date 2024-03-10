@@ -6,7 +6,7 @@ const cartSchema = new Schema({
     required: true,
   },
   contributorIds: [String],
-  products: [String],
+  products: [{ ids: String, quantity: Number }],
 });
 
 cartSchema.set("collection", "carts");

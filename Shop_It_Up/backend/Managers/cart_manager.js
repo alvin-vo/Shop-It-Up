@@ -158,6 +158,7 @@ const getUserCart = async (userId) => {
           userCart.products.at(i)
         );
         if (product != null) {
+          product.quantity = userCart.products.at(i).quantity;
           productsfind.push(product);
           console.log(product);
         }
