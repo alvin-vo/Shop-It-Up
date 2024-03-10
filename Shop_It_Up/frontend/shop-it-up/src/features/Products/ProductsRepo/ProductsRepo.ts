@@ -4,16 +4,23 @@ import {mapProductEntityToProduct} from '../mapper/productMapper';
 
 export interface ProductsRepository{
     fetchProducts(): Promise<Product[]>;
+    fetchProduct(id: string): Promise<Product>;
 }
 
 export class ProductsRepositoryImpl implements ProductsRepository{
-    baseUrl = 'http://localhost:3010/api/products';
-
     async fetchProducts(): Promise<Product[]>{
         const response = await fetch('http://localhost:3010/api/products')//{
          //   method: 'GET'
     //    });
+
         const productEntities: ProductEntity[] = await response.json();
         return productEntities.map(mapProductEntityToProduct);
+    }
+    async fetchProduct(id: string): Promise<Product>{
+        const response = await fetch(`/api/products/${id}`,{
+            method: 'GET'
+        });
+        const productEntities: ProductEntity = await response.json();
+        return productEntities;
     }
 }
