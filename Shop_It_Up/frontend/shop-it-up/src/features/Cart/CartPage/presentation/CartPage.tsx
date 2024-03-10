@@ -16,7 +16,7 @@ const ShoppingCartPage: React.FC = () => {
     (async () => {
       console.log("Fetch shopping cart is being called");
       try {
-        const response = await fetch("http://localhost:3010/api/carts/cart");
+        const response = await fetch("/api/carts/cart");
 
         let data = await response.json();
         console.log("response data: ", data);
@@ -79,9 +79,9 @@ const ShoppingCartPage: React.FC = () => {
   ) => {
     try {
       const response = await fetch(
-        `/api/cart/removeProduct/${cartId}/${productId}`,
+        `http://localhost:3000/api/carts/removeProduct/${productId}`,
         {
-          method: "POST", // Even though we are "removing", the method specified is POST
+          method: "DELETE", // Even though we are "removing", the method specified is POST
           headers: {
             "Content-Type": "application/json",
             // Include other headers as required, such as authorization tokens

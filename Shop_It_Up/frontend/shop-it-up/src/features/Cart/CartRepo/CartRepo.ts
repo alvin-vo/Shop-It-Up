@@ -15,7 +15,7 @@ export class CartRepoImp implements CartRepo {
   ): Promise<Cart> {
     try {
       const response = await fetch(
-        `/api/cart/removeProduct/${cartId}/${productId}`,
+        `http://localhost:3000/api/carts/removeProduct/${productId}`,
         {
           method: "DELETE",
           headers: {
@@ -39,7 +39,7 @@ export class CartRepoImp implements CartRepo {
   async fetchShoppingCart(): Promise<Cart> {
     console.log("Fetch shopping cart is being called");
     try {
-      const response = await fetch("http://localhost:3010/api/carts/cart", {
+      const response = await fetch("/api/carts/cart", {
         mode: "no-cors",
         method: "GET", // Use GET method to fetch data
         headers: {

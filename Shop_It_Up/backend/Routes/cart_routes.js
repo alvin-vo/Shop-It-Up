@@ -11,7 +11,7 @@ const { authorize } = require("../Managers/authorize_manager");
 // PRODUCT UPDATE:
 
 // ADD TO CART: THIS SHOULD ADD TO CART AND RETURN THE NEW CART
-router.post("/addProduct/:productId", async (req, res) => {
+router.post("/addProduct/:productId",authorize, async (req, res) => {
   const userId = req.userId;
   if (userId == undefined) {
     res.send("Error: invalid user.");
@@ -26,7 +26,7 @@ router.post("/addProduct/:productId", async (req, res) => {
 });
 
 // ADD TO CART: THIS SHOULD REMOVE PRODUCT RELATED TO CART AND RETURN THE NEW CART
-router.post("/removeProduct/:productId", authorize, async (req, res) => {
+router.delete("/removeProduct/:productId", authorize, async (req, res) => {
   const userId = req.userId;
   if (userId == undefined) {
     res.send("Error: invalid user.");
@@ -81,7 +81,7 @@ router.get("/", async (req, res) => {
 });
 
 //GET CART: SHOULD RETURN USER SPECIFIC CART
-router.get("/cart", async (req, res) => {
+router.get("/cart", authorize, async (req, res) => {
   const userId = req.userId;
   if (userId == undefined) {
     res.send("Error: invalid user.");
