@@ -16,21 +16,37 @@ const createUser = async (userInfo) => {
   await userDAO.createNewUser(userInfo.userId, userInfo.email);
 };
 
-const getUser = async (userToFind, passedInVariablePassword, passedInVariablePassphrase) => {
+const getUser = async (
+  userToFind,
+  passedInVariablePassword,
+  passedInVariablePassphrase
+) => {
   // Encrypt Server
   const encryptedServerMessage = await guard.encryptServer();
-  const decryptedServerMessage = await guard.decryptNow(encryptedServerMessage, passedInVariablePassphrase);
-  
+  const decryptedServerMessage = await guard.decryptNow(
+    encryptedServerMessage,
+    passedInVariablePassphrase
+  );
+
   // Encrypt User
-  const encryptedUserMessage = await guard.encryptNow(passedInVariablePassword, passedInVariablePassphrase);
-  const decryptedUserMessage = await guard.decryptNow(encryptedUserMessage, passedInVariablePassphrase);
+  const encryptedUserMessage = await guard.encryptNow(
+    passedInVariablePassword,
+    passedInVariablePassphrase
+  );
+  const decryptedUserMessage = await guard.decryptNow(
+    encryptedUserMessage,
+    passedInVariablePassphrase
+  );
 
   // Check: Should be TRUE
-  const checkNow = await guard.checkCorrect(decryptedServerMessage, decryptedUserMessage);
+  const checkNow = await guard.checkCorrect(
+    decryptedServerMessage,
+    decryptedUserMessage
+  );
 
   // TRUE: Get all users
-  if(checkNow) {
-    return await await userDAO.getExisitngUserInfo(userToFind); 
+  if (checkNow) {
+    return await await userDAO.getExisitngUserInfo(userToFind);
   }
   return null; // Return null if FALSE
 };
@@ -39,35 +55,55 @@ const getUser = async (userToFind, passedInVariablePassword, passedInVariablePas
 const getAll = async (passedInVariablePassword, passedInVariablePassphrase) => {
   // Encrypt Server
   const encryptedServerMessage = await guard.encryptServer();
-  const decryptedServerMessage = await guard.decryptNow(encryptedServerMessage, passedInVariablePassphrase);
-  
+  const decryptedServerMessage = await guard.decryptNow(
+    encryptedServerMessage,
+    passedInVariablePassphrase
+  );
+
   // Encrypt User
-  const encryptedUserMessage = await guard.encryptNow(passedInVariablePassword, passedInVariablePassphrase);
-  const decryptedUserMessage = await guard.decryptNow(encryptedUserMessage, passedInVariablePassphrase);
+  const encryptedUserMessage = await guard.encryptNow(
+    passedInVariablePassword,
+    passedInVariablePassphrase
+  );
+  const decryptedUserMessage = await guard.decryptNow(
+    encryptedUserMessage,
+    passedInVariablePassphrase
+  );
 
   // Check: Should be TRUE
-  const checkNow = await guard.checkCorrect(decryptedServerMessage, decryptedUserMessage);
+  const checkNow = await guard.checkCorrect(
+    decryptedServerMessage,
+    decryptedUserMessage
+  );
 
   // TRUE: Get all users
-  if(checkNow) {
-    return await userDAO.getAllUsers(); 
+  if (checkNow) {
+    return await userDAO.getAllUsers();
   }
   return null; // Return null if FALSE
- };
+};
 
 // PRODUCTS:
 
-const addProductToSell = async (passedInUserId, passedInProductId, passedInBody)=> {
+const addProductToSell = async (
+  passedInUserId,
+  passedInProductId,
+  passedInBody
+) => {
   // Product Doesn't Exist
   const checkOne = await checkValidProductToSell(passedInProductId);
-  if(checkOne == true) {
+  if (checkOne == true) {
     // Req.body is Correct
     const checkTwo = await checkBody(passedInBody);
-    if(checkTwo == true) {
-      const confirmation = await userDAO.addProduct(passedInUserId, passedInProductId, passedInBody)
-      if(confirmation == true) {
+    if (checkTwo == true) {
+      const confirmation = await userDAO.addProduct(
+        passedInUserId,
+        passedInProductId,
+        passedInBody
+      );
+      if (confirmation == true) {
         return true;
-      }  
+      }
     }
   }
   return false;
@@ -75,39 +111,43 @@ const addProductToSell = async (passedInUserId, passedInProductId, passedInBody)
 
 const removeProductToSell = async (passedInUserId, passedInProductId) => {
   const valUser = await checkValidOwner(passedInUserId, passedInProductId);
-  if(valUser == null) {
+  if (valUser == null) {
     return false;
   } else if (valUser == true) {
-    const confirmation = await userDAO.removeProduct(passedInUserId, passedInProductId);  
-    if(confirmation == true) {
+    const confirmation = await userDAO.removeProduct(
+      passedInUserId,
+      passedInProductId
+    );
+    if (confirmation == true) {
       return true;
-    } 
-  }  
+    }
+  }
   return false;
 };
 
 // INVITES:
 
 // Checks if Valid User and Valid Cart, returns TRUE
-const sendInvite = async (passedInId, passedInEmail) => {
+const sendInvite = async (passedInId) => {
   // Check if User Exists
   const valUser = await checkValidUser(passedInId);
-  if(valUser == null) {
+  if (valUser == null) {
     return null;
   }
   // Check if Cart Exists
   const valCart = await checkValidCart(valUser.cartId);
-  if(valCart == null) {
+  if (valCart == null) {
     return null;
   }
 
   // All tests passed
-  return await userDAO.sendHandler(valUser, passedInEmail);
+  console.log("calling send handler");
+  return await userDAO.sendHandler(valUser);
 };
 
 const acceptInvite = async (passedInCartId, passedInUserId) => {
   const valCart = await checkValidCart(passedInCartId);
-  if(valCart != null) {
+  if (valCart != null) {
     return await userDAO.acceptHandler(passedInCartId, passedInUserId);
   }
   return null;
@@ -118,43 +158,43 @@ const acceptInvite = async (passedInCartId, passedInUserId) => {
 // Validate User, returns TRUE
 async function checkValidUser(userToValidate) {
   const userResult = await userDAO.getOnlyUser(userToValidate);
-  if(userResult == null) {
+  if (userResult == null) {
     return null;
   }
   return userResult;
-};
+}
 
 // Validate Cart, returns TRUE
 async function checkValidCart(cartToValidate) {
   // Get Cart Id
   const getCartId = await getOnlyCart(cartToValidate);
   // No cartId, Can't Invite
-  if(getCartId == null){
+  if (getCartId == null) {
     return null;
   }
   return getCartId.cartId;
-};
+}
 
 // Validate Product Doesn't Exist
 async function checkValidProductToSell(productIdToValidate) {
   const product = await getOnlyProduct(productIdToValidate);
-  if(product == null) {
+  if (product == null) {
     return true;
   }
   return false;
-};
+}
 
 // Validate Product Belongs to User
 async function checkValidOwner(userIdToValidate, productIdToValidate) {
   const product = await getOnlyProduct(productIdToValidate);
-  if(product == null) {
+  if (product == null) {
     return null;
   }
-  if(product.sellerId == userIdToValidate) {
+  if (product.sellerId == userIdToValidate) {
     return true;
   }
   return false;
-};
+}
 
 module.exports = {
   createUser,

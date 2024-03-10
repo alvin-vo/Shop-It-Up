@@ -6,7 +6,7 @@ The models communicate with the database.
 const User = require("../Models/user_model.js"); // OBJECT
 const Cart = require("../Models/cart_model.js");
 
-const guard = require("../Security/check_status.js")
+const guard = require("../Security/check_status.js");
 
 const { createdProduct } = require("../AccessObjects/product_dao.js");
 const { deletedProduct } = require("../AccessObjects/product_dao.js");
@@ -16,7 +16,7 @@ const { deletedProduct } = require("../AccessObjects/product_dao.js");
 const createNewUser = async (userId, passedInEmail) => {
   const userID = userId;
   const existingUser = await User.findOne({ userId: userID });
-  
+
   // ENCRYPT EMAIL FOR INVITE
   const encryptEmail = await guard.encryptEmail(passedInEmail);
 
@@ -35,7 +35,7 @@ const createNewUser = async (userId, passedInEmail) => {
 };
 
 const getExisitngUserInfo = async (passedInUserId) => {
-  const existingUser = await User.findOne({userId: passedInUserId});
+  const existingUser = await User.findOne({ userId: passedInUserId });
   if (existingUser) {
     return existingUser;
   } else {
@@ -54,15 +54,15 @@ const addProduct = async (passedInUserId, passedInProductId, passedInBody) => {
   passedInBody.productId = passedInProductId;
   passedInBody.sellerId = passedInUserId;
   try {
-  const product = createdProduct(passedInBody);
-  const user = await User.findOneAndUpdate(
-    { cartId: passedInUserId },
-    { $push: {"productsToSell": passedInProductId} }
-  );
-  return true;
-} catch (err) {
-  return false; // Return null if error.
-}
+    const product = createdProduct(passedInBody);
+    const user = await User.findOneAndUpdate(
+      { cartId: passedInUserId },
+      { $push: { productsToSell: passedInProductId } }
+    );
+    return true;
+  } catch (err) {
+    return false; // Return null if error.
+  }
 };
 
 const removeProduct = async (passedInUserId, passedInProductId) => {
@@ -70,7 +70,7 @@ const removeProduct = async (passedInUserId, passedInProductId) => {
     const product = deletedProduct(passedInProductId);
     const user = await User.findOneAndUpdate(
       { cartId: passedInUserId },
-      { $pull: {"productsToSell": passedInProductId} }
+      { $pull: { productsToSell: passedInProductId } }
     );
     return true;
   } catch (err) {
@@ -80,12 +80,13 @@ const removeProduct = async (passedInUserId, passedInProductId) => {
 
 // INVITES:
 
-const sendHandler = async (userToInvite, emailToSend) => {
+const sendHandler = async (userToInvite) => {
   // Get Cart Id
   const getCartId = userToInvite.cartId;
 
   // Make Link
-  const linkToSend = "http://localhost:3010/api/user/invite/accept/" + getCartId;
+  const linkToSend =
+    "http://localhost:3010/api/user/invite/accept/" + getCartId;
 
   // Send Email (Broken: Google Banned Email)
   // const sentOrNot = await guard.sendEmail(emailToSend, linkToSend);
@@ -98,17 +99,16 @@ const acceptHandler = async (cartIdToEdit, userToAdd) => {
   try {
     const cart = await Cart.findOneAndUpdate(
       { cartId: cartIdToEdit },
-      { $push: {"contributorIds": userToAdd} }
+      { $push: { contributorIds: userToAdd } }
     );
     const existingUser = await User.findOneAndUpdate(
       { userId: userToAdd },
-      { cartId: cartIdToEdit } 
+      { cartId: cartIdToEdit }
     );
     return true;
   } catch (err) {
     return null;
   }
-
 };
 
 // RETURNS NEW USER
@@ -116,11 +116,11 @@ const updateUserWithCart = async (passedInCartId, passedInUserId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
       { cartId: passedInCartId },
-      { $push: {"contributorIds": passedInUserId} }
+      { $push: { contributorIds: passedInUserId } }
     );
     const existingUser = await User.findOneAndUpdate(
       { userId: passedInUserId },
-      { cartId: passedInCartId } 
+      { cartId: passedInCartId }
     );
     return existingUser;
   } catch (err) {
@@ -133,7 +133,7 @@ const setEmptyCart = async (passedInUserId) => {
   try {
     const existingUser = await User.findOneAndUpdate(
       { userId: passedInUserId },
-      { cartId: "" } 
+      { cartId: "" }
     );
     return existingUser;
   } catch (err) {
@@ -145,13 +145,13 @@ const setEmptyCart = async (passedInUserId) => {
 
 // Find user, return user
 async function getOnlyUser(passedInUserId) {
-  const existingUser = await User.findOne({userId: passedInUserId});
+  const existingUser = await User.findOne({ userId: passedInUserId });
   if (existingUser) {
     return existingUser;
   } else {
     return null; // return null if no user
   }
-};
+}
 
 // LEGACY
 
