@@ -11,8 +11,8 @@ const { authorize } = require("../Managers/authorize_manager");
 // PRODUCT UPDATE:
 
 // ADD TO CART: THIS SHOULD ADD TO CART AND RETURN THE NEW CART
-router.post("/addProduct/:productId", async (req, res) => {
-  const userId = "102537222162702225956";
+router.post("/addProduct/:productId", authorize, async (req, res) => {
+  const userId = req.userId;
   if (userId == undefined) {
     res.send("Error: invalid user.");
   } else {
@@ -81,8 +81,10 @@ router.get("/", async (req, res) => {
 });
 
 //GET CART: SHOULD RETURN USER SPECIFIC CART
-router.get("/cart", async (req, res) => {
-  const userId = "102537222162702225956";
+router.get("/cart", authorize, async (req, res) => {
+  console.log("Calling cart function");
+  const userId = req.userId;
+  console.log("UserId: ", userId);
   if (userId == undefined) {
     res.send("Error: invalid user.");
   } else {
