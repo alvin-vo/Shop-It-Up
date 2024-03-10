@@ -65,7 +65,7 @@ passport.use(
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/protected",
+    successRedirect: "/protected", // TODO: Redirect to the homepage 
     failureRedirect: "/auth/google/failure",
   })
 );
@@ -85,11 +85,8 @@ app.get("/protected", async (req, res) => {
 
   res.cookie("auth", token, { httpOnly: true });
   console.log(confirmation);
-  if (confirmation !== null) {
-    res.json({ redirect: true, message: "login succesfull" });
-  } else {
-    res.json({ redirect: true, message: "new user created." });
-  }
+  const otherServerUrl = "http://localhost:3000/";
+  res.redirect(otherServerUrl);
 });
 
 app.get("/auth/google/failure", (req, res) => {
@@ -128,18 +125,3 @@ async function connectToDB() {
     })
     .catch((err) => console.error(err));
 }
-
-async function authorize(userId) {
-  const authenticated = user.find(userId); // Hmm
-  if (authenticated === null) {
-    console.error("user not authenticated");
-  } else {
-    return userId;
-  }
-}
-
-function isLoggedIn(req, res, next) {
-  req.user ? next() : res.sendStatus(401);
-}
-
-// run().catch(console.dir);
