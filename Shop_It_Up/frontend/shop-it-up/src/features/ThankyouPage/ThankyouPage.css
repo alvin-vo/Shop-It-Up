@@ -1,0 +1,19 @@
+.thankyou-page {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .thankyou-message h1 {
+    margin-top: 20px;
+    color: #333;
+    font-weight: bold; /* Makes the font bolder */
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.2); /* Adds a subtle shadow to make the text pop */
+  }
+  
+  .thankyou-message p {
+    margin-top: 10px;
+    color: #666;
+    font-weight: 500; /* Slightly bolder than normal */
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.1); /* Adds a subtle shadow for depth */
+  }
+  

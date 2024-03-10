@@ -37,7 +37,8 @@ function Product(props: any) {
 
     const getProducts = async () => {
         let myProduct = await props.itemInfo;
-        setProduct(myProduct);
+        setProduct(myProduct[props.itemNum]);
+
     }
 
     getProducts()
@@ -77,7 +78,11 @@ function Product(props: any) {
             <CardFooter>
                     <Flex w='100%'>
                         <Text color='blue.600' fontSize='2xl'>
-                            {'$' + product.price.toString()}
+                        {product && product.price && (
+  <Text color='blue.600' fontSize='2xl'>
+    {'$' + product.price.toString()}
+  </Text>
+)}
                         </Text>
                         <Spacer/>
                         <Button variant='solid' colorScheme='blue' onMouseDown={() => {

@@ -8,13 +8,12 @@ const router = express.Router();
 const cartManager = require("../Managers/cart_manager.js");
 const { authorize } = require("../Managers/authorize_manager");
 
-
 // PRODUCT UPDATE:
 
 // ADD TO CART: THIS SHOULD ADD TO CART AND RETURN THE NEW CART
-router.post("/addProduct/:productId", authorize, async (req, res) => {
+router.post("/addProduct/:productId",authorize, async (req, res) => {
   const userId = req.userId;
-  if(userId == undefined) {
+  if (userId == undefined) {
     res.send("Error: invalid user.");
   } else {
     const cart = await cartManager.addProductToCart(req, userId);
@@ -27,9 +26,9 @@ router.post("/addProduct/:productId", authorize, async (req, res) => {
 });
 
 // ADD TO CART: THIS SHOULD REMOVE PRODUCT RELATED TO CART AND RETURN THE NEW CART
-router.post("/removeProduct/:productId", authorize, async (req, res) => {
+router.delete("/removeProduct/:productId", authorize, async (req, res) => {
   const userId = req.userId;
-  if(userId == undefined) {
+  if (userId == undefined) {
     res.send("Error: invalid user.");
   } else {
     const cart = await cartManager.removeProductFromCart(req, userId);
@@ -72,7 +71,8 @@ router.post("/addUser/:cartid/:userId", async (req, res) => {
 // CART UPDATE:
 
 router.get("/", async (req, res) => {
-  const carts = await cartManager.getCarts();;
+  const userId = req.userId;
+  const carts = await cartManager.getCarts(userId);
   if (carts == null) {
     res.send("Error: null.");
   } else {
@@ -80,10 +80,26 @@ router.get("/", async (req, res) => {
   }
 });
 
-// CHECKOUT CART: SHOULD RETURN ALL PRODUCTS BASED ON USERID'S CART
-router.post("/checkout/", authorize, async (req, res) => {
+//GET CART: SHOULD RETURN USER SPECIFIC CART
+router.get("/cart", authorize, async (req, res) => {
   const userId = req.userId;
-  if(userId == undefined) {
+  if (userId == undefined) {
+    res.send("Error: invalid user.");
+  } else {
+    const cart = await cartManager.getUserCart(userId);
+    if (cart == null) {
+      // null or empty ?
+      res.send("Error: null.");
+    } else {
+      res.json(cart);
+    }
+  }
+});
+
+// CHECKOUT CART: SHOULD RETURN ALL PRODUCTS BASED ON USERID'S CART
+router.post("/checkout", authorize, async (req, res) => {
+  const userId = req.userId;
+  if (userId == undefined) {
     res.send("Error: invalid user.");
   } else {
     const cart = await cartManager.checkoutCart(userId);

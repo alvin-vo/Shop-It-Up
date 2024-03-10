@@ -34,6 +34,7 @@ router.get("/:productId", async (req, res) => {
 // Create new product.
 // RETURNS CREATED PRODUCT
 router.post("/create", async (req, res) => {
+  console.log("Create product called");
   const product = await productManager.createProduct(req);
   if (product == null) {
     // null or empty ?
@@ -47,7 +48,8 @@ router.post("/create", async (req, res) => {
 // RETURNS DELETED PRODUCT
 router.delete("/delete/:productId", async (req, res) => {
   const product = await productManager.deleteProduct(req); // not working?
-  if (product == null) { // null or empty ?
+  if (product == null) {
+    // null or empty ?
     res.send("Error: null.");
   } else {
     res.send(product);
