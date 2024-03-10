@@ -57,13 +57,15 @@ function ProductsGrid(props: any) {
 
   useEffect(() => {
     getProducts();
-  }, [props.query, props.filtPrice1, props.filtPrice2], );
+  }, [props.query, props.filtPrice1, props.filtPrice2]);
+
+
 
 
   return (
       <SimpleGrid columns={[4, null, 5]} spacing={3}>
         {[...Array(productArr.length)].map((x, i) => (
-          <Products itemInfo={foo.fetchProduct(productArr[i].productId)} />
+          <Products productId={productArr[i].productId} itemInfo={foo.fetchProduct(productArr[i].productId)} />
         ))}
       </SimpleGrid>
   );
