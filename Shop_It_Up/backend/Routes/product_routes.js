@@ -33,7 +33,10 @@ router.get("/:productId", async (req, res) => {
 
 // Create new product.
 // RETURNS CREATED PRODUCT
-router.post("/create", async (req, res) => {
+router.post("/create", authorize, async (req, res) => {
+  const sellerId = req.userId;
+  req.body.sellerId = sellerId;
+  console.log(req.body);
   console.log("Create product called");
   const product = await productManager.createProduct(req);
   if (product == null) {
