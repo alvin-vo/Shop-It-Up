@@ -1,20 +1,67 @@
-import { Input, Flex, ButtonGroup, Box } from "@chakra-ui/react";
-import { IconButton } from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
+import {
+  Flex,
+} from "@chakra-ui/react";
 import FilterFunc from "./filter_button";
-import SearchFunc from "./search_func";
+import { useState, useEffect } from "react";
+import { ProductsRepositoryImpl } from "../../Products/ProductsRepo/ProductsRepo";
 
-const SearchBar = () => {
+import {
+  AutoComplete,
+  AutoCompleteInput,
+  AutoCompleteItem,
+  AutoCompleteList,
+} from "@choc-ui/chakra-autocomplete";
+
+function SearchBar(props:any){
+  function handleInput(e: any){
+    if (e){
+      props.onQuery(e.target.value)
+    }
+    
+  }
+
+  const [options, setOptions] = useState(Array<string>);
+  let foo: ProductsRepositoryImpl = new ProductsRepositoryImpl();
+
+  const getOptions = async () => {
+    let myProducts = await foo.fetchProducts();
+    let temp = [];
+    for (let i = 0; i < myProducts.length; i++) {
+      temp.push(myProducts[i].title);
+    }
+    setOptions(temp);
+  };
+
+  useEffect(() => {
+    getOptions();
+  }, [])
 
   return (
-    <Flex>
-      <Box>
-        <ButtonGroup isAttached variant="outline" borderRadius={'none'} _hover={{ bg: "##FFFF" }}>
-          <FilterFunc/>
-          <SearchFunc/>
-          <IconButton aria-label="Search Button" icon={<SearchIcon/>} borderRadius={'none'}/>
-        </ButtonGroup>
-      </Box>
+    <Flex direction={"row"}>
+      <FilterFunc />
+
+      <Flex w="100%" h="100%" bg={"white"} justifyContent="center">
+        <AutoComplete rollNavigation>
+          <AutoCompleteInput
+            onChange={handleInput}
+            onKeyDown={handleInput}
+            variant="outline"
+            placeholder="Search Shop-It-Up"
+            autoFocus
+          />
+          <AutoCompleteList>
+            {options.map((option, oid) => (
+              <AutoCompleteItem
+                key={`option-${oid}`}
+                value={option}
+                textTransform="capitalize"
+              >
+                {option}
+              </AutoCompleteItem>
+            ))}
+          </AutoCompleteList>
+        </AutoComplete>
+      </Flex>
     </Flex>
   );
 };
