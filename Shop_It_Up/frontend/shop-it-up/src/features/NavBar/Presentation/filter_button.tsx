@@ -75,6 +75,7 @@ function BasicUsage(props: any) {
               onChange={handleInputChange1}
               value={format(value1)}
               inputMode={"numeric"}
+              min={0}
             >
               <NumberInputField />
               <NumberInputStepper>

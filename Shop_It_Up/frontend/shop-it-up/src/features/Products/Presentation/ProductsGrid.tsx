@@ -13,6 +13,7 @@ function ProductsGrid(props: any) {
   const getProducts = async () => {
     let myProducts = await foo.fetchProducts();
     let temp = []
+    let finaltemp = []
     if (props.query !== ''){
       for (let i = 0; i < myProducts.length; i++){
         if (myProducts[i].title.toUpperCase().includes(props.query.toUpperCase())){
@@ -20,26 +21,44 @@ function ProductsGrid(props: any) {
         }
       }
       console.log(temp);
-    }
-    else if (props.filtPrice1 !== 0 && props.filtPrice2 !== 0) {
-      for (let i = 0; i < myProducts.length; i++) {
-        if (myProducts[i].price > props.filtPrice1 && myProducts[i].price < props.filtPrice2) {
-          temp.push(myProducts[i]);
+      if (props.filtPrice1 !== -1 && props.filtPrice2 !== 0) {
+        for (let i = 0; i < temp.length; i++) {
+          if (temp[i].price > props.filtPrice1 && temp[i].price < props.filtPrice2) {
+            finaltemp.push(temp[i]);
+          }
         }
+        console.log("finalTemp", finaltemp)
+        setProductArr(finaltemp);
       }
-      console.log(temp)
+      else {
+        setProductArr(temp);
+      }
+    }
+    else if (props.query == '') {
+      if (props.filtPrice1 !== -1 && props.filtPrice2 !== 0) {
+        for (let i = 0; i < myProducts.length; i++) {
+          if (myProducts[i].price > props.filtPrice1 && myProducts[i].price < props.filtPrice2) {
+            temp.push(myProducts[i]);
+          }
+        }
+        setProductArr(temp);
+      }
+      else{
+        temp = myProducts;
+        setProductArr(temp);
+      }
     }
     else{
       temp = myProducts;
+      setProductArr(temp);
     }
-    setProductArr(temp);
   };
 
 
   useEffect(() => {
     getProducts();
-  }, [props.query, props.filtPrice1, props.filtPrice2]);
-  
+  }, [props.query, props.filtPrice1, props.filtPrice2], );
+
 
   return (
       <SimpleGrid columns={[4, null, 5]} spacing={3}>
