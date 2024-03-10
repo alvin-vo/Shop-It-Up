@@ -22,8 +22,6 @@ import {
 import { useState } from "react";
 import axios from "axios";
 
-import { ChevronDownIcon } from "@chakra-ui/icons";
-
 function Product(props: any) {
   const toast = useToast();
 
@@ -85,8 +83,6 @@ function Product(props: any) {
                         },
                         loading: { title: "Loading", description: "Please wait" },
                       });
-
-
                 }}>
                   Remove
                 </Button>
@@ -96,7 +92,6 @@ function Product(props: any) {
           </PopoverContent>
         </Popover>
       </CardBody>
-
       <CardFooter>
         <Flex w="100%">
           <Text color="blue.600" fontSize="2xl">
