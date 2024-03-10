@@ -16,7 +16,7 @@ const ShoppingCartPage: React.FC = () => {
     (async () => {
       console.log("Fetch shopping cart is being called");
       try {
-        const response = await fetch("http://localhost:3010/api/carts/cart");
+        const response = await fetch("/api/carts/cart");
 
         let data = await response.json();
         console.log("response data: ", data);

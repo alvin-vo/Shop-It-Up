@@ -37,17 +37,9 @@ export class CartRepoImp implements CartRepo {
   }
 
   async fetchShoppingCart(): Promise<Cart> {
-    console.log("Fetch shopping cart is being called");
+    console.log("Fetch shopping cart is being called 2");
     try {
-      const response = await fetch("http://localhost:3010/api/carts/cart", {
-        mode: "no-cors",
-        method: "GET", // Use GET method to fetch data
-        headers: {
-          "Content-Type": "application/json",
-          // Include other headers as required, such as authorization tokens
-        },
-        credentials: "include", //
-      });
+      const response = await fetch("/api/carts/cart");
 
       if (!response.ok) {
         throw new Error("Failed to fetch shopping cart");
