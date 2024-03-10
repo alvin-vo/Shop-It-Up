@@ -3,6 +3,8 @@ import './LoginPage.css'; // Ensure the CSS file is correctly linked
 import { Box, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
+
+
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');

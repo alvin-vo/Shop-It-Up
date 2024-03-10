@@ -3,6 +3,7 @@ import "./CartPage.css"; // Assume we have some CSS for basic styling
 import Navbar from "../../../NavBar/Presentation/nav_bar";
 import Cart from "features/Cart/domain/Cart";
 import { mapCartEntitytoCart } from "features/Cart/mapper/cartMapper";
+import { useNavigate } from 'react-router-dom';
 
 type CartItem = {
   id: number;
@@ -12,6 +13,7 @@ type CartItem = {
 };
 
 const ShoppingCartPage: React.FC = () => {
+  const navigate = useNavigate();
   useEffect(() => {
     (async () => {
       console.log("Fetch shopping cart is being called");
@@ -45,10 +47,8 @@ const ShoppingCartPage: React.FC = () => {
   }, []);
 
   const initialCartItems: CartItem[] = [
-    { id: 1, name: "Echo Dot", price: 49.99, quantity: 1 },
-    { id: 2, name: "Amazon Fire Stick", price: 39.99, quantity: 2 },
   ];
-
+  
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
 
   const updateQuantity = (id: number, quantity: number) => {
@@ -69,7 +69,7 @@ const ShoppingCartPage: React.FC = () => {
   };
 
   const handleCheckout = () => {
-    console.log("Proceeding to checkout...");
+    navigate('/checkout');
   };
 
   // Function to call API for removing product from cart
