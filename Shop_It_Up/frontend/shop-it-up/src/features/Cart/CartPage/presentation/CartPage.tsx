@@ -13,7 +13,9 @@ type CartItem = {
 };
 
 const ShoppingCartPage: React.FC = () => {
+  const [inviteUrl, setInviteUrl] = useState("");
   const navigate = useNavigate();
+  const [showTooltip, setShowTooltip] = useState(false); 
   useEffect(() => {
     (async () => {
       console.log("Fetch shopping cart is being called");
@@ -56,6 +58,26 @@ const ShoppingCartPage: React.FC = () => {
       cartItems.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
   };
+
+  const sendInvite = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/users/invite")
+      if (!response.ok) {
+        console.error("Failed to send invite."); // Log error to console
+        return; // Exit the function if the response is not ok
+      }
+  
+      const result = await response.json(); // Parse JSON response
+      setInviteUrl(result.inviteUrl); 
+      setShowTooltip(!showTooltip);// Store the invite URL in the component's state
+    } catch (error) {
+      console.error("Error sending invite:", error); // Log error to console
+    }
+  };
+
+
+
+
 
   // Modify this function to call the removeProductFromCartAPI
   const removeItemFromCart = (cartId: number, productId: number) => {
@@ -134,7 +156,16 @@ const ShoppingCartPage: React.FC = () => {
           Checkout
         </button>
       </div>
+      <div className="invite-section">
+      <button onClick={sendInvite}>Generate Invite URL</button>
+        {showTooltip && inviteUrl && ( // Conditionally display the tooltip based on the state
+          <div className="tooltip-active"> // Consider renaming this class to match your styling needs
+            {inviteUrl}
     </div>
+  )}
+    </div>
+    </div>
+
   );
 };
 
