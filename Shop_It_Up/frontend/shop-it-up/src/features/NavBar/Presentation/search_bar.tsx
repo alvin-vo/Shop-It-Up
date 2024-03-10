@@ -13,6 +13,7 @@ import {
 } from "@choc-ui/chakra-autocomplete";
 
 function SearchBar(props:any){
+  console.log("SB Props: ", props);
   function handleInput(e: any){
     if (e){
       props.onQuery(e.target.value)
@@ -38,7 +39,7 @@ function SearchBar(props:any){
 
   return (
     <Flex direction={"row"}>
-      <FilterFunc />
+      <FilterFunc handleFilterButtonClick={props.handleFilterButtonClick}/>
 
       <Flex w="100%" h="100%" bg={"white"} justifyContent="center">
         <AutoComplete rollNavigation>

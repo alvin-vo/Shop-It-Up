@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/layout";
 
 function NavBar(props: any){
+  console.log("NB Props: ", props);
   return (
     <Flex
       h="75"
@@ -44,7 +45,7 @@ function NavBar(props: any){
       <Spacer />
 
       <Box w="700px" h="10" bg="white">
-        <SearchBar onQuery={props.onQuery}/>
+        <SearchBar onQuery={props.onQuery} handleFilterButtonClick={props.handleFilterButtonClick}/>
       </Box>
 
       <Spacer />

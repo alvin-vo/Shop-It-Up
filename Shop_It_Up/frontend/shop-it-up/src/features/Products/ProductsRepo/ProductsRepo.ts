@@ -9,9 +9,10 @@ export interface ProductsRepository{
 
 export class ProductsRepositoryImpl implements ProductsRepository{
     async fetchProducts(): Promise<Product[]>{
-        const response = await fetch('/api/products',{
-            method: 'GET'
-        });
+        const response = await fetch('http://localhost:3010/api/products')//{
+         //   method: 'GET'
+    //    });
+
         const productEntities: ProductEntity[] = await response.json();
         return productEntities.map(mapProductEntityToProduct);
     }
