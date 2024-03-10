@@ -139,9 +139,7 @@ const sendInvite = async (passedInId) => {
   if (valCart == null) {
     return null;
   }
-
   // All tests passed
-  console.log("calling send handler");
   return await userDAO.sendHandler(valUser);
 };
 
