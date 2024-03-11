@@ -3,6 +3,11 @@
     margin: auto;
     padding: 20px;
   }
+
+  .shopping-cart h2 {
+    font-weight: bold;
+    font-size: 2em;
+  }
   
   .cart-item {
     display: flex;
@@ -31,7 +36,7 @@
     display: block; /* Make the button block to occupy the full width if needed */
     width: 100%; /* Full width */
     padding: 10px; /* Padding for better touch */
-    background-color: #0000FF; /* A nice green color */
+    background-color: #3b8ad9; /* A nice green color */
     color: white; /* Text color */
     font-size: 16px; /* Slightly larger font */
     cursor: pointer; /* Cursor to pointer to indicate it's clickable */
@@ -41,7 +46,7 @@
 }
 
 .checkout-button:hover {
-    background-color: #0000FF; /* Darker shade on hover */
+    background-color: #1b6fbf; /* Darker shade on hover */
 }
 
 .tooltip {
@@ -87,3 +92,29 @@
   width: auto; /* Adjust width as needed */
   max-width: 80%; /* Max-width to avoid too wide tooltips */
 }
+
+.invite-section {
+  position: relative;
+  position: absolute;
+  top: calc(100% + 3px); /* Position 10px below the checkout button */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Optional: Align button vertically */
+}
+
+  .invite-section button {
+    background-color: #66BB6A; /* Background color */
+    color: #fff; /* Text color */
+    padding: 10px 20px; /* Padding */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add rounded corners */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Add cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+  }
+  .invite-section button:hover {
+    background-color: #499D4F; /* Darken the background color on hover */
+  }

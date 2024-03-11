@@ -110,7 +110,7 @@ const CheckoutPage: React.FC = () => {
   return (
     <div>
       <div className="checkout-page">
-        <h2>Checkout</h2>
+        <h2>Checkout Cart</h2>
 
         {cartItems.map((item) => (
           <div key={item.id} className="cart-item">
@@ -128,7 +128,7 @@ const CheckoutPage: React.FC = () => {
           <input type="text" name="city" value={buyerInfo.city} onChange={handleChange} placeholder="City" required />
           <input type="text" name="zipCode" value={buyerInfo.zipCode} onChange={handleChange} placeholder="Zip Code" required />
         
-          <button type="submit" >Submit Order</button>
+          <button type="submit" >Place Order</button>
         </form>
       </div>
     </div>

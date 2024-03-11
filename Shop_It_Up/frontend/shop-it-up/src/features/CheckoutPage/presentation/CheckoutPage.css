@@ -12,6 +12,8 @@
   .checkout-page h2 {
     margin-bottom: 20px;
     text-align: center;
+    font-weight: bold;
+    font-size: 3em;
   }
   
   /* Styles for form inputs */

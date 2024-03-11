@@ -62,6 +62,7 @@ function BasicUsage(props: any) {
         icon={<TbFilterSearch />}
         fontSize={20}
         onClick={onOpen}
+        borderRadius={0}
       />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

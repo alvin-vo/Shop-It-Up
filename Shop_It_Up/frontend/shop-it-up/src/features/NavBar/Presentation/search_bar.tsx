@@ -49,6 +49,7 @@ function SearchBar(props:any){
             variant="outline"
             placeholder="Search Shop-It-Up"
             autoFocus
+            rounded='none'
           />
           <AutoCompleteList>
             {options.map((option, oid) => (
@@ -56,6 +57,7 @@ function SearchBar(props:any){
                 key={`option-${oid}`}
                 value={option}
                 textTransform="capitalize"
+                rounded='none'
               >
                 {option}
               </AutoCompleteItem>
