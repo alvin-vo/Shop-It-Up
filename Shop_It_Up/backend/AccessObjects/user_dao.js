@@ -86,7 +86,7 @@ const sendHandler = async (userToInvite) => {
 
   // Make Link
   const linkToSend =
-    "http://localhost:3010/api/user/invite/accept/" + getCartId;
+    "http://localhost:3010/api/users/invite/accept/" + getCartId;
 
   // Send Email (Broken: Google Banned Email)
   // const sentOrNot = await guard.sendEmail(emailToSend, linkToSend);
