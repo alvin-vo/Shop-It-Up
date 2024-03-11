@@ -4,6 +4,8 @@ import Navbar from "../../../NavBar/Presentation/nav_bar";
 import Cart from "features/Cart/domain/Cart";
 import { mapCartEntitytoCart } from "features/Cart/mapper/cartMapper";
 import { useNavigate } from 'react-router-dom';
+import { Button, useToast, Flex } from '@chakra-ui/react';
+
 
 
 type CartItem = {
@@ -17,6 +19,8 @@ type CartItem = {
 const ShoppingCartPage: React.FC = () => {
   const [inviteUrl, setInviteUrl] = useState("");
   const navigate = useNavigate();
+  const toast = useToast();
+
   const [showTooltip, setShowTooltip] = useState(false); 
   useEffect(() => {
     (async () => {
@@ -105,7 +109,7 @@ const ShoppingCartPage: React.FC = () => {
   };
 
   // Function to call API for removing product from cart
-  const removeProductFromCartAPI = async (productId: string) => {
+  const  removeProductFromCartAPI = async (productId: string) => {
     try {
       const response = await fetch(
         `http://localhost:3000/api/carts/removeProduct/${productId}`, {
@@ -115,19 +119,35 @@ const ShoppingCartPage: React.FC = () => {
           },
         }
       );
-  
+
       if (!response.ok) {
         throw new Error("Failed to remove product from cart");
       }
-  
+
       // Product successfully removed, now update the state
-      // Filter out the removed product based on productId
       const updatedCartItems = cartItems.filter(item => item.id !== productId);
       setCartItems(updatedCartItems);
-  
+
+      // Show success toast
+      toast({
+        title: "Product removed.",
+        description: "The product has been removed from your cart.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
       console.log("Product removed from cart");
     } catch (error) {
       console.error("Error removing product from cart:", error);
+      // Show error toast
+      toast({
+        title: "Error removing product.",
+        description: "There was an issue removing the product from your cart.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
   
@@ -154,9 +174,9 @@ const ShoppingCartPage: React.FC = () => {
                 min="1"
               />
               {/* Modify the onClick handler to pass the correct cartId and productId */}
-              <button onClick={() => removeItemFromCart(item.id)}>
-                Remove
-              </button>
+              <Button colorScheme="red" onClick={() => removeItemFromCart(item.id)}>
+               Remove
+            </Button>
             </div>
           </div>
         ))}
