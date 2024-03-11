@@ -19,7 +19,6 @@ const authorize = async (req, res, next) => {
     const doesUserExists = await userDAO.checkUserExistence(data.id);
 
     console.log("user exsistence", doesUserExists);
-
     if (doesUserExists) {
       //decrypted user Id returned (This is used to get the google Id we encrypted).
       req.userId = data.id;
@@ -29,15 +28,15 @@ const authorize = async (req, res, next) => {
       // res
       //   .status(404)
       //   .json({ authenticated: false, message: "User is not authenticated." });
-      /* CHANGE REDIRECT TO LOGIN PAGE URL */
-      res.redirect("/api/authorize/auth/google");
+      const otherServerUrl = "http://localhost:3000/login";
+      res.redirect(otherServerUrl);
     }
   } catch (e) {
     // res
     //   .status(404)
     //   .json({ authenticated: false, message: "User is not authenticated." });
-    /* CHANGE REDIRECT TO LOGIN PAGE URL */
-      res.redirect("/api/authorize/auth/google");
+      const otherServerUrl = "http://localhost:3000/login";
+      res.redirect(otherServerUrl);
   }
 };
 
