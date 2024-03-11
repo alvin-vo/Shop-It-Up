@@ -44,7 +44,7 @@ function NavBar(props: any){
 
       <Spacer />
 
-      <Box w="700px" h="10" bg="white">
+      <Box w="700px" h="10">
         <SearchBar onQuery={props.onQuery} handleFilterButtonClick={props.handleFilterButtonClick}/>
       </Box>
 
