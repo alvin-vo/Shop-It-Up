@@ -17,7 +17,9 @@ const { setEmptyCart } = require("../AccessObjects/user_dao.js");
 // 5: ADD PRODUCT TO CART
 // 6: RETURN NEW CART
 const addProductToCart = async (passedInInfo, passedInUserId) => {
-  //const realCart = await userManager.checkValidCart(passedInInfo.params.cartId); // Should be TRUE
+  let quantity = 1;
+  const realCart = await userManager.checkValidCart(passedInInfo.params.cartId); // Should be TRUE
+
   const realProduct = await productManager.getOneProduct(passedInInfo); // Should be set to a valid product
   const realUser = await getExisitngUserInfo(passedInUserId); // SHOULD BE SET TO USER OBJECT
 
@@ -36,7 +38,8 @@ const addProductToCart = async (passedInInfo, passedInUserId) => {
       // REAL CART
       const checkTrue = await cartDAO.addProduct(
         realUser.cartId,
-        realProduct.productId
+        realProduct.productId,
+        quantity
       );
       if (checkTrue) {
         return await cartDAO.getOnlyCart(realUser.cartId);
