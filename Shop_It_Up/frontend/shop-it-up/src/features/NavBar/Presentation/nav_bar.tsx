@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/layout";
 
 function NavBar(props: any){
-  console.log("NB Props: ", props);
+  //console.log("NB Props: ", props);
   return (
     <Flex
       h="75"
