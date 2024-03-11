@@ -87,3 +87,35 @@
   width: auto; /* Adjust width as needed */
   max-width: 80%; /* Max-width to avoid too wide tooltips */
 }
+.close-button {
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  /* You might want to add more styles for hover effects, border radius, etc. */
+}
+.orange-button {
+  background-color: orange; /* Orange background */
+  color: white; /* White text color */
+  border: none; /* No border */
+  padding: 10px 20px; /* Padding for size */
+  cursor: pointer; /* Cursor indicates button */
+  font-weight: bold; /* Optional: makes text bold */
+  border-radius: 5px; /* Optional: rounds the corners */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+.button-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full height of the viewport */
+}
+.invite-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh; /* Adjust this if you want a specific height other than full viewport */
+  flex-direction: column;
+  position: relative; /* Add this if using the top property for positioning */
+}
