@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 type CartItem = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   quantity: number;
@@ -57,7 +57,7 @@ const ShoppingCartPage: React.FC = () => {
   
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = (id: string, quantity: number) => {
     setCartItems(
       cartItems.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
@@ -90,8 +90,8 @@ const ShoppingCartPage: React.FC = () => {
 
 
   // Modify this function to call the removeProductFromCartAPI
-  const removeItemFromCart = (cartId: number, productId: number) => {
-    removeProductFromCartAPI(cartId, productId);
+  const removeItemFromCart = ( productId: string) => {
+    removeProductFromCartAPI(productId);
   };
 
   const calculateTotal = () => {
@@ -105,34 +105,33 @@ const ShoppingCartPage: React.FC = () => {
   };
 
   // Function to call API for removing product from cart
-  const removeProductFromCartAPI = async (
-    cartId: number,
-    productId: number
-  ) => {
+  const removeProductFromCartAPI = async (productId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/carts/removeProduct/${productId}`,
-        {
-          method: "DELETE", // Even though we are "removing", the method specified is POST
+        `http://localhost:3000/api/carts/removeProduct/${productId}`, {
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-            // Include other headers as required, such as authorization tokens
           },
         }
       );
-
+  
       if (!response.ok) {
         throw new Error("Failed to remove product from cart");
       }
-
-      const updatedCart = await response.json();
-      // Assuming updatedCart is an array of CartItems
-      setCartItems(updatedCart);
-      console.log("Product removed from cart", updatedCart);
+  
+      // Product successfully removed, now update the state
+      // Filter out the removed product based on productId
+      const updatedCartItems = cartItems.filter(item => item.id !== productId);
+      setCartItems(updatedCartItems);
+  
+      console.log("Product removed from cart");
     } catch (error) {
       console.error("Error removing product from cart:", error);
     }
   };
+  
+  
 
   return (
     <div>
@@ -155,7 +154,7 @@ const ShoppingCartPage: React.FC = () => {
                 min="1"
               />
               {/* Modify the onClick handler to pass the correct cartId and productId */}
-              <button onClick={() => removeItemFromCart(1, item.id)}>
+              <button onClick={() => removeItemFromCart(item.id)}>
                 Remove
               </button>
             </div>
