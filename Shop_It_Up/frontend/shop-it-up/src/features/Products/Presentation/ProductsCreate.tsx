@@ -165,7 +165,7 @@ function ProductsCreate(props: any) {
                     formik.values.productId = (
                       myProducts.length + 1
                     ).toString();
-                    formik.values.sellerId = uuidv4();
+                    formik.values.productId = uuidv4();
                     const request = await axios.post(
                       "http://localhost:3010/api/products/create",
                       formik.values
