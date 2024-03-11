@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './CheckoutPage.css';
 import { useNavigate } from 'react-router-dom';
+import Cart from "features/Cart/domain/Cart";
+import { mapCartEntitytoCart } from "features/Cart/mapper/cartMapper";
 
 type BuyerInfo = {
   fullName: string;
@@ -9,6 +11,13 @@ type BuyerInfo = {
   city: string;
   zipCode: string;
   // Add more fields as necessary
+};
+
+type CartItem = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
 };
 
 const CheckoutPage: React.FC = () => {
@@ -20,6 +29,42 @@ const CheckoutPage: React.FC = () => {
     zipCode: '',
     // Initialize more fields here if added
   });
+
+  const initialCartItems: CartItem[] = [
+  ];
+  
+  const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
+  useEffect(() => {
+    (async () => {
+      console.log("Fetch shopping cart is being called");
+      try {
+        const response = await fetch("/api/carts/cart");
+
+        let data = await response.json();
+        console.log("response data: ", data);
+        console.log(data.productsfind);
+        let udpatedCartItems: CartItem[] = data.productsfind.map(
+          (item: any) => {
+            console.log(item);
+            return {
+              id: item.productId,
+              name: item.title,
+              price: item.price,
+              quantity: item.quantity,
+            };
+          }
+        );
+        setCartItems(udpatedCartItems);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch shopping cart");
+        }
+      } catch (error) {
+        console.error("Error fetching shopping cart:", error);
+        throw error;
+      }
+    })();
+  }, []);
 
   const navigate = useNavigate();
   const handleCheckout = () => {
@@ -66,13 +111,23 @@ const CheckoutPage: React.FC = () => {
     <div>
       <div className="checkout-page">
         <h2>Checkout</h2>
+
+        {cartItems.map((item) => (
+          <div key={item.id} className="cart-item">
+            <div className="item-info">
+              <span>{item.name}</span>
+              <span>${item.price}</span>
+            </div>
+        
+          </div>
+        ))}
         <form onSubmit={handleSubmit}>
           <input type="text" name="fullName" value={buyerInfo.fullName} onChange={handleChange} placeholder="Full Name" required />
           <input type="email" name="email" value={buyerInfo.email} onChange={handleChange} placeholder="Email" required />
           <input type="text" name="address" value={buyerInfo.address} onChange={handleChange} placeholder="Address" required />
           <input type="text" name="city" value={buyerInfo.city} onChange={handleChange} placeholder="City" required />
           <input type="text" name="zipCode" value={buyerInfo.zipCode} onChange={handleChange} placeholder="Zip Code" required />
-          
+        
           <button type="submit" >Submit Order</button>
         </form>
       </div>

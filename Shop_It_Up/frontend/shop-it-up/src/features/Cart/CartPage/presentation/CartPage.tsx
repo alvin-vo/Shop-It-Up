@@ -4,18 +4,24 @@ import Navbar from "../../../NavBar/Presentation/nav_bar";
 import Cart from "features/Cart/domain/Cart";
 import { mapCartEntitytoCart } from "features/Cart/mapper/cartMapper";
 import { useNavigate } from 'react-router-dom';
+import { Button, useToast, Flex } from '@chakra-ui/react';
 import { ProductsRepositoryImpl } from "../../../Products/ProductsRepo/ProductsRepo";
 
 
 type CartItem = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   quantity: number;
 };
 
+
 const ShoppingCartPage: React.FC = () => {
+  const [inviteUrl, setInviteUrl] = useState("");
   const navigate = useNavigate();
+  const toast = useToast();
+
+  const [showTooltip, setShowTooltip] = useState(false); 
   useEffect(() => {
     (async () => {
       console.log("Fetch shopping cart is being called");
@@ -57,20 +63,48 @@ const ShoppingCartPage: React.FC = () => {
     })();
   }, []);
 
+  const closeTooltip = () => setShowTooltip(false);
+
   const initialCartItems: CartItem[] = [
   ];
   
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = (id: string, quantity: number) => {
     setCartItems(
       cartItems.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
   };
 
+
+  const sendInvite = async () => {
+    try {
+      const response = await fetch("/api/users/invite");
+      // Check only the response status to determine if the request was successful
+      if (!response.ok) {
+        console.error("Failed to send invite."); // Log an appropriate error
+        return; // Exit the function early
+      }
+  
+      // Since the backend returns a plain string, use response.text() instead of response.json()
+      const inviteUrl = await response.text(); // Get the invite link as text
+      setInviteUrl(inviteUrl);
+      setShowTooltip(true); // Store the invite URL in the component's state
+    } catch (error) {
+      console.error("Error sending invite:", error); // Log fetch or parsing errors
+    }
+  };
+  
+  
+  
+
+
+
+
+
   // Modify this function to call the removeProductFromCartAPI
-  const removeItemFromCart = (cartId: number, productId: number) => {
-    removeProductFromCartAPI(cartId, productId);
+  const removeItemFromCart = ( productId: string) => {
+    removeProductFromCartAPI(productId);
   };
 
   const calculateTotal = () => {
@@ -84,18 +118,13 @@ const ShoppingCartPage: React.FC = () => {
   };
 
   // Function to call API for removing product from cart
-  const removeProductFromCartAPI = async (
-    cartId: number,
-    productId: number
-  ) => {
+  const  removeProductFromCartAPI = async (productId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/carts/removeProduct/${productId}`,
-        {
-          method: "DELETE", // Even though we are "removing", the method specified is POST
+        `http://localhost:3000/api/carts/removeProduct/${productId}`, {
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-            // Include other headers as required, such as authorization tokens
           },
         }
       );
@@ -104,14 +133,34 @@ const ShoppingCartPage: React.FC = () => {
         throw new Error("Failed to remove product from cart");
       }
 
-      const updatedCart = await response.json();
-      // Assuming updatedCart is an array of CartItems
-      setCartItems(updatedCart);
-      console.log("Product removed from cart", updatedCart);
+      // Product successfully removed, now update the state
+      const updatedCartItems = cartItems.filter(item => item.id !== productId);
+      setCartItems(updatedCartItems);
+
+      // Show success toast
+      toast({
+        title: "Product removed.",
+        description: "The product has been removed from your cart.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
+      console.log("Product removed from cart");
     } catch (error) {
       console.error("Error removing product from cart:", error);
+      // Show error toast
+      toast({
+        title: "Error removing product.",
+        description: "There was an issue removing the product from your cart.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
+  
+  
 
   return (
     <div>
@@ -134,9 +183,9 @@ const ShoppingCartPage: React.FC = () => {
                 min="1"
               />
               {/* Modify the onClick handler to pass the correct cartId and productId */}
-              <button onClick={() => removeItemFromCart(1, item.id)}>
-                Remove
-              </button>
+              <Button colorScheme="red" onClick={() => removeItemFromCart(item.id)}>
+               Remove
+            </Button>
             </div>
           </div>
         ))}
@@ -145,7 +194,17 @@ const ShoppingCartPage: React.FC = () => {
           Checkout
         </button>
       </div>
+      <div className="invite-section">
+  <button onClick={sendInvite}>Generate Invite URL</button>
+  {showTooltip && inviteUrl && (
+    <div className="tooltip-active">
+      {inviteUrl}
+      <button onClick={closeTooltip}>Close</button>
     </div>
+  )}
+    </div>
+    </div>
+
   );
 };
 
