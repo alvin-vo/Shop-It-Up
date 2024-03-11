@@ -13,7 +13,7 @@ import {
 } from "@choc-ui/chakra-autocomplete";
 
 function SearchBar(props:any){
-  console.log("SB Props: ", props);
+  //console.log("SB Props: ", props);
   function handleInput(e: any){
     if (e){
       props.onQuery(e.target.value)

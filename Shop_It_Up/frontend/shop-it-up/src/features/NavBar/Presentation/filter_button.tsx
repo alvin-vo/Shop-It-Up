@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 
 function BasicUsage(props: any) {
-  console.log("FB Props: ", props);
+  //console.log("FB Props: ", props);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const format = (val: string) => `$` + val;
   const parse = (val: string) => val.replace(/^\$/, "");

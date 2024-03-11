@@ -6,12 +6,16 @@ The models communicate with the database.
 const Cart = require("../Models/cart_model.js");
 
 // ADD PRODUCT TO CART
-const addProduct = async (findCartId, passedInProductId) => {
+const addProduct = async (findCartId, passedInProductId, quantity) => {
+  console.log("productId: ", passedInProductId);
   try {
     const cart = await Cart.findOneAndUpdate(
-      { "cartId": findCartId },
-      { $push: {"products": passedInProductId} }
-
+      { cartId: findCartId },
+      {
+        $push: {
+          products: { productId: passedInProductId, quantity: quantity },
+        },
+      }
     );
     return true;
   } catch (err) {
@@ -22,9 +26,9 @@ const addProduct = async (findCartId, passedInProductId) => {
 const firstProduct = async (findCartId, passedInProductId, passedInUserId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { "cartId": findCartId },
-      { $set: {"products": passedInProductId} },
-      { $set: {"contributorIds": passedInUserId} },
+      { cartId: findCartId },
+      { $set: { products: passedInProductId } },
+      { $set: { contributorIds: passedInUserId } }
     );
     return true;
   } catch (err) {
@@ -35,8 +39,8 @@ const firstProduct = async (findCartId, passedInProductId, passedInUserId) => {
 const removeProduct = async (findCartId, productId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { "cartId": findCartId },
-      { $pull: {"products": productId} }
+      { cartId: findCartId },
+      { $pull: { products: productId } }
     );
 
     return true;
@@ -48,24 +52,23 @@ const removeProduct = async (findCartId, productId) => {
 const inCart = async (findCartId, passedInUserId) => {
   try {
     const cart = await Cart.findOne(
-      { "cartId": findCartId },
-      { "contributorIds": passedInUserId }
+      { cartId: findCartId },
+      { contributorIds: passedInUserId }
     );
-    if(cart.contributorIds.length == 0) {
+    if (cart.contributorIds.length == 0) {
       return false;
     }
     return true;
   } catch (err) {
     return null;
   }
-
 };
 
 const removeUser = async (findCartId, passedInUserId) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { "cartId": findCartId },
-      { $pull: {"contributorIds": passedInUserId} }
+      { cartId: findCartId },
+      { $pull: { contributorIds: passedInUserId } }
     );
 
     return true;
@@ -74,32 +77,25 @@ const removeUser = async (findCartId, passedInUserId) => {
   }
 };
 
-const addContributor = async (cartId) => {
-  
-};
+const addContributor = async (cartId) => {};
 
 const removeContributor = async (userId) => {};
 
 const checkout = async (passedInCartId) => {
   try {
-    const cart = await Cart.findOneAndUpdate(
-      { "cartId": passedInCartId },
-    );
-    if(cart.contributorIds.length == 0) {
-      await Cart.findOneAndDelete({ "cartId": passedInCartId });
+    const cart = await Cart.findOneAndUpdate({ cartId: passedInCartId });
+    if (cart.contributorIds.length == 0) {
+      await Cart.findOneAndDelete({ cartId: passedInCartId });
     }
     return true;
   } catch (err) {
     return null;
   }
-
 };
 
 const getOnlyCart = async (passedInCartId) => {
   try {
-    const cart = await Cart.findOne(
-      { "cartId": passedInCartId },
-    );
+    const cart = await Cart.findOne({ cartId: passedInCartId });
 
     return cart;
   } catch (err) {
@@ -109,7 +105,7 @@ const getOnlyCart = async (passedInCartId) => {
 
 const deleteCart = async (passedInCartId) => {
   try {
-    const cart = await Cart.findOneAndDelete({ "cartId": passedInCartId });
+    const cart = await Cart.findOneAndDelete({ cartId: passedInCartId });
     return cart;
   } catch (err) {
     return null; // Return null if error.
@@ -120,9 +116,9 @@ const createCart = async () => {
   try {
     createdCartId = makeNewId();
     const newCart = new Cart({
-      "cartId": createdCartId
-  });
-  newCart.save();
+      cartId: createdCartId,
+    });
+    newCart.save();
     // Return created cartId.
     return createdCartId;
   } catch (err) {
@@ -144,10 +140,11 @@ const getAllCarts = async () => {
 // MAKE NEW ID (FOR CART) OF LENGTH 13
 function makeNewId() {
   // SET VALUES CARTID CAN BE
-  const validChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const validChar =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   const validCharLength = validChar.length;
   // VALUE TO RETURN
-  var returnVal = '';
+  var returnVal = "";
   // CREATE VALUE
   let count = 0;
   while (count < 13) {

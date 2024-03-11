@@ -5,7 +5,7 @@ import Cart from "features/Cart/domain/Cart";
 import { mapCartEntitytoCart } from "features/Cart/mapper/cartMapper";
 import { useNavigate } from 'react-router-dom';
 import { Button, useToast, Flex } from '@chakra-ui/react';
-
+import { ProductsRepositoryImpl } from "../../../Products/ProductsRepo/ProductsRepo";
 
 
 type CartItem = {
@@ -29,20 +29,29 @@ const ShoppingCartPage: React.FC = () => {
         const response = await fetch("/api/carts/cart");
 
         let data = await response.json();
-        console.log("response data: ", data);
-        console.log(data.productsfind);
-        let udpatedCartItems: CartItem[] = data.productsfind.map(
-          (item: any) => {
-            console.log(item);
-            return {
-              id: item.productId,
-              name: item.title,
-              price: item.price,
-              quantity: item.quantity,
+        //console.log("response data: ", data);
+        //console.log(data.productsfind);
+        let foo: ProductsRepositoryImpl = new ProductsRepositoryImpl();
+
+        let cartInfo: CartItem[] = [];
+
+        for (let i = 0; i < data.userCart.products.length; i++){
+          if (data.userCart.products[i].productId){
+            let newData = await foo.fetchProduct(data.userCart.products[i].productId)
+            let item: CartItem = {
+              id: 0,
+              name: '',
+              price: 0,
+              quantity: 0
             };
+            item.id = data.userCart.products[i].productId;
+            item.name = newData.title;
+            item.price = newData.price;
+            item.quantity = data.userCart.products[i].quantity;
+            cartInfo.push(item);
           }
-        );
-        setCartItems(udpatedCartItems);
+        }
+        setCartItems(cartInfo);
 
         if (!response.ok) {
           throw new Error("Failed to fetch shopping cart");

@@ -3,9 +3,8 @@
    It should be the only thing that commuicates with the DAOs.
 */
 
-
 // SCHEMA
-const Joi = require('joi');
+const Joi = require("joi");
 // MIRROR CHANGES HERE! (FROM "../Models/products_model.js")
 const schemaChecker = Joi.object({
   productId: Joi.string().required(),
@@ -25,13 +24,13 @@ const getProducts = async () => {
 
 const getOneProduct = async (req) => {
   return await productDAO.getOnlyProduct(req.params.productId);
-
 };
 
 const createProduct = async (req) => {
   const checkOne = await checkId(req.body.productId); // Check product id for any matches, FALSE if match
   const checkTwo = await checkBody(req.body); // Check body to ensure correct values, FALSE if not
-  if(checkOne && checkTwo) { // THIS NEEDS TO BE TRUE TRUE
+  if (checkOne && checkTwo) {
+    // THIS NEEDS TO BE TRUE TRUE
     return await productDAO.createdProduct(req.body);
   } else {
     return null;
@@ -45,7 +44,8 @@ const deleteProduct = async (req) => {
 const updateProduct = async (req) => {
   const checkOne = await checkId(req.params.productId); // Check product id for any matches, FALSE if match
   const checkTwo = await checkBody(req.body); // Check body to ensure correct values, FALSE if not
-  if(!checkOne && checkTwo) { // THIS NEEDS TO BE !(FALSE) TRUE
+  if (!checkOne && checkTwo) {
+    // THIS NEEDS TO BE !(FALSE) TRUE
     await productDAO.updatedProduct(req.params.productId, req.body); // UPDATE
     return await productDAO.getOnlyProduct(req.body.productId); // RETURN UPDATED OBJECT
   } else {
@@ -57,22 +57,21 @@ const updateProduct = async (req) => {
 // RETURNS true IF req.body IS VALID, false OTHERWISE.
 async function checkBody(bodyToCheck) {
   const bodyResult = schemaChecker.validate(bodyToCheck);
-  if(bodyResult.error) {
+  if (bodyResult.error) {
     return false;
   }
   return true;
-};
+}
 
 // Function to check that req.body.productId is not duplicated!
 // RETURNS true IF THERE IS NOT AN EXISTING PRODUCT, false OTHERWISE.
 async function checkId(productIdToCheck) {
-  const idResult = await productDAO.getOnlyProduct(productIdToCheck); 
-  if(idResult == null) {
+  const idResult = await productDAO.getOnlyProduct(productIdToCheck);
+  if (idResult == null) {
     return true;
   }
   return false;
-};
-
+}
 
 module.exports = {
   getProducts,
