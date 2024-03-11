@@ -39,7 +39,7 @@ const ShoppingCartPage: React.FC = () => {
           if (data.userCart.products[i].productId){
             let newData = await foo.fetchProduct(data.userCart.products[i].productId)
             let item: CartItem = {
-              id: 0,
+              id: '',
               name: '',
               price: 0,
               quantity: 0
