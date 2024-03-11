@@ -71,8 +71,14 @@
   opacity: 1;
 }
 .tooltip-active {
-  /* Styles for the visible tooltip */
-  display: block; /* or other display types depending on your layout */
-  position: absolute; /* Adjust based on your layout */
-  /* More styling as needed (background, color, padding, etc.) */
+  display: block; /* Ensures the tooltip is shown */
+  position: fixed; /* or 'absolute', depending on layout needs */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the tooltip */
+  background-color: black; /* Tooltip background */
+  color: white; /* Text color */
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 100; /* Ensure it's above other content */
 }

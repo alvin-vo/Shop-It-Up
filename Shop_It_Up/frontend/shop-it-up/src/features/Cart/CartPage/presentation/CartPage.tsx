@@ -5,12 +5,14 @@ import Cart from "features/Cart/domain/Cart";
 import { mapCartEntitytoCart } from "features/Cart/mapper/cartMapper";
 import { useNavigate } from 'react-router-dom';
 
+
 type CartItem = {
   id: number;
   name: string;
   price: number;
   quantity: number;
 };
+
 
 const ShoppingCartPage: React.FC = () => {
   const [inviteUrl, setInviteUrl] = useState("");
@@ -48,6 +50,8 @@ const ShoppingCartPage: React.FC = () => {
     })();
   }, []);
 
+  const closeTooltip = () => setShowTooltip(false);
+
   const initialCartItems: CartItem[] = [
   ];
   
@@ -59,21 +63,27 @@ const ShoppingCartPage: React.FC = () => {
     );
   };
 
+
   const sendInvite = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/users/invite")
+      const response = await fetch("/api/users/invite");
+      // Check only the response status to determine if the request was successful
       if (!response.ok) {
-        console.error("Failed to send invite."); // Log error to console
-        return; // Exit the function if the response is not ok
+        console.error("Failed to send invite."); // Log an appropriate error
+        return; // Exit the function early
       }
   
-      const result = await response.json(); // Parse JSON response
-      setInviteUrl(result.inviteUrl); 
-      setShowTooltip(!showTooltip);// Store the invite URL in the component's state
+      // Since the backend returns a plain string, use response.text() instead of response.json()
+      const inviteUrl = await response.text(); // Get the invite link as text
+      setInviteUrl(inviteUrl);
+      setShowTooltip(true); // Store the invite URL in the component's state
     } catch (error) {
-      console.error("Error sending invite:", error); // Log error to console
+      console.error("Error sending invite:", error); // Log fetch or parsing errors
     }
   };
+  
+  
+  
 
 
 
@@ -157,10 +167,11 @@ const ShoppingCartPage: React.FC = () => {
         </button>
       </div>
       <div className="invite-section">
-      <button onClick={sendInvite}>Generate Invite URL</button>
-        {showTooltip && inviteUrl && ( // Conditionally display the tooltip based on the state
-          <div className="tooltip-active"> // Consider renaming this class to match your styling needs
-            {inviteUrl}
+  <button onClick={sendInvite}>Generate Invite URL</button>
+  {showTooltip && inviteUrl && (
+    <div className="tooltip-active">
+      {inviteUrl}
+      <button onClick={closeTooltip}>Close</button>
     </div>
   )}
     </div>
