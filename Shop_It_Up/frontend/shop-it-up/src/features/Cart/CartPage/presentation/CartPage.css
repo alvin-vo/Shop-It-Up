@@ -71,14 +71,19 @@
   opacity: 1;
 }
 .tooltip-active {
-  display: block; /* Ensures the tooltip is shown */
-  position: fixed; /* or 'absolute', depending on layout needs */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* Center the tooltip */
-  background-color: black; /* Tooltip background */
-  color: white; /* Text color */
-  padding: 10px;
-  border-radius: 5px;
-  z-index: 100; /* Ensure it's above other content */
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center-align items for a neat look */
+  padding: 10px; /* Add some padding around the content */
+  background-color: black; /* Light background color */
+  color: #fff; /* Text color */
+  border-radius: 5px; /* Rounded corners for the tooltip */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Optional: Add a subtle shadow for depth */
+  position: fixed; /* Fixed position */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust translation for true centering */
+  z-index: 1000; /* Ensure it appears above other content */
+  width: auto; /* Adjust width as needed */
+  max-width: 80%; /* Max-width to avoid too wide tooltips */
 }
