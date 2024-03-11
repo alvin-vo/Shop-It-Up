@@ -195,13 +195,15 @@ const ShoppingCartPage: React.FC = () => {
         </button>
       </div>
       <div className="invite-section">
-  <button onClick={sendInvite}>Generate Invite URL</button>
-  {showTooltip && inviteUrl && (
-    <div className="tooltip-active">
-      {inviteUrl}
-      <button onClick={closeTooltip}>Close</button>
-    </div>
-  )}
+      <button onClick={sendInvite} className="orange-button">Generate Invite URL</button>
+{showTooltip && inviteUrl && (
+  <div className="tooltip-active">
+    {inviteUrl}
+    <button onClick={closeTooltip} className="close-button">Close</button>
+  </div>
+)}
+
+
     </div>
     </div>
 
