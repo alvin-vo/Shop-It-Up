@@ -17,10 +17,22 @@ const getProductsHandler = async (req, res) => {
   }
 };
 
+const createProductHandler = async (req, res) => {
+  const sellerId = req.userId;
+  req.body.sellerId = sellerId;
+  const product = await productManager.createProduct(req);
+  if (product == null) {
+    // null or empty ?
+    res.send("Error: null.");
+  } else {
+    res.send(product);
+  }
+};
+
 // Get all products.
 // RETURNS ALL PRODUCTS
 router.get("/", async (req, res) => {
-  getProductsHandler(req, res);
+  await getProductsHandler(req, res);
 });
 
 // Find by product ID.
@@ -38,17 +50,7 @@ router.get("/:productId", async (req, res) => {
 // Create new product.
 // RETURNS CREATED PRODUCT
 router.post("/create", authorize, async (req, res) => {
-  const sellerId = req.userId;
-  req.body.sellerId = sellerId;
-  console.log(req.body);
-  console.log("Create product called");
-  const product = await productManager.createProduct(req);
-  if (product == null) {
-    // null or empty ?
-    res.send("Error: null.");
-  } else {
-    res.send(product);
-  }
+  await createProductHandler(req, res);
 });
 
 // Delete product.
@@ -75,4 +77,4 @@ router.patch("/update/:productId", async (req, res) => {
   }
 });
 
-module.exports = { router, getProductsHandler };
+module.exports = { router, getProductsHandler, createProductHandler };
