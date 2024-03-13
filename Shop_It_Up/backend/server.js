@@ -1,18 +1,12 @@
 // IMPORTED MODULES
-
-const session = require("express-session");
 const mongoose = require("mongoose");
-
-// PARSERS
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 
 // USER MANAGER
 const userManager = require("./Managers/user_manager.js");
 
 // AUTHORIZATION
-const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 const PORT = 3010;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;

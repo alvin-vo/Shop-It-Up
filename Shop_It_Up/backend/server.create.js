@@ -3,7 +3,7 @@ const session = require("express-session");
 
 // ROUTES
 const authRoutes = require("./Routes/auth_routes.js");
-const productRoutes = require("./Routes/product_routes.js");
+const { router: productRoutes } = require("./Routes/product_routes.js");
 const userRoutes = require("./Routes/user_routes.js");
 const cartRoutes = require("./Routes/cart_routes.js");
 
@@ -13,7 +13,6 @@ const cookieParser = require("cookie-parser");
 
 //AUTHORIZATION
 const passport = require("passport");
-
 const cors = require("cors");
 
 const createServer = () => {

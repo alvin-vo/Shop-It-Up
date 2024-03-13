@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "nodemon server.js"
   },
   "author": "",
@@ -23,6 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongoose": "^8.1.1",
+    "node-mocks-http": "^1.14.1",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "uuid": "^9.0.1"

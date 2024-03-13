@@ -4,19 +4,23 @@ const express = require("express");
     They will only communicate with the the req and res object, and managers interfaces.
 */
 
-const router = express.Router();
+router = express.Router();
 const productManager = require("../Managers/product_manager.js");
 const { authorize } = require("../Managers/authorize_manager.js");
 
-// Get all products.
-// RETURNS ALL PRODUCTS
-router.get("/", async (req, res) => {
+const getProductsHandler = async (req, res) => {
   const products = await productManager.getProducts();
   if (products == null) {
     res.send("Error: null.");
   } else {
-    res.send(products);
+    res.status(200).send(products);
   }
+};
+
+// Get all products.
+// RETURNS ALL PRODUCTS
+router.get("/", async (req, res) => {
+  getProductsHandler(req, res);
 });
 
 // Find by product ID.
@@ -71,4 +75,4 @@ router.patch("/update/:productId", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = { router, getProductsHandler };
