@@ -4,19 +4,35 @@ const express = require("express");
     They will only communicate with the the req and res object, and managers interfaces.
 */
 
-const router = express.Router();
+router = express.Router();
 const productManager = require("../Managers/product_manager.js");
 const { authorize } = require("../Managers/authorize_manager.js");
 
-// Get all products.
-// RETURNS ALL PRODUCTS
-router.get("/", async (req, res) => {
+const getProductsHandler = async (req, res) => {
   const products = await productManager.getProducts();
   if (products == null) {
     res.send("Error: null.");
   } else {
-    res.send(products);
+    res.status(200).send(products);
   }
+};
+
+const createProductHandler = async (req, res) => {
+  const sellerId = req.userId;
+  req.body.sellerId = sellerId;
+  const product = await productManager.createProduct(req);
+  if (product == null) {
+    // null or empty ?
+    res.send("Error: null.");
+  } else {
+    res.send(product);
+  }
+};
+
+// Get all products.
+// RETURNS ALL PRODUCTS
+router.get("/", async (req, res) => {
+  await getProductsHandler(req, res);
 });
 
 // Find by product ID.
@@ -34,17 +50,7 @@ router.get("/:productId", async (req, res) => {
 // Create new product.
 // RETURNS CREATED PRODUCT
 router.post("/create", authorize, async (req, res) => {
-  const sellerId = req.userId;
-  req.body.sellerId = sellerId;
-  console.log(req.body);
-  console.log("Create product called");
-  const product = await productManager.createProduct(req);
-  if (product == null) {
-    // null or empty ?
-    res.send("Error: null.");
-  } else {
-    res.send(product);
-  }
+  await createProductHandler(req, res);
 });
 
 // Delete product.
@@ -71,4 +77,4 @@ router.patch("/update/:productId", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = { router, getProductsHandler, createProductHandler };
