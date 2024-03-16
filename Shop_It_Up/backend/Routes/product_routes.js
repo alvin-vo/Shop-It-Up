@@ -17,10 +17,40 @@ const getProductsHandler = async (req, res) => {
   }
 };
 
+const deleteProductHandler = async (req, res) => {
+  const product = await productManager.deleteProduct(req); // not working?
+  if (product == null) {
+    // null or empty ?
+    res.send("Error: null.");
+  } else {
+    res.send(product);
+  }
+};
+
 const createProductHandler = async (req, res) => {
   const sellerId = req.userId;
   req.body.sellerId = sellerId;
   const product = await productManager.createProduct(req);
+  if (product == null) {
+    // null or empty ?
+    res.send("Error: null.");
+  } else {
+    res.send(product);
+  }
+};
+
+const findOneProductHandler = async (req, res) => {
+  const product = await productManager.getOneProduct(req);
+  if (product == null) {
+    // null or empty ?
+    res.send("Error: null.");
+  } else {
+    res.send(product);
+  }
+};
+
+const updateProductHandler = async (req, res) => {
+  const product = await productManager.updateProduct(req);
   if (product == null) {
     // null or empty ?
     res.send("Error: null.");
@@ -38,13 +68,7 @@ router.get("/", async (req, res) => {
 // Find by product ID.
 // RETURNS FOUND PRODUCT
 router.get("/:productId", async (req, res) => {
-  const product = await productManager.getOneProduct(req);
-  if (product == null) {
-    // null or empty ?
-    res.send("Error: null.");
-  } else {
-    res.send(product);
-  }
+  await findOneProductHandler(req, res);
 });
 
 // Create new product.
@@ -56,25 +80,20 @@ router.post("/create", authorize, async (req, res) => {
 // Delete product.
 // RETURNS DELETED PRODUCT
 router.delete("/delete/:productId", async (req, res) => {
-  const product = await productManager.deleteProduct(req); // not working?
-  if (product == null) {
-    // null or empty ?
-    res.send("Error: null.");
-  } else {
-    res.send(product);
-  }
+  await deleteProductHandler(req, res);
 });
 
 // Update product.
 // RETURNS NEW PRODUCT
 router.patch("/update/:productId", async (req, res) => {
-  const product = await productManager.updateProduct(req);
-  if (product == null) {
-    // null or empty ?
-    res.send("Error: null.");
-  } else {
-    res.send(product);
-  }
+  await updateProductHandler(req, res);
 });
 
-module.exports = { router, getProductsHandler, createProductHandler };
+module.exports = {
+  router,
+  getProductsHandler,
+  createProductHandler,
+  findOneProductHandler,
+  deleteProductHandler,
+  updateProductHandler,
+};
